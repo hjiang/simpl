@@ -19,3 +19,13 @@ cc_library(name = 'lexer',
 cc_library(name = 'error',
            srcs = ['error.cc'],
            hdrs = ['error.h'])
+
+cc_test(
+    name = "lexer_test",
+    srcs = ["lexer_test.cc"],
+    deps = [
+        "lexer",
+        "@gtest//:gtest_main"
+    ],
+    size = "small"
+)

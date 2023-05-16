@@ -19,6 +19,7 @@ private:
   char Advance() { return source_[current_++]; };
   void AddToken(Token::Type type, const Token::literal_t &literal = nullptr);
   bool Match(char expected);
+  char Peek() { return AtEnd() ? '\0' : source_[current_]; };
   const std::string source_;
   std::list<Token> tokens_;
   int start_ = 0;

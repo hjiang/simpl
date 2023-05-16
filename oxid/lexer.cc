@@ -48,7 +48,8 @@ void Lexer::ScanToken() {
     AddToken(Token::PLUS);
     break;
   case ';':
-    AddToken(Token::SEMICOLON);
+    while (Peek() != '\n' && !AtEnd())
+      Advance();
     break;
   case '*':
     AddToken(Token::STAR);
@@ -60,7 +61,6 @@ void Lexer::ScanToken() {
     break;
   case '>':
     AddToken(Match('=') ? Token::GREATER_EQUAL : Token::GREATER);
-    break;
     break;
   default:
     Error(line_, "Unexpected character.");
