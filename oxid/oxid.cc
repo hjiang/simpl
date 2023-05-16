@@ -42,7 +42,7 @@ void RunREPL() {
     ClearError();
     cout << "> ";
     string line;
-    cin >> line;
+    getline(cin, line);
     if (cin.eof()) {
       break;
     }
