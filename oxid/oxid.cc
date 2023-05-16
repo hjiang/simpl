@@ -2,29 +2,22 @@
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
+
+#include "error.h"
+#include "lexer.h"
 
 namespace oxid {
 
 using namespace std;
 
-static bool hadError = false;
-
-static void error(int line, const string &message) {
-  cout << "[line " << line << "] Error: " << message << endl;
-}
-
-static void report(int line, const string &where, const string &message) {
-  cout << "[line " << line << "] Error " << where << ": " << message << endl;
-  hadError = true;
-}
-
 static void run(const string &source) {
-  Scanner scanner(source);
-  list<Token> tokens = scanner.scanTokens();
+  Lexer lexer(source);
+  list<Token> tokens = lexer.scan();
 
   for (Token token : tokens) {
-    cout << token << endl;
+    cout << string(token) << endl;
   }
 }
 
@@ -34,8 +27,9 @@ void RunFile(const string &path) {
   if (file) {
     ostringstream ss;
     ss << file.rdbuf();
+    file.close();
     run(ss.str());
-    if (hadError) {
+    if (HadError()) {
       exit(65);
     }
   } else {
@@ -45,7 +39,7 @@ void RunFile(const string &path) {
 
 void RunREPL() {
   while (true) {
-    hadError = false;
+    ClearError();
     cout << "> ";
     string line;
     cin >> line;

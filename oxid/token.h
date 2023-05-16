@@ -57,7 +57,7 @@ public:
     END_OF_FILE
   };
 
-  using literal_t = std::variant<long, double, std::string>;
+  using literal_t = std::variant<long, double, std::string, nullptr_t>;
   const Type type;
   const std::string lexeme;
   const literal_t literal;
@@ -70,3 +70,7 @@ public:
 };
 
 #endif // TOKEN_H_
+
+// Local Variables:
+// compile-command : "bazel build //oxid:lexer"
+// End:
