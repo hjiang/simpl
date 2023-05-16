@@ -79,6 +79,15 @@ TEST(Lexer, SimpleExpression) {
   EXPECT_EQ(tokens.size(), 6);
   EXPECT_FALSE(oxid::HadError());
 }
+
+TEST(Lexer, Identifier) {
+  oxid::ClearError();
+  Lexer lexer("if foobar");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 3);
+  EXPECT_EQ(tokens.front().type, Token::kIf);
+  EXPECT_FALSE(oxid::HadError());
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
 // End:

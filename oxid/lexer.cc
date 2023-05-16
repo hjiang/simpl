@@ -3,11 +3,27 @@
 #include <cassert>
 #include <cctype>
 #include <list>
+#include <string>
+#include <unordered_map>
 
 #include "error.h"
 #include "token.h"
 
 namespace oxid {
+
+static const std::unordered_map<std::string, Token::Type> kKeywords{
+    {"and", Token::kAnd},     {"class", Token::kClass},
+    {"def", Token::kDef},     {"defclass", Token::kDefClass},
+    {"defn", Token::kDefn},   {"false", Token::kFalse},
+    {"for", Token::kFor},     {"fn", Token::kFn},
+    {"if", Token::kIf},       {"let", Token::kLet},
+    {"nil", Token::kNil},     {"or", Token::kOr},
+    {"print", Token::kPrint}, {"super", Token::kSuper},
+    {"this", Token::kThis},   {"true", Token::kTrue},
+    {"var", Token::kVar},     {"while", Token::kWhile}};
+
+static bool IsAlphaOrUnderscore(char c) { return isalpha(c) || c == '_'; }
+static bool IsAlphaNumOrUnderscore(char c) { return isalnum(c) || c == '_'; }
 
 Lexer::Lexer(const std::string &source) : source_(source), tokens_() {}
 
@@ -83,8 +99,8 @@ void Lexer::ScanToken() {
   default:
     if (isdigit(c)) {
       Number();
-    } else if (isalpha(c)) {
-      // Identifier();
+    } else if (IsAlphaOrUnderscore(c)) {
+      Identifier();
     } else {
       Error(line_, "Unexpected character.");
     }
@@ -142,6 +158,15 @@ void Lexer::Number() {
     AddToken(Token::kInteger,
              std::stoi(source_.substr(start_, current_ - start_)));
   }
+}
+
+void Lexer::Identifier() {
+  while (IsAlphaNumOrUnderscore(Peek()))
+    Advance();
+
+  const auto text = source_.substr(start_, current_ - start_);
+  const auto it = kKeywords.find(text);
+  it != kKeywords.end() ? AddToken(it->second) : AddToken(Token::kIdentifier);
 }
 
 char Lexer::PeekNext() {

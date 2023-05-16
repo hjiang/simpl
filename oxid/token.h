@@ -40,7 +40,7 @@ public:
     kAnd,
     kClass,
     kDef,
-    kDefclass,
+    kDefClass,
     kDefn,
     kFalse,
     kFn,
