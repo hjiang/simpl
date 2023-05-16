@@ -1,6 +1,7 @@
 #include "lexer.h"
 
 #include <cassert>
+#include <cctype>
 #include <list>
 
 #include "error.h"
@@ -80,7 +81,13 @@ void Lexer::ScanToken() {
     line_++;
     break;
   default:
-    Error(line_, "Unexpected character.");
+    if (isdigit(c)) {
+      Number();
+    } else if (isalpha(c)) {
+      // Identifier();
+    } else {
+      Error(line_, "Unexpected character.");
+    }
     break;
   }
 }
@@ -114,6 +121,33 @@ void Lexer::String() {
   char c = Advance();
   assert('"' == c);
   AddToken(Token::kString, source_.substr(start_ + 1, current_ - start_ - 2));
+}
+
+void Lexer::Number() {
+  bool is_float = false;
+  while (isdigit(Peek()))
+    Advance();
+
+  if (Peek() == '.' && isdigit(PeekNext())) {
+    is_float = true;
+    Advance();
+    while (isdigit(Peek()))
+      Advance();
+  }
+  if (is_float) {
+
+    AddToken(Token::kFloat,
+             std::stod(source_.substr(start_, current_ - start_)));
+  } else {
+    AddToken(Token::kInteger,
+             std::stoi(source_.substr(start_, current_ - start_)));
+  }
+}
+
+char Lexer::PeekNext() {
+  if (current_ + 1 >= source_.size())
+    return '\0';
+  return source_[current_ + 1];
 }
 
 } // namespace oxid

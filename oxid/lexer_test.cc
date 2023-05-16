@@ -53,6 +53,32 @@ TEST(Lexer, EmptyString) {
   EXPECT_EQ(std::get<std::string>(tokens.front().literal), "");
   EXPECT_FALSE(oxid::HadError());
 }
+
+TEST(Lexer, Float) {
+  oxid::ClearError();
+  Lexer lexer("3.14");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 2);
+  EXPECT_DOUBLE_EQ(std::get<double>(tokens.front().literal), 3.14);
+  EXPECT_FALSE(oxid::HadError());
+}
+
+TEST(Lexer, Integer) {
+  oxid::ClearError();
+  Lexer lexer("256");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 2);
+  EXPECT_EQ(std::get<long>(tokens.front().literal), 256);
+  EXPECT_FALSE(oxid::HadError());
+}
+
+TEST(Lexer, SimpleExpression) {
+  oxid::ClearError();
+  Lexer lexer("(+ 1 2)");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 6);
+  EXPECT_FALSE(oxid::HadError());
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
 // End:
