@@ -62,6 +62,13 @@ void Lexer::ScanToken() {
   case '>':
     AddToken(Match('=') ? Token::kGreaterEqual : Token::kGreater);
     break;
+  case ' ':
+  case '\r':
+  case '\t':
+    break;
+  case '\n':
+    line_++;
+    break;
   default:
     Error(line_, "Unexpected character.");
     break;
@@ -85,5 +92,5 @@ void Lexer::AddToken(Token::Type type, const Token::literal_t &literal) {
 } // namespace oxid
 
 // Local Variables:
-// compile-command : "bazel build //oxid:lexer"
+// compile-command : "bazel test //oxid:lexer_test"
 // End:

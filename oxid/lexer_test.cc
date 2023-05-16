@@ -1,3 +1,4 @@
+#include "error.h"
 #include "lexer.h"
 
 #include <gtest/gtest.h>
@@ -18,13 +19,14 @@ TEST(Lexer, LineComment) {
   EXPECT_EQ(tokens.size(), 1);
   EXPECT_EQ(tokens.front().type, Token::kEof);
 }
-/*
-TEST(Lexer, SimpleExpression) {
-  Lexer lexer("(+ 1 2)");
+
+TEST(Lexer, WhiteSpace) {
+  oxid::ClearError();
+  Lexer lexer("(   )");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.size(), 3);
+  EXPECT_FALSE(oxid::HadError());
 }
-  */
 
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
