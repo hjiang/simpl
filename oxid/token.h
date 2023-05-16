@@ -16,7 +16,6 @@ public:
     DOT,
     MINUS,
     PLUS,
-    SEMICOLON,
     SLASH,
     STAR,
     EQUAL,
