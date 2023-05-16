@@ -18,6 +18,7 @@ private:
   void ScanToken();
   char Advance() { return source_[current_++]; };
   void AddToken(Token::Type type, const Token::literal_t &literal = nullptr);
+  bool Match(char expected);
   const std::string source_;
   std::list<Token> tokens_;
   int start_ = 0;

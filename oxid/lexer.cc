@@ -52,11 +52,29 @@ void Lexer::ScanToken() {
     break;
   case '*':
     AddToken(Token::STAR);
+  case '!':
+    AddToken(Match('=') ? Token::BANG_EQUAL : Token::BANG);
+    break;
+  case '<':
+    AddToken(Match('=') ? Token::LESS_EQUAL : Token::LESS);
+    break;
+  case '>':
+    AddToken(Match('=') ? Token::GREATER_EQUAL : Token::GREATER);
+    break;
     break;
   default:
     Error(line_, "Unexpected character.");
     break;
   }
+}
+
+bool Lexer::Match(char expected) {
+  if (AtEnd())
+    return false;
+  if (source_[current_] != expected)
+    return false;
+  current_++;
+  return true;
 }
 
 void Lexer::AddToken(Token::Type type, const Token::literal_t &literal) {
