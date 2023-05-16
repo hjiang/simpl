@@ -29,6 +29,12 @@ void Lexer::ScanToken() {
   case ')':
     AddToken(Token::kRightParen);
     break;
+  case '[':
+    AddToken(Token::kLeftBracket);
+    break;
+  case ']':
+    AddToken(Token::kRightBracket);
+    break;
   case '{':
     AddToken(Token::kLeftBrace);
     break;

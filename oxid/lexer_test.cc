@@ -28,6 +28,13 @@ TEST(Lexer, WhiteSpace) {
   EXPECT_FALSE(oxid::HadError());
 }
 
+TEST(Lexer, Bracket) {
+  oxid::ClearError();
+  Lexer lexer("[]");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 3);
+  EXPECT_FALSE(oxid::HadError());
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
 // End:

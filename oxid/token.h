@@ -10,6 +10,8 @@ public:
     // Single-character tokens.
     kLeftParen,
     kRightParen,
+    kLeftBracket,
+    kRightBracket,
     kLeftBrace,
     kRightBrace,
     kComma,
