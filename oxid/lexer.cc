@@ -1,5 +1,6 @@
 #include "lexer.h"
 
+#include <cassert>
 #include <list>
 
 #include "error.h"
@@ -68,6 +69,9 @@ void Lexer::ScanToken() {
   case '>':
     AddToken(Match('=') ? Token::kGreaterEqual : Token::kGreater);
     break;
+  case '"':
+    String();
+    break;
   case ' ':
   case '\r':
   case '\t':
@@ -94,6 +98,23 @@ void Lexer::AddToken(Token::Type type, const Token::literal_t &literal) {
   tokens_.push_back(
       Token(type, source_.substr(start_, current_ - start_), literal, line_));
 };
+
+void Lexer::String() {
+  while (Peek() != '"' && !AtEnd()) {
+    if (Peek() == '\n')
+      line_++;
+    Advance();
+  }
+
+  if (AtEnd()) {
+    Error(line_, "Unterminated string.");
+    return;
+  }
+
+  char c = Advance();
+  assert('"' == c);
+  AddToken(Token::kString, source_.substr(start_ + 1, current_ - start_ - 2));
+}
 
 } // namespace oxid
 

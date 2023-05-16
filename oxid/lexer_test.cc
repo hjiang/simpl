@@ -35,6 +35,24 @@ TEST(Lexer, Bracket) {
   EXPECT_EQ(tokens.size(), 3);
   EXPECT_FALSE(oxid::HadError());
 }
+
+TEST(Lexer, String) {
+  oxid::ClearError();
+  Lexer lexer("\"abc\"");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 2);
+  EXPECT_EQ(std::get<std::string>(tokens.front().literal), "abc");
+  EXPECT_FALSE(oxid::HadError());
+}
+
+TEST(Lexer, EmptyString) {
+  oxid::ClearError();
+  Lexer lexer("\"\"");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 2);
+  EXPECT_EQ(std::get<std::string>(tokens.front().literal), "");
+  EXPECT_FALSE(oxid::HadError());
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
 // End:

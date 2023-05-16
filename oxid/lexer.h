@@ -20,6 +20,7 @@ private:
   void AddToken(Token::Type type, const Token::literal_t &literal = nullptr);
   bool Match(char expected);
   char Peek() { return AtEnd() ? '\0' : source_[current_]; };
+  void String();
   const std::string source_;
   std::list<Token> tokens_;
   int start_ = 0;
