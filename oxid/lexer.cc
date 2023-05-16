@@ -16,7 +16,7 @@ std::list<Token> Lexer::scan() {
     ScanToken();
   }
 
-  tokens_.push_back(Token(Token::END_OF_FILE, "", nullptr, line_));
+  tokens_.push_back(Token(Token::kEof, "", nullptr, line_));
   return tokens_;
 }
 
@@ -24,43 +24,43 @@ void Lexer::ScanToken() {
   char c = Advance();
   switch (c) {
   case '(':
-    AddToken(Token::LEFT_PAREN);
+    AddToken(Token::kLeftParen);
     break;
   case ')':
-    AddToken(Token::RIGHT_PAREN);
+    AddToken(Token::kRightParen);
     break;
   case '{':
-    AddToken(Token::LEFT_BRACE);
+    AddToken(Token::kLeftBrace);
     break;
   case '}':
-    AddToken(Token::RIGHT_BRACE);
+    AddToken(Token::kRightBrace);
     break;
   case ',':
-    AddToken(Token::COMMA);
+    AddToken(Token::kComma);
     break;
   case '.':
-    AddToken(Token::DOT);
+    AddToken(Token::kDot);
     break;
   case '-':
-    AddToken(Token::MINUS);
+    AddToken(Token::kMinus);
     break;
   case '+':
-    AddToken(Token::PLUS);
+    AddToken(Token::kPlus);
     break;
   case ';':
     while (Peek() != '\n' && !AtEnd())
       Advance();
     break;
   case '*':
-    AddToken(Token::STAR);
+    AddToken(Token::kStar);
   case '!':
-    AddToken(Match('=') ? Token::BANG_EQUAL : Token::BANG);
+    AddToken(Match('=') ? Token::kBangEqual : Token::kBang);
     break;
   case '<':
-    AddToken(Match('=') ? Token::LESS_EQUAL : Token::LESS);
+    AddToken(Match('=') ? Token::kLessEqual : Token::kLess);
     break;
   case '>':
-    AddToken(Match('=') ? Token::GREATER_EQUAL : Token::GREATER);
+    AddToken(Match('=') ? Token::kGreaterEqual : Token::kGreater);
     break;
   default:
     Error(line_, "Unexpected character.");
