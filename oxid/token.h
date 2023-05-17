@@ -31,7 +31,7 @@ public:
     kLessEqual,
 
     // Literals.
-    kIdentifier,
+    kSymbol,
     kString,
     kInteger,
     kFloat,

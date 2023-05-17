@@ -23,7 +23,7 @@ private:
   char PeekNext();
   void String();
   void Number();
-  void Identifier();
+  void Symbol();
   const std::string source_;
   std::list<Token> tokens_;
   int start_ = 0;

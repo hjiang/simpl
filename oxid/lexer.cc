@@ -100,7 +100,7 @@ void Lexer::ScanToken() {
     if (isdigit(c)) {
       Number();
     } else if (IsAlphaOrUnderscore(c)) {
-      Identifier();
+      Symbol();
     } else {
       Error(line_, "Unexpected character.");
     }
@@ -160,13 +160,13 @@ void Lexer::Number() {
   }
 }
 
-void Lexer::Identifier() {
+void Lexer::Symbol() {
   while (IsAlphaNumOrUnderscore(Peek()))
     Advance();
 
   const auto text = source_.substr(start_, current_ - start_);
   const auto it = kKeywords.find(text);
-  it != kKeywords.end() ? AddToken(it->second) : AddToken(Token::kIdentifier);
+  it != kKeywords.end() ? AddToken(it->second) : AddToken(Token::kSymbol);
 }
 
 char Lexer::PeekNext() {
