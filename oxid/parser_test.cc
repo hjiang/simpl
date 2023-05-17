@@ -27,6 +27,15 @@ TEST(Parser, String) {
   EXPECT_EQ(atom->value<std::string>(), "hello");
 }
 
+TEST(Parser, Symbol) {
+  Lexer lexer("foo");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kSymbol);
+  Parser parser(tokens);
+  auto atom = std::dynamic_pointer_cast<Expr::Atom>(parser.Parse());
+  EXPECT_EQ(atom->value<Symbol>().name, "foo");
+}
+
 // Local Variables:
 // compile-command : "bazel test //oxid:parser_test"
 // End:
