@@ -16,14 +16,6 @@ cc_library(name = 'lexer',
            hdrs = ['lexer.h'],
            deps = [ 'token', 'error' ])
 
-cc_library(name = 'parser',
-           srcs = ['parser.cc'],
-           hdrs = ['parser.h'])
-
-cc_library(name = 'error',
-           srcs = ['error.cc'],
-           hdrs = ['error.h'])
-
 cc_test(
     name = "lexer_test",
     srcs = ["lexer_test.cc"],
@@ -31,5 +23,25 @@ cc_test(
         "lexer",
         "@gtest//:gtest_main"
     ],
-    size = "small"
-)
+    size = "small")
+
+cc_library(name = 'parser',
+           srcs = ['parser.cc'],
+           hdrs = ['parser.h'],
+           deps = ['token', 'error'])
+
+cc_test(
+    name = "parser_test",
+    srcs = ["parser_test.cc"],
+    deps = [
+        "lexer",
+        "parser",
+        "token",
+        "@gtest//:gtest_main"
+    ],
+    size = "small")
+
+cc_library(name = 'error',
+           srcs = ['error.cc'],
+           hdrs = ['error.h'])
+

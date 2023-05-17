@@ -2,16 +2,22 @@
 #define PARSER_H_
 
 #include <list>
+#include <memory>
 #include <string>
 #include <variant>
 #include <initializer_list>
 
+#include "token.h"
+
 namespace oxid {
+
+class ExprVisitor;
+
 class Expr {
  public:
-  class List;
   class Atom;
-
+  class List;
+  virtual void Accept(ExprVisitor* visitor) const = 0;
   virtual ~Expr() {}
 };
 
@@ -20,20 +26,41 @@ struct Symbol {
 };
 
 class Expr::Atom : public Expr {
-  using value_type = std::variant<int, double, bool, std::string, Symbol>;
+  using value_type = std::variant<long, double, bool, std::string, Symbol>;
  public:
   explicit Atom(value_type v): value_(v) {}
   virtual ~Atom() {}
+  template <typename T>
+  T value() const {
+    return std::get<T>(value_);
+  }
+  virtual void Accept(ExprVisitor* visitor) const override;
  private:
   value_type value_;
 };
 
 class Expr::List : public Expr {
  public:
-  List(std::initializer_list<Expr> l): exprs_(l) {}
+  List(std::initializer_list<std::shared_ptr<Expr>> l): exprs_(l) {}
   virtual ~List() {}
   private:
-  const std::list<Expr> exprs_;
+  const std::list<std::shared_ptr<Expr>> exprs_;
+};
+
+class ExprVisitor {
+ public:
+  virtual void Visit(const Expr::List& expr) = 0;
+  virtual void Visit(const Expr::Atom& expr) = 0;
+};
+
+class Parser {
+  using token_list_t = std::list<Token>;
+  public:
+  explicit Parser(const token_list_t& tokens): tokens_(tokens), current_(tokens_.begin()) {}
+  std::shared_ptr<Expr> Parse();
+  private:
+  const token_list_t tokens_;
+  token_list_t::const_iterator current_;
 };
 
 }  // namespace oxid
