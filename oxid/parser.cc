@@ -29,7 +29,13 @@ void Expr::Atom::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
 
 void Expr::List::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
 
-std::shared_ptr<Expr> Parser::Parse() { return ParseExpr(); }
+std::shared_ptr<Expr> Parser::Parse() {
+  try {
+    return ParseExpr();
+  } catch (const ParseError& e) {
+    return nullptr;
+  }
+}
 
 std::shared_ptr<Expr> Parser::ParseAtom() {
   auto atom = Advance();

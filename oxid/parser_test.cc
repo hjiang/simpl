@@ -49,7 +49,7 @@ TEST(Parser, List) {
   Lexer lexer("(+ 1 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
-  EXPECT_NO_THROW(parser.Parse());
+  EXPECT_TRUE(nullptr != parser.Parse());
 }
 
 // Local Variables:
