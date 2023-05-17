@@ -16,6 +16,10 @@ cc_library(name = 'lexer',
            hdrs = ['lexer.h'],
            deps = [ 'token', 'error' ])
 
+cc_library(name = 'parser',
+           srcs = ['parser.cc'],
+           hdrs = ['parser.h'])
+
 cc_library(name = 'error',
            srcs = ['error.cc'],
            hdrs = ['error.h'])
