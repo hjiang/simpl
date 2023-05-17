@@ -41,78 +41,75 @@ std::list<Token> Lexer::scan() {
 void Lexer::ScanToken() {
   char c = Advance();
   switch (c) {
-  case '(':
-    AddToken(Token::kLeftParen);
-    break;
-  case ')':
-    AddToken(Token::kRightParen);
-    break;
-  case '[':
-    AddToken(Token::kLeftBracket);
-    break;
-  case ']':
-    AddToken(Token::kRightBracket);
-    break;
-  case '{':
-    AddToken(Token::kLeftBrace);
-    break;
-  case '}':
-    AddToken(Token::kRightBrace);
-    break;
-  case ',':
-    AddToken(Token::kComma);
-    break;
-  case '.':
-    AddToken(Token::kDot);
-    break;
-  case '-':
-    AddToken(Token::kMinus);
-    break;
-  case '+':
-    AddToken(Token::kPlus);
-    break;
-  case ';':
-    while (Peek() != '\n' && !AtEnd())
-      Advance();
-    break;
-  case '*':
-    AddToken(Token::kStar);
-  case '!':
-    AddToken(Match('=') ? Token::kBangEqual : Token::kBang);
-    break;
-  case '<':
-    AddToken(Match('=') ? Token::kLessEqual : Token::kLess);
-    break;
-  case '>':
-    AddToken(Match('=') ? Token::kGreaterEqual : Token::kGreater);
-    break;
-  case '"':
-    String();
-    break;
-  case ' ':
-  case '\r':
-  case '\t':
-    break;
-  case '\n':
-    line_++;
-    break;
-  default:
-    if (isdigit(c)) {
-      Number();
-    } else if (IsAlphaOrUnderscore(c)) {
-      Symbol();
-    } else {
-      Error(line_, "Unexpected character.");
-    }
-    break;
+    case '(':
+      AddToken(Token::kLeftParen);
+      break;
+    case ')':
+      AddToken(Token::kRightParen);
+      break;
+    case '[':
+      AddToken(Token::kLeftBracket);
+      break;
+    case ']':
+      AddToken(Token::kRightBracket);
+      break;
+    case '{':
+      AddToken(Token::kLeftBrace);
+      break;
+    case '}':
+      AddToken(Token::kRightBrace);
+      break;
+    case ',':
+      AddToken(Token::kComma);
+      break;
+    case '.':
+      AddToken(Token::kDot);
+      break;
+    case '-':
+      AddToken(Token::kMinus);
+      break;
+    case '+':
+      AddToken(Token::kPlus);
+      break;
+    case ';':
+      while (Peek() != '\n' && !AtEnd()) Advance();
+      break;
+    case '*':
+      AddToken(Token::kStar);
+    case '!':
+      AddToken(Match('=') ? Token::kBangEqual : Token::kBang);
+      break;
+    case '<':
+      AddToken(Match('=') ? Token::kLessEqual : Token::kLess);
+      break;
+    case '>':
+      AddToken(Match('=') ? Token::kGreaterEqual : Token::kGreater);
+      break;
+    case '"':
+      String();
+      break;
+    case ' ':
+    case '\r':
+    case '\t':
+      break;
+    case '\n':
+      line_++;
+      break;
+    default:
+      if (isdigit(c)) {
+        Number();
+      } else if (IsAlphaOrUnderscore(c)) {
+        Symbol();
+      } else {
+        Error(line_, "Unexpected character.");
+      }
+      break;
   }
 }
 
 bool Lexer::Match(char expected) {
-  if (AtEnd())
-    return false;
-  if (source_[current_] != expected)
-    return false;
+  if (AtEnd()) return false;
+  if (source_[current_] != expected) return false;
   current_++;
   return true;
 }
@@ -124,8 +121,7 @@ void Lexer::AddToken(Token::Type type, const Token::literal_t &literal) {
 
 void Lexer::String() {
   while (Peek() != '"' && !AtEnd()) {
-    if (Peek() == '\n')
-      line_++;
+    if (Peek() == '\n') line_++;
     Advance();
   }
 
@@ -141,17 +137,14 @@ void Lexer::String() {
 
 void Lexer::Number() {
   bool is_float = false;
-  while (isdigit(Peek()))
-    Advance();
+  while (isdigit(Peek())) Advance();
 
   if (Peek() == '.' && isdigit(PeekNext())) {
     is_float = true;
     Advance();
-    while (isdigit(Peek()))
-      Advance();
+    while (isdigit(Peek())) Advance();
   }
   if (is_float) {
-
     AddToken(Token::kFloat,
              std::stod(source_.substr(start_, current_ - start_)));
   } else {
@@ -161,8 +154,7 @@ void Lexer::Number() {
 }
 
 void Lexer::Symbol() {
-  while (IsAlphaNumOrUnderscore(Peek()))
-    Advance();
+  while (IsAlphaNumOrUnderscore(Peek())) Advance();
 
   const auto text = source_.substr(start_, current_ - start_);
   const auto it = kKeywords.find(text);
@@ -170,12 +162,11 @@ void Lexer::Symbol() {
 }
 
 char Lexer::PeekNext() {
-  if (current_ + 1 >= source_.size())
-    return '\0';
+  if (current_ + 1 >= source_.size()) return '\0';
   return source_[current_ + 1];
 }
 
-} // namespace oxid
+}  // namespace oxid
 
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"

@@ -13,6 +13,6 @@ bool HadError();
 
 void ClearError();
 
-} // namespace oxid
+}  // namespace oxid
 
-#endif // ERROR_H_
+#endif  // ERROR_H_

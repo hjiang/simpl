@@ -1,7 +1,8 @@
-#include "error.h"
 #include "lexer.h"
 
 #include <gtest/gtest.h>
+
+#include "error.h"
 
 using namespace oxid;
 

@@ -7,7 +7,7 @@
 namespace oxid {
 
 class Token {
-public:
+ public:
   enum Type {
     // Single-character tokens.
     kLeftParen,
@@ -73,9 +73,9 @@ public:
   operator std::string() { return lexeme; }
 };
 
-} // namespace oxid
+}  // namespace oxid
 
-#endif // TOKEN_H_
+#endif  // TOKEN_H_
 
 // Local Variables:
 // compile-command : "bazel build //oxid:lexer"

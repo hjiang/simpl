@@ -9,6 +9,6 @@ void RunREPL();
 
 void RunFile(const std::string &path);
 
-} // namespace oxid
+}  // namespace oxid
 
-#endif // OXID_H_
+#endif  // OXID_H_

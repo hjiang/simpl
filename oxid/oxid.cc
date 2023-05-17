@@ -50,4 +50,4 @@ void RunREPL() {
   }
 }
 
-} // namespace oxid
+}  // namespace oxid

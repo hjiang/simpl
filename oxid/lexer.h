@@ -9,11 +9,11 @@
 namespace oxid {
 
 class Lexer {
-public:
+ public:
   explicit Lexer(const std::string &source);
   std::list<Token> scan();
 
-private:
+ private:
   bool AtEnd() { return current_ >= source_.length(); };
   void ScanToken();
   char Advance() { return source_[current_++]; };
@@ -31,6 +31,6 @@ private:
   int line_ = 1;
 };
 
-} // namespace oxid
+}  // namespace oxid
 
-#endif // LEXER_H_
+#endif  // LEXER_H_

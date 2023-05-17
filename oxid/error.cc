@@ -19,7 +19,7 @@ bool HadError() { return gHadError; }
 
 void ClearError() { gHadError = false; }
 
-} // namespace oxid
+}  // namespace oxid
 
 // Local Variables:
 // compile-command : "bazel build //oxid:error"
