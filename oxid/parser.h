@@ -42,10 +42,10 @@ class Expr::Atom : public Expr {
 
 class Expr::List : public Expr {
  public:
-  List(std::initializer_list<std::shared_ptr<Expr>> l): exprs_(l) {}
   explicit List(const std::list<std::shared_ptr<Expr>>& l): exprs_(l) {}
   virtual ~List() {}
-  private:
+  virtual void Accept(ExprVisitor* visitor) const override;
+ private:
   const std::list<std::shared_ptr<Expr>> exprs_;
 };
 

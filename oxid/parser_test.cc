@@ -27,6 +27,15 @@ TEST(Parser, String) {
   EXPECT_EQ(atom->value<std::string>(), "hello");
 }
 
+TEST(Parser, Bool) {
+  Lexer lexer("false");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kFalse);
+  Parser parser(tokens);
+  auto atom = std::dynamic_pointer_cast<Expr::Atom>(parser.Parse());
+  EXPECT_EQ(atom->value<bool>(), false);
+}
+
 TEST(Parser, Symbol) {
   Lexer lexer("foo");
   auto tokens = lexer.scan();
@@ -34,6 +43,13 @@ TEST(Parser, Symbol) {
   Parser parser(tokens);
   auto atom = std::dynamic_pointer_cast<Expr::Atom>(parser.Parse());
   EXPECT_EQ(atom->value<Symbol>().name, "foo");
+}
+
+TEST(Parser, List) {
+  Lexer lexer("(+ 1 2)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  EXPECT_NO_THROW(parser.Parse());
 }
 
 // Local Variables:
