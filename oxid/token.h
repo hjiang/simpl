@@ -37,6 +37,7 @@ class Token {
     kString,
     kInteger,
     kFloat,
+    kNil,
 
     // Keywords.
     kAnd,
@@ -49,7 +50,6 @@ class Token {
     kFor,
     kIf,
     kLet,
-    kNil,
     kOr,
     kPrint,
     kSuper,
