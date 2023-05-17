@@ -58,15 +58,21 @@ class ExprVisitor {
 class Parser {
   using token_list_t = std::list<Token>;
   using expr_ptr = std::shared_ptr<Expr>;
-  public:
+ public:
   explicit Parser(const token_list_t& tokens): tokens_(tokens), current_(tokens_.begin()) {}
   std::shared_ptr<Expr> Parse();
-  private:
+ private:
+  class ParseError: std::runtime_error {
+   public:
+    explicit ParseError(const std::string& msg): std::runtime_error(msg) {}
+  };
+  ParseError Error(const Token& token, const std::string& msg);
   expr_ptr ParseExpr();
   expr_ptr ParseList();
   expr_ptr ParseAtom();
   bool Match(Token::Type type);
   bool Check(Token::Type type) const;
+  const Token& Consume(Token::Type type, const std::string& msg);
   const Token& Advance();
   bool AtEnd() const { return Peek().type == Token::kEof; }
   const Token& Peek() const { return *current_; }

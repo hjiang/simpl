@@ -2,7 +2,28 @@
 
 #include <memory>
 
+#include "error.h"
+
 namespace oxid {
+
+static void Error(const Token& token, const std::string& message) {
+  if (token.type == Token::Type::kEof) {
+    Report(token.line, " at end", message);
+  } else {
+    Report(token.line, " at '" + token.lexeme + "'", message);
+  }
+}
+
+Parser::ParseError Parser::Error(const Token& token,
+                                 const std::string& message) {
+  oxid::Error(token, message);
+  return ParseError(message);
+}
+
+const Token& Parser::Consume(Token::Type type, const std::string& message) {
+  if (Check(type)) return Advance();
+  throw Error(Peek(), message);
+}
 
 void Expr::Atom::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
 
