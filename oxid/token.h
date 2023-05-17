@@ -4,6 +4,8 @@
 #include <string>
 #include <variant>
 
+namespace oxid {
+
 class Token {
 public:
   enum Type {
@@ -70,6 +72,8 @@ public:
 
   operator std::string() { return lexeme; }
 };
+
+} // namespace oxid
 
 #endif // TOKEN_H_
 
