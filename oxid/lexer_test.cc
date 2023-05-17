@@ -89,6 +89,15 @@ TEST(Lexer, Identifier) {
   EXPECT_EQ(tokens.front().type, Token::kIf);
   EXPECT_FALSE(oxid::HadError());
 }
+
+TEST(Lexer, NegativeInteger) {
+  oxid::ClearError();
+  Lexer lexer("-123");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 2);
+  EXPECT_EQ(std::get<long>(tokens.front().literal), -123);
+  EXPECT_FALSE(oxid::HadError());
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
 // End:

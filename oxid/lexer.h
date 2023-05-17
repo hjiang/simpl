@@ -34,3 +34,7 @@ class Lexer {
 }  // namespace oxid
 
 #endif  // LEXER_H_
+
+// Local Variables:
+// compile-command : "bazel test //oxid:lexer_test"
+// End:

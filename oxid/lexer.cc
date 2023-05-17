@@ -66,10 +66,18 @@ void Lexer::ScanToken() {
       AddToken(Token::kDot);
       break;
     case '-':
-      AddToken(Token::kMinus);
+      if (isspace(Peek())) {
+        AddToken(Token::kMinus);
+      } else {
+        Number();
+      }
       break;
     case '+':
-      AddToken(Token::kPlus);
+      if (isspace(Peek())) {
+        AddToken(Token::kPlus);
+      } else {
+        Number();
+      }
       break;
     case ';':
       while (Peek() != '\n' && !AtEnd()) Advance();
