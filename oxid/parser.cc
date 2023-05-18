@@ -78,7 +78,7 @@ std::shared_ptr<Expr> Parser::ParseAtom() {
     case Token::Type::kVar:
     case Token::Type::kWhile:
     case Token::Type::kSymbol:
-      return std::make_shared<Expr::Atom>(Symbol{atom.lexeme});
+      return std::make_shared<Expr::Atom>(Expr::Symbol{atom.lexeme});
     case Token::Type::kNil:
       return std::make_shared<Expr::Atom>(nullptr);
     default:

@@ -19,10 +19,9 @@ class Expr {
   class Visitor;
   virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
-};
-
-struct Symbol {
-  const std::string name;
+  struct Symbol {
+    const std::string name;
+  };
 };
 
 class Expr::Atom : public Expr {
@@ -51,6 +50,7 @@ class Expr::List : public Expr {
   explicit List(const std::list<std::shared_ptr<Expr>>& l) : exprs_(l) {}
   virtual ~List() {}
   virtual void Accept(Expr::Visitor* visitor) const override;
+  const std::list<std::shared_ptr<Expr>>& exprs() const { return exprs_; }
 
  private:
   const std::list<std::shared_ptr<Expr>> exprs_;

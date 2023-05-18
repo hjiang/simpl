@@ -25,6 +25,15 @@ TEST(Parser, Bool) {
   Interpreter interpreter;
   EXPECT_TRUE(std::get<bool>(interpreter.evaluate(expr)));
 }
+
+TEST(Parser, Plus) {
+  Lexer lexer("(+ 1 2)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 3);
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:all"
 // End:

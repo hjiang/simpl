@@ -42,7 +42,7 @@ TEST(Parser, Symbol) {
   EXPECT_EQ(tokens.front().type, Token::kSymbol);
   Parser parser(tokens);
   auto atom = std::dynamic_pointer_cast<Expr::Atom>(parser.Parse());
-  EXPECT_EQ(atom->value<Symbol>().name, "foo");
+  EXPECT_EQ(atom->value<Expr::Symbol>().name, "foo");
 }
 
 TEST(Parser, List) {

@@ -8,19 +8,31 @@
 namespace oxid {
 
 class Interpreter : public Expr::Visitor {
-  using result_type = std::variant<long, double, bool, std::string>;
+  struct Symbol {
+    std::string name;
+  };
+  using atom_value_type = std::variant<long, double, bool, std::string, Symbol>;
+  using function_type =
+      std::function<atom_value_type(const std::vector<atom_value_type>&)>;
 
  public:
   virtual ~Interpreter() {}
   virtual void Visit(const Expr::Atom& atom) override;
   virtual void Visit(const Expr::List& list) override;
-  result_type evaluate(std::shared_ptr<Expr> expr);
+  atom_value_type evaluate(std::shared_ptr<Expr> expr);
 
  private:
   template <typename T>
-  bool MaybeSetResult(const Expr::Atom& atom);
-  result_type result_;
+  bool MaybeSetAtomResult(const Expr::Atom& atom);
+  atom_value_type last_atom_result_;
+  static std::unordered_map<std::string, function_type> built_in_functions_;
+  friend Interpreter::atom_value_type operator+(
+      const Interpreter::atom_value_type& lhs,
+      const Interpreter::atom_value_type& rhs);
 };
+
+Interpreter::atom_value_type operator+(const Interpreter::atom_value_type& lhs,
+                                       const Interpreter::atom_value_type& rhs);
 
 }  // namespace oxid
 
