@@ -36,6 +36,10 @@ class Expr::Atom : public Expr {
   T value() const {
     return std::get<T>(value_);
   }
+  template <typename T>
+  bool has_value() const {
+    return std::holds_alternative<T>(value_);
+  }
   virtual void Accept(Expr::Visitor* visitor) const override;
 
  private:

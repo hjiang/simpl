@@ -17,6 +17,8 @@ class Interpreter : public Expr::Visitor {
   result_type evaluate(std::shared_ptr<Expr> expr);
 
  private:
+  template <typename T>
+  bool MaybeSetResult(const Expr::Atom& atom);
   result_type result_;
 };
 
