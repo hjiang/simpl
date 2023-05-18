@@ -22,6 +22,7 @@ class Interpreter : public Expr::Visitor {
   virtual void Visit(const Expr::Atom& atom) override;
   virtual void Visit(const Expr::List& list) override;
   atom_value_type evaluate(std::shared_ptr<Expr> expr);
+  static std::string StringifyValue(const atom_value_type& value);
 
  private:
   template <typename T>

@@ -6,7 +6,9 @@
 #include <string>
 
 #include "error.h"
+#include "interpreter.h"
 #include "lexer.h"
+#include "parser.h"
 
 namespace oxid {
 
@@ -15,10 +17,10 @@ using namespace std;
 static void run(const string &source) {
   Lexer lexer(source);
   list<Token> tokens = lexer.scan();
-
-  for (Token token : tokens) {
-    cout << string(token) << endl;
-  }
+  Parser parser(tokens);
+  Interpreter interpreter;
+  cout << Interpreter::StringifyValue(interpreter.evaluate(parser.Parse()))
+       << endl;
 }
 
 void RunFile(const string &path) {

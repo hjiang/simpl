@@ -88,6 +88,25 @@ Interpreter::atom_value_type Interpreter::evaluate(std::shared_ptr<Expr> expr) {
   return last_atom_result_;
 }
 
+std::string Interpreter::StringifyValue(const Interpreter::atom_value_type& v) {
+  if (holds<long>(v)) {
+    return std::to_string(std::get<long>(v));
+  }
+  if (holds<double>(v)) {
+    return std::to_string(std::get<double>(v));
+  }
+  if (holds<bool>(v)) {
+    return std::get<bool>(v) ? "true" : "false";
+  }
+  if (holds<std::string>(v)) {
+    return std::get<std::string>(v);
+  }
+  if (holds<Symbol>(v)) {
+    return std::get<Symbol>(v).name;
+  }
+  throw std::runtime_error("Unknown atom type");
+}
+
 template <typename T>
 bool Interpreter::MaybeSetAtomResult(const Expr::Atom& atom) {
   if (atom.has_value<T>()) {

@@ -1,11 +1,11 @@
-cc_binary(name = 'oxid-cli',
+cc_binary(name = 'oxid',
           srcs = ['main.cc'],
-          deps = ['oxid'])
+          deps = ['oxid-imp'])
 
-cc_library(name = 'oxid',
+cc_library(name = 'oxid-imp',
            srcs = ['oxid.cc'],
            hdrs = ['oxid.h'],
-           deps = ['error', 'token', 'lexer'])
+           deps = ['error', 'token', 'lexer', 'interpreter'])
 
 cc_library(name = 'token',
            srcs = ['token.cc'],
