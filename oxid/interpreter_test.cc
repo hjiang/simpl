@@ -34,6 +34,16 @@ TEST(Parser, Plus) {
   Interpreter interpreter;
   EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 3);
 }
+
+TEST(Parser, NestedSum) {
+  Lexer lexer("(+ 1 2 (+ 3 4))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 10);
+}
+
 // Local Variables:
 // compile-command : "bazel test //oxid:all"
 // End:
