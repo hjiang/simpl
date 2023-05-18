@@ -25,9 +25,9 @@ const Token& Parser::Consume(Token::Type type, const std::string& message) {
   throw Error(Peek(), message);
 }
 
-void Expr::Atom::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
+void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
-void Expr::List::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
+void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
 std::shared_ptr<Expr> Parser::Parse() {
   try {
@@ -122,3 +122,7 @@ const Token& Parser::Advance() {
 }
 
 }  // namespace oxid
+
+// Local Variables:
+// compile-command : "bazel test //oxid:all"
+// End:

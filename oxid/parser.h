@@ -1,24 +1,23 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
+#include <initializer_list>
 #include <iterator>
 #include <list>
 #include <memory>
 #include <string>
 #include <variant>
-#include <initializer_list>
 
 #include "token.h"
 
 namespace oxid {
 
-class ExprVisitor;
-
 class Expr {
  public:
   class Atom;
   class List;
-  virtual void Accept(ExprVisitor* visitor) const = 0;
+  class Visitor;
+  virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
 };
 
@@ -27,44 +26,45 @@ struct Symbol {
 };
 
 class Expr::Atom : public Expr {
-  using value_type = std::variant<long, double, bool, std::string, Symbol, nullptr_t>;
+  using value_type =
+      std::variant<long, double, bool, std::string, Symbol, nullptr_t>;
+
  public:
-  explicit Atom(value_type v): value_(v) {}
+  explicit Atom(value_type v) : value_(v) {}
   virtual ~Atom() {}
   template <typename T>
   T value() const {
     return std::get<T>(value_);
   }
-  virtual void Accept(ExprVisitor* visitor) const override;
+  virtual void Accept(Expr::Visitor* visitor) const override;
+
  private:
   value_type value_;
 };
 
 class Expr::List : public Expr {
  public:
-  explicit List(const std::list<std::shared_ptr<Expr>>& l): exprs_(l) {}
+  explicit List(const std::list<std::shared_ptr<Expr>>& l) : exprs_(l) {}
   virtual ~List() {}
-  virtual void Accept(ExprVisitor* visitor) const override;
+  virtual void Accept(Expr::Visitor* visitor) const override;
+
  private:
   const std::list<std::shared_ptr<Expr>> exprs_;
-};
-
-class ExprVisitor {
- public:
-  virtual void Visit(const Expr::List& expr) = 0;
-  virtual void Visit(const Expr::Atom& expr) = 0;
 };
 
 class Parser {
   using token_list_t = std::list<Token>;
   using expr_ptr = std::shared_ptr<Expr>;
+
  public:
-  explicit Parser(const token_list_t& tokens): tokens_(tokens), current_(tokens_.begin()) {}
+  explicit Parser(const token_list_t& tokens)
+      : tokens_(tokens), current_(tokens_.begin()) {}
   std::shared_ptr<Expr> Parse();
+
  private:
-  class ParseError: std::runtime_error {
+  class ParseError : std::runtime_error {
    public:
-    explicit ParseError(const std::string& msg): std::runtime_error(msg) {}
+    explicit ParseError(const std::string& msg) : std::runtime_error(msg) {}
   };
   ParseError Error(const Token& token, const std::string& msg);
   expr_ptr ParseExpr();
@@ -81,6 +81,17 @@ class Parser {
   token_list_t::const_iterator current_;
 };
 
+class Expr::Visitor {
+ public:
+  virtual void Visit(const Expr::List& expr) = 0;
+  virtual void Visit(const Expr::Atom& expr) = 0;
+  virtual ~Visitor() {}
+};
+
 }  // namespace oxid
 
 #endif  // PARSER_H_
+
+// Local Variables:
+// compile-command : "bazel test //oxid:all"
+// End:
