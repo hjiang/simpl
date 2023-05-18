@@ -8,14 +8,16 @@
 namespace oxid {
 
 class Interpreter : public Expr::Visitor {
+ public:
   struct Symbol {
     std::string name;
   };
+
   using atom_value_type = std::variant<long, double, bool, std::string, Symbol>;
   using function_type =
       std::function<atom_value_type(const std::vector<atom_value_type>&)>;
+  using fn_args_type = const std::vector<Interpreter::atom_value_type>&;
 
- public:
   virtual ~Interpreter() {}
   virtual void Visit(const Expr::Atom& atom) override;
   virtual void Visit(const Expr::List& list) override;
