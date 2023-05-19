@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 #include "error.h"
@@ -18,9 +19,16 @@ static void run(const string &source) {
   Lexer lexer(source);
   list<Token> tokens = lexer.scan();
   Parser parser(tokens);
+  auto ast = parser.Parse();
+  if (HadError()) {
+    return;
+  }
   Interpreter interpreter;
-  cout << Interpreter::StringifyValue(interpreter.evaluate(parser.Parse()))
-       << endl;
+  try {
+    cout << Interpreter::StringifyValue(interpreter.evaluate(ast)) << endl;
+  } catch (const std::runtime_error &e) {
+    HandleRuntimeError(e);
+  }
 }
 
 void RunFile(const string &path) {
@@ -33,6 +41,9 @@ void RunFile(const string &path) {
     run(ss.str());
     if (HadError()) {
       exit(65);
+    }
+    if (HadRuntimeError()) {
+      exit(70);
     }
   } else {
     cout << "Could not open file: " << path << endl;
