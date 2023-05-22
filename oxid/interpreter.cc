@@ -84,8 +84,16 @@ std::unordered_map<std::string, Interpreter::function_type>
          }}};
 
 Interpreter::atom_value_type Interpreter::evaluate(
-    const std::unique_ptr<Expr>& expr) {
+    const std::unique_ptr<const Expr>& expr) {
   expr->Accept(this);
+  return last_atom_result_;
+}
+
+Interpreter::atom_value_type Interpreter::evaluate(
+    const std::list<std::unique_ptr<const Expr>>& exprs) {
+  for (auto& e : exprs) {
+    evaluate(e);
+  }
   return last_atom_result_;
 }
 

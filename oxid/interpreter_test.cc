@@ -70,6 +70,15 @@ TEST(Parser, UnarySubstract) {
   Interpreter interpreter;
   EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), -12);
 }
+
+TEST(Parser, InterpretProgram) {
+  Lexer lexer("(- 1 2)\n(+ 3 4)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 7);
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:all"
 // End:

@@ -29,12 +29,12 @@ void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
 void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
-std::unique_ptr<Expr> Parser::Parse() {
-  try {
-    return ParseExpr();
-  } catch (const ParseError& e) {
-    return nullptr;
+std::list<std::unique_ptr<const Expr>> Parser::Parse() {
+  std::list<std::unique_ptr<const Expr>> exprs;
+  while (!AtEnd()) {
+    exprs.push_back(ParseExpr());
   }
+  return exprs;
 }
 
 std::unique_ptr<Expr> Parser::ParseAtom() {

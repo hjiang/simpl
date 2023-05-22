@@ -1,6 +1,8 @@
 #ifndef INTERPRETER_H_
 #define INTERPRETER_H_
 
+#include <memory>
+#include <unordered_map>
 #include <variant>
 
 #include "parser.h"
@@ -14,6 +16,39 @@ class Interpreter : public Expr::Visitor {
   };
 
   using atom_value_type = std::variant<long, double, bool, std::string, Symbol>;
+
+  class Environment {
+   public:
+    explicit Environment(std::unique_ptr<Environment>&& parent = nullptr)
+        : values_(), parent_(parent.release()) {}
+
+    void Define(const std::string& name, const atom_value_type& value) {
+      if (parent_) {
+        return parent_->Define(name, value);
+      }
+      values_[name] = value;
+    }
+
+    void Bind(const std::string& name, const atom_value_type& value) {
+      values_[name] = value;
+    }
+
+    atom_value_type Get(const std::string& name) const {
+      auto it = values_.find(name);
+      if (it != values_.end()) {
+        return it->second;
+      }
+      if (parent_) {
+        return parent_->Get(name);
+      }
+      throw std::runtime_error("Undefined variable '" + name + "'");
+    }
+
+   private:
+    std::unordered_map<std::string, atom_value_type> values_;
+    std::unique_ptr<Environment> parent_;
+  };
+
   using function_type =
       std::function<atom_value_type(const std::vector<atom_value_type>&)>;
   using fn_args_type = const std::vector<Interpreter::atom_value_type>&;
@@ -21,7 +56,8 @@ class Interpreter : public Expr::Visitor {
   virtual ~Interpreter() {}
   virtual void Visit(const Expr::Atom& atom) override;
   virtual void Visit(const Expr::List& list) override;
-  atom_value_type evaluate(const std::unique_ptr<Expr>& expr);
+  atom_value_type evaluate(const std::unique_ptr<const Expr>& expr);
+  atom_value_type evaluate(const std::list<std::unique_ptr<const Expr>>& expr);
   static std::string StringifyValue(const atom_value_type& value);
 
  private:

@@ -63,7 +63,7 @@ class Parser {
  public:
   explicit Parser(const token_list_t& tokens)
       : tokens_(tokens), current_(tokens_.begin()) {}
-  std::unique_ptr<Expr> Parse();
+  std::list<std::unique_ptr<const Expr>> Parse();
 
  private:
   class ParseError : std::runtime_error {
