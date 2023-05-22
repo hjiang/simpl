@@ -83,7 +83,8 @@ std::unordered_map<std::string, Interpreter::function_type>
                "Invalid types for operator -");  // FIXME: error handling
          }}};
 
-Interpreter::atom_value_type Interpreter::evaluate(std::shared_ptr<Expr> expr) {
+Interpreter::atom_value_type Interpreter::evaluate(
+    const std::unique_ptr<Expr>& expr) {
   expr->Accept(this);
   return last_atom_result_;
 }

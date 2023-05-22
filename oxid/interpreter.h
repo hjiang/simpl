@@ -21,13 +21,15 @@ class Interpreter : public Expr::Visitor {
   virtual ~Interpreter() {}
   virtual void Visit(const Expr::Atom& atom) override;
   virtual void Visit(const Expr::List& list) override;
-  atom_value_type evaluate(std::shared_ptr<Expr> expr);
+  atom_value_type evaluate(const std::unique_ptr<Expr>& expr);
   static std::string StringifyValue(const atom_value_type& value);
 
  private:
   template <typename T>
   bool MaybeSetAtomResult(const Expr::Atom& atom);
   atom_value_type last_atom_result_;
+  std::unique_ptr<Environment> environment_;
+
   static std::unordered_map<std::string, function_type> built_in_functions_;
   friend Interpreter::atom_value_type operator+(
       const Interpreter::atom_value_type& lhs,

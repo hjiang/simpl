@@ -14,7 +14,8 @@ TEST(Parser, Integer) {
   EXPECT_EQ(tokens.front().type, Token::kInteger);
   EXPECT_EQ(std::get<long>(tokens.front().literal), 1);
   Parser parser(tokens);
-  auto atom = std::dynamic_pointer_cast<Expr::Atom>(parser.Parse());
+  auto expr = parser.Parse();
+  auto atom = dynamic_cast<Expr::Atom*>(expr.get());
   EXPECT_EQ(atom->value<long>(), 1);
 }
 
@@ -23,7 +24,8 @@ TEST(Parser, String) {
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kString);
   Parser parser(tokens);
-  auto atom = std::dynamic_pointer_cast<Expr::Atom>(parser.Parse());
+  auto expr = parser.Parse();
+  auto atom = dynamic_cast<Expr::Atom*>(expr.get());
   EXPECT_EQ(atom->value<std::string>(), "hello");
 }
 
@@ -32,7 +34,8 @@ TEST(Parser, Bool) {
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kFalse);
   Parser parser(tokens);
-  auto atom = std::dynamic_pointer_cast<Expr::Atom>(parser.Parse());
+  auto expr = parser.Parse();
+  auto atom = dynamic_cast<Expr::Atom*>(expr.get());
   EXPECT_EQ(atom->value<bool>(), false);
 }
 
@@ -41,7 +44,8 @@ TEST(Parser, Symbol) {
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kSymbol);
   Parser parser(tokens);
-  auto atom = std::dynamic_pointer_cast<Expr::Atom>(parser.Parse());
+  auto expr = parser.Parse();
+  auto atom = dynamic_cast<Expr::Atom*>(expr.get());
   EXPECT_EQ(atom->value<Expr::Symbol>().name, "foo");
 }
 

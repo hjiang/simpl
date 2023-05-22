@@ -29,7 +29,7 @@ void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
 void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
-std::shared_ptr<Expr> Parser::Parse() {
+std::unique_ptr<Expr> Parser::Parse() {
   try {
     return ParseExpr();
   } catch (const ParseError& e) {
@@ -37,23 +37,23 @@ std::shared_ptr<Expr> Parser::Parse() {
   }
 }
 
-std::shared_ptr<Expr> Parser::ParseAtom() {
+std::unique_ptr<Expr> Parser::ParseAtom() {
   auto atom = Advance();
   switch (atom.type) {
     case Token::Type::kInteger:
-      return std::make_shared<Expr::Atom>(std::get<long>(atom.literal));
+      return std::make_unique<Expr::Atom>(std::get<long>(atom.literal));
       break;
     case Token::Type::kString:
-      return std::make_shared<Expr::Atom>(std::get<std::string>(atom.literal));
+      return std::make_unique<Expr::Atom>(std::get<std::string>(atom.literal));
       break;
     case Token::Type::kFloat:
-      return std::make_shared<Expr::Atom>(std::get<double>(atom.literal));
+      return std::make_unique<Expr::Atom>(std::get<double>(atom.literal));
       break;
     case Token::Type::kFalse:
-      return std::make_shared<Expr::Atom>(false);
+      return std::make_unique<Expr::Atom>(false);
       break;
     case Token::Type::kTrue:
-      return std::make_shared<Expr::Atom>(true);
+      return std::make_unique<Expr::Atom>(true);
       break;
     case Token::Type::kMinus:
     case Token::Type::kPlus:
@@ -78,15 +78,15 @@ std::shared_ptr<Expr> Parser::ParseAtom() {
     case Token::Type::kVar:
     case Token::Type::kWhile:
     case Token::Type::kSymbol:
-      return std::make_shared<Expr::Atom>(Expr::Symbol{atom.lexeme});
+      return std::make_unique<Expr::Atom>(Expr::Symbol{atom.lexeme});
     case Token::Type::kNil:
-      return std::make_shared<Expr::Atom>(nullptr);
+      return std::make_unique<Expr::Atom>(nullptr);
     default:
       throw Error(atom, "Unexpected token");
   }
 }
 
-std::shared_ptr<Expr> Parser::ParseExpr() {
+std::unique_ptr<Expr> Parser::ParseExpr() {
   if (Peek().type == Token::Type::kLeftParen) {
     return ParseList();
   } else {
@@ -94,14 +94,14 @@ std::shared_ptr<Expr> Parser::ParseExpr() {
   }
 }
 
-std::shared_ptr<Expr> Parser::ParseList() {
+std::unique_ptr<Expr> Parser::ParseList() {
   Consume(Token::Type::kLeftParen, "Expect '(' before list.");
-  std::list<std::shared_ptr<Expr>> exprs;
+  std::list<std::unique_ptr<Expr>> exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
     exprs.push_back(ParseExpr());
   }
   Consume(Token::Type::kRightParen, "Expect ')' after list.");
-  return std::make_shared<Expr::List>(exprs);
+  return std::make_unique<Expr::List>(std::move(exprs));
 }
 
 bool Parser::Match(Token::Type type) {

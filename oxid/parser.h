@@ -47,23 +47,23 @@ class Expr::Atom : public Expr {
 
 class Expr::List : public Expr {
  public:
-  explicit List(const std::list<std::shared_ptr<Expr>>& l) : exprs_(l) {}
+  explicit List(std::list<std::unique_ptr<Expr>>&& l) : exprs_(std::move(l)) {}
   virtual ~List() {}
   virtual void Accept(Expr::Visitor* visitor) const override;
-  const std::list<std::shared_ptr<Expr>>& exprs() const { return exprs_; }
+  const std::list<std::unique_ptr<Expr>>& exprs() const { return exprs_; }
 
  private:
-  const std::list<std::shared_ptr<Expr>> exprs_;
+  const std::list<std::unique_ptr<Expr>> exprs_;
 };
 
 class Parser {
   using token_list_t = std::list<Token>;
-  using expr_ptr = std::shared_ptr<Expr>;
+  using expr_ptr = std::unique_ptr<Expr>;
 
  public:
   explicit Parser(const token_list_t& tokens)
       : tokens_(tokens), current_(tokens_.begin()) {}
-  std::shared_ptr<Expr> Parse();
+  std::unique_ptr<Expr> Parse();
 
  private:
   class ParseError : std::runtime_error {
