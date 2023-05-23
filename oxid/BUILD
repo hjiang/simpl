@@ -48,7 +48,8 @@ cc_library(name = 'interpreter',
 
 cc_test(name = 'interpreter_test',
         srcs = ['interpreter_test.cc'],
-        deps = ['interpreter', 'parser', 'token', 'lexer', '@gtest//:gtest_main'])
+        deps = ['interpreter', 'parser', 'token', 'lexer', '@gtest//:gtest_main'],
+        size="small")
 
 cc_library(name = 'error',
            srcs = ['error.cc'],
