@@ -81,6 +81,8 @@ class Interpreter : public Expr::Visitor {
 Interpreter::atom_value_type operator+(const Interpreter::atom_value_type& lhs,
                                        const Interpreter::atom_value_type& rhs);
 
+Interpreter::atom_value_type operator-(const Interpreter::atom_value_type& lhs,
+                                       const Interpreter::atom_value_type& rhs);
 }  // namespace oxid
 
 #endif  // INTERPRETER_H_

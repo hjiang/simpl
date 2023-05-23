@@ -63,6 +63,15 @@ TEST(Parser, Substract) {
   EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), -1);
 }
 
+TEST(Parser, MoreSubstract) {
+  Lexer lexer("(- 1 2 3 4)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), -8);
+}
+
 TEST(Parser, UnarySubstract) {
   Lexer lexer("(- 12)");
   auto tokens = lexer.scan();

@@ -39,6 +39,32 @@ Interpreter::atom_value_type operator+(
       "Invalid types for operator +");  // FIXME: error handling
 }
 
+Interpreter::atom_value_type operator-(
+    const Interpreter::atom_value_type& lhs,
+    const Interpreter::atom_value_type& rhs) {
+  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
+    return std::get<long>(lhs) - std::get<long>(rhs);
+  }
+  if (std::holds_alternative<long>(lhs) &&
+      std::holds_alternative<double>(rhs)) {
+    return std::get<long>(lhs) - std::get<double>(rhs);
+  }
+  if (std::holds_alternative<double>(lhs) &&
+      std::holds_alternative<long>(rhs)) {
+    return std::get<double>(lhs) - std::get<long>(rhs);
+  }
+  if (std::holds_alternative<double>(lhs) &&
+      std::holds_alternative<double>(rhs)) {
+    return std::get<double>(lhs) - std::get<double>(rhs);
+  }
+  if (std::holds_alternative<std::string>(lhs) &&
+      std::holds_alternative<std::string>(rhs)) {
+    return std::get<std::string>(lhs) - std::get<std::string>(rhs);
+  }
+  throw std::runtime_error(
+      "Invalid types for operator -");  // FIXME: error handling
+}
+
 std::unordered_map<std::string, Interpreter::function_type>
     Interpreter::built_in_functions_{
         {"+",
@@ -51,36 +77,14 @@ std::unordered_map<std::string, Interpreter::function_type>
            return result;
          }},
         {"-",
-         [](Interpreter::fn_args_type args) -> Interpreter::atom_value_type {
-           if (args.size() > 2 || args.size() < 1) {
-             throw std::runtime_error(
-                 "Invalid number of arguments for operator -");  // FIXME: error
-                                                                 // handling
+         [](const std::vector<Interpreter::atom_value_type>& args)
+             -> Interpreter::atom_value_type {
+           auto i = args.begin();
+           Interpreter::atom_value_type result = *i++;
+           for (; i != args.end(); ++i) {
+             result = result - *i;
            }
-           auto lhs = args[0];
-           if (args.size() == 1) {
-             if (holds<long>(lhs)) {
-               return -std::get<long>(lhs);
-             }
-             if (holds<double>(lhs)) {
-               return -std::get<double>(lhs);
-             }
-           }
-           auto rhs = args[1];
-           if (holds<long>(lhs) && holds<long>(rhs)) {
-             return std::get<long>(lhs) - std::get<long>(rhs);
-           }
-           if (holds<double>(lhs) && holds<double>(rhs)) {
-             return std::get<double>(lhs) - std::get<double>(rhs);
-           }
-           if (holds<double>(lhs) && holds<long>(rhs)) {
-             return std::get<double>(lhs) - std::get<long>(rhs);
-           }
-           if (holds<long>(lhs) && holds<double>(rhs)) {
-             return std::get<long>(lhs) - std::get<double>(rhs);
-           }
-           throw std::runtime_error(
-               "Invalid types for operator -");  // FIXME: error handling
+           return args.size() > 1 ? result : 0 - result;
          }}};
 
 Interpreter::atom_value_type Interpreter::evaluate(const Expr& expr) {
