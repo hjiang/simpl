@@ -22,15 +22,16 @@ class Interpreter : public Expr::Visitor {
     explicit Environment(std::unique_ptr<Environment>&& parent = nullptr)
         : values_(), parent_(parent.release()) {}
 
-    void Define(const std::string& name, const atom_value_type& value) {
+    void Define(std::string name, atom_value_type value) {
       if (parent_) {
-        return parent_->Define(name, value);
+        return parent_->Define(std::move(name), std::move(value));
+      } else {
+        values_[std::move(name)] = std::move(value);
       }
-      values_[name] = value;
     }
 
-    void Bind(const std::string& name, const atom_value_type& value) {
-      values_[name] = value;
+    void Bind(std::string name, atom_value_type value) {
+      values_[std::move(name)] = std::move(value);
     }
 
     atom_value_type Get(const std::string& name) const {

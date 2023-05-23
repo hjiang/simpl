@@ -59,8 +59,8 @@ class Expr::List : public Expr {
 
 class Expr::Def: public Expr {
  public:
-  Def(const std::string& name, std::unique_ptr<Expr> expr)
-      : name_(name), expr_(std::move(expr)) {
+  Def(std::string name, std::unique_ptr<Expr> expr)
+      : name_(std::move(name)), expr_(std::move(expr)) {
   }
   virtual ~Def() {}
   virtual void Accept(Expr::Visitor* visitor) const override;
