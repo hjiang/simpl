@@ -66,7 +66,7 @@ class Interpreter : public Expr::Visitor {
  private:
   template <typename T>
   bool MaybeSetAtomResult(const Expr::Atom& atom);
-  void DefVar(const std::string& name, const atom_value_type& value);
+  void DefVar(std::string name, atom_value_type value);
 
   atom_value_type last_atom_result_;
   std::unique_ptr<Environment> env_;

@@ -102,7 +102,7 @@ std::unique_ptr<Expr> Parser::ParseDef() {
   auto name = token.lexeme;
   auto expr = ParseExpr();
   Consume(Token::Type::kRightParen, "Expect ')' after definition.");
-  return std::make_unique<Expr::Def>(name, std::move(expr));
+  return std::make_unique<Expr::Def>(std::move(name), std::move(expr));
 }
 
 std::unique_ptr<Expr> Parser::ParseList() {
