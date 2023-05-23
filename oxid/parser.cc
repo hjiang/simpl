@@ -62,6 +62,7 @@ std::unique_ptr<Expr> Parser::ParseAtom() {
     case Token::Type::kPlus:
     case Token::Type::kSlash:
     case Token::Type::kStar:
+    case Token::Type::kPercent:
     case Token::Type::kEqual:
     case Token::Type::kBang:
     case Token::Type::kBangEqual:

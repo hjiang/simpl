@@ -73,15 +73,17 @@ class Interpreter : public Expr::Visitor {
 
   static std::unordered_map<std::string, function_type> built_in_functions_;
   static bool IsBuiltInFn(const std::string& name);
-  friend Interpreter::atom_value_type operator+(
-      const Interpreter::atom_value_type& lhs,
-      const Interpreter::atom_value_type& rhs);
 };
 
 Interpreter::atom_value_type operator+(const Interpreter::atom_value_type& lhs,
                                        const Interpreter::atom_value_type& rhs);
-
 Interpreter::atom_value_type operator-(const Interpreter::atom_value_type& lhs,
+                                       const Interpreter::atom_value_type& rhs);
+Interpreter::atom_value_type operator*(const Interpreter::atom_value_type& lhs,
+                                       const Interpreter::atom_value_type& rhs);
+Interpreter::atom_value_type operator/(const Interpreter::atom_value_type& lhs,
+                                       const Interpreter::atom_value_type& rhs);
+Interpreter::atom_value_type operator%(const Interpreter::atom_value_type& lhs,
                                        const Interpreter::atom_value_type& rhs);
 }  // namespace oxid
 

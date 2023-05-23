@@ -81,6 +81,42 @@ TEST(Parser, UnarySubstract) {
   EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), -12);
 }
 
+TEST(Parser, Multiply) {
+  Lexer lexer("(* 3 2)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 6);
+}
+
+TEST(Parser, MoreMultiply) {
+  Lexer lexer("(* 2 3 4)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 24);
+}
+
+TEST(Parser, divide) {
+  Lexer lexer("(/ 6 2)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 3);
+}
+
+TEST(Parser, mod) {
+  Lexer lexer("(% 11 3)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 2);
+}
+
 TEST(Parser, InterpretProgram) {
   Lexer lexer("(- 1 2)\n(+ 3 4)");
   auto tokens = lexer.scan();

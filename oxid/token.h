@@ -23,6 +23,7 @@ class Token {
     kSlash,
     kStar,
     kEqual,
+    kPercent,
 
     // One or two character tokens.
     kBang,

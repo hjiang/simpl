@@ -85,6 +85,12 @@ void Lexer::ScanToken() {
     case '*':
       AddToken(Token::kStar);
       break;
+    case '/':
+      AddToken(Token::kSlash);
+      break;
+    case '%':
+      AddToken(Token::kPercent);
+      break;
     case '!':
       AddToken(Match('=') ? Token::kBangEqual : Token::kBang);
       break;
