@@ -117,6 +117,19 @@ TEST(Lexer, Symbol) {
   EXPECT_EQ(tokens.front().lexeme, "asdf");
   EXPECT_FALSE(oxid::HadError());
 }
+
+TEST(Lexer, Multiply) {
+  Lexer lexer("(* 3 2)");
+  auto tokens = lexer.scan();
+  auto it = tokens.begin();
+  EXPECT_EQ((it++)->type, Token::kLeftParen);
+  EXPECT_EQ((it++)->type, Token::kStar);
+  EXPECT_EQ((it++)->type, Token::kInteger);
+  EXPECT_EQ((it++)->type, Token::kInteger);
+  EXPECT_EQ((it++)->type, Token::kRightParen);
+  EXPECT_EQ((it++)->type, Token::kEof);
+  EXPECT_EQ(tokens.size(), 6);
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
 // End:
