@@ -18,6 +18,7 @@ class Expr {
   class List;
   class Visitor;
   class Def;
+  class Let;
   virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
   struct Symbol {
@@ -71,6 +72,21 @@ class Expr::Def: public Expr {
   const std::unique_ptr<Expr> expr_;
 };
 
+class Expr::Let: public Expr {
+ public:
+  using body_t = std::list<std::unique_ptr<Expr>>;
+  using binding_t = std::pair<std::string, std::unique_ptr<Expr>>;
+  using binding_list_t = std::list<binding_t>;
+  Let(binding_list_t&& bindings, body_t&& body)
+      : bindings_(std::move(bindings)), body_(std::move(body)) {
+  }
+  virtual ~Let() = default;
+  virtual void Accept(Expr::Visitor* visitor) const override;
+ private:
+  const binding_list_t bindings_;
+  const body_t body_;
+};
+
 class Parser {
   using token_list_t = std::list<Token>;
   using expr_ptr = std::unique_ptr<Expr>;
@@ -90,6 +106,9 @@ class Parser {
   expr_ptr ParseList();
   expr_ptr ParseAtom();
   expr_ptr ParseDef();
+  expr_ptr ParseLet();
+  Expr::Let::binding_list_t ParseBindings();
+  Expr::Let::binding_t ParseBinding();
   bool Match(Token::Type type);
   bool Check(Token::Type type) const;
   const Token& Consume(Token::Type type, const std::string& msg);
@@ -106,6 +125,7 @@ class Expr::Visitor {
   virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Atom& expr) = 0;
   virtual void Visit(const Expr::Def& expr) = 0;
+  virtual void Visit(const Expr::Let& expr) = 0;
   virtual ~Visitor() {}
 };
 

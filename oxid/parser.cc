@@ -27,10 +27,9 @@ const Token& Parser::Consume(Token::Type type, const std::string& message) {
 }
 
 void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-
 void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-
 void Expr::Def::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::Let::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
 std::list<std::unique_ptr<const Expr>> Parser::Parse() {
   std::list<std::unique_ptr<const Expr>> exprs;
@@ -89,6 +88,9 @@ std::unique_ptr<Expr> Parser::ParseExpr() {
     if (Match(Token::Type::kDef)) {
       return ParseDef();
     }
+    if (Match(Token::Type::kLet)) {
+      return ParseLet();
+    }
     return ParseList();
   } else {
     return ParseAtom();
@@ -104,6 +106,34 @@ std::unique_ptr<Expr> Parser::ParseDef() {
   auto expr = ParseExpr();
   Consume(Token::Type::kRightParen, "Expect ')' after definition.");
   return std::make_unique<Expr::Def>(std::move(name), std::move(expr));
+}
+
+Expr::Let::binding_t Parser::ParseBinding() {
+  auto token = Advance();
+  if (token.type != Token::Type::kSymbol) {
+    throw Error(token, "Expected symbol as binding target");
+  }
+  return std::make_pair(std::move(token.lexeme), ParseExpr());
+}
+
+Expr::Let::binding_list_t Parser::ParseBindings() {
+  Expr::Let::binding_list_t bindings;
+  Consume(Token::Type::kLeftBracket, "Expect '[' before bindings.");
+  while (!Check(Token::Type::kRightBracket) && !AtEnd()) {
+    bindings.push_back(ParseBinding());
+  }
+  Consume(Token::Type::kRightBracket, "Expect ']' after bindings.");
+  return bindings;
+}
+
+std::unique_ptr<Expr> Parser::ParseLet() {
+  Expr::Let::binding_list_t bindings(ParseBindings());
+  Expr::Let::body_t body;
+  while (!Check(Token::Type::kRightParen) && !AtEnd()) {
+    body.push_back(ParseExpr());
+  }
+  Consume(Token::Type::kRightParen, "Expect ')' at end of LET form.");
+  return std::make_unique<Expr::Let>(std::move(bindings), std::move(body));
 }
 
 std::unique_ptr<Expr> Parser::ParseList() {

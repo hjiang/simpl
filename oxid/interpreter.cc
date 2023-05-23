@@ -262,6 +262,8 @@ void Interpreter::Visit(const Expr::Def& def) {
   DefVar(def.name(), last_atom_result_);
 }
 
+void Interpreter::Visit([[maybe_unused]] const Expr::Let& let) {}
+
 void Interpreter::DefVar(std::string name, atom_value_type value) {
   env_->Define(std::move(name), std::move(value));
 }
