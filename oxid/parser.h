@@ -17,6 +17,7 @@ class Expr {
   class Atom;
   class List;
   class Visitor;
+  class Def;
   virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
   struct Symbol {
@@ -56,6 +57,20 @@ class Expr::List : public Expr {
   const std::list<std::unique_ptr<Expr>> exprs_;
 };
 
+class Expr::Def: public Expr {
+ public:
+  Def(const std::string& name, std::unique_ptr<Expr> expr)
+      : name_(name), expr_(std::move(expr)) {
+  }
+  virtual ~Def() {}
+  virtual void Accept(Expr::Visitor* visitor) const override;
+  const std::string& name() const { return name_; }
+  const Expr& expr() const { return *expr_; }
+ private:
+  const std::string name_;
+  const std::unique_ptr<Expr> expr_;
+};
+
 class Parser {
   using token_list_t = std::list<Token>;
   using expr_ptr = std::unique_ptr<Expr>;
@@ -74,6 +89,7 @@ class Parser {
   expr_ptr ParseExpr();
   expr_ptr ParseList();
   expr_ptr ParseAtom();
+  expr_ptr ParseDef();
   bool Match(Token::Type type);
   bool Check(Token::Type type) const;
   const Token& Consume(Token::Type type, const std::string& msg);
@@ -89,6 +105,7 @@ class Expr::Visitor {
  public:
   virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Atom& expr) = 0;
+  virtual void Visit(const Expr::Def& expr) = 0;
   virtual ~Visitor() {}
 };
 

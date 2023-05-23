@@ -23,7 +23,7 @@ static void run(const string &source) {
   if (HadError()) {
     return;
   }
-  Interpreter interpreter;
+  static Interpreter interpreter;
   try {
     cout << Interpreter::StringifyValue(interpreter.evaluate(ast)) << endl;
   } catch (const std::runtime_error &e) {

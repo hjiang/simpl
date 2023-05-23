@@ -1,6 +1,7 @@
 #include "parser.h"
 
 #include <memory>
+#include <string>
 
 #include "error.h"
 
@@ -28,6 +29,8 @@ const Token& Parser::Consume(Token::Type type, const std::string& message) {
 void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
 void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+
+void Expr::Def::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
 std::list<std::unique_ptr<const Expr>> Parser::Parse() {
   std::list<std::unique_ptr<const Expr>> exprs;
@@ -67,12 +70,6 @@ std::unique_ptr<Expr> Parser::ParseAtom() {
     case Token::Type::kLess:
     case Token::Type::kLessEqual:
     case Token::Type::kAnd:
-    case Token::Type::kDef:
-    case Token::Type::kDefn:
-    case Token::Type::kFn:
-    case Token::Type::kFor:
-    case Token::Type::kIf:
-    case Token::Type::kLet:
     case Token::Type::kOr:
     case Token::Type::kPrint:
     case Token::Type::kVar:
@@ -87,15 +84,28 @@ std::unique_ptr<Expr> Parser::ParseAtom() {
 }
 
 std::unique_ptr<Expr> Parser::ParseExpr() {
-  if (Peek().type == Token::Type::kLeftParen) {
+  if (Match(Token::Type::kLeftParen)) {
+    if (Match(Token::Type::kDef)) {
+      return ParseDef();
+    }
     return ParseList();
   } else {
     return ParseAtom();
   }
 }
 
+std::unique_ptr<Expr> Parser::ParseDef() {
+  auto token = Advance();
+  if (token.type != Token::Type::kSymbol) {
+    throw Error(token, "Expected symbol after def");
+  }
+  auto name = token.lexeme;
+  auto expr = ParseExpr();
+  Consume(Token::Type::kRightParen, "Expect ')' after definition.");
+  return std::make_unique<Expr::Def>(name, std::move(expr));
+}
+
 std::unique_ptr<Expr> Parser::ParseList() {
-  Consume(Token::Type::kLeftParen, "Expect '(' before list.");
   std::list<std::unique_ptr<Expr>> exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
     exprs.push_back(ParseExpr());
@@ -117,12 +127,12 @@ bool Parser::Check(Token::Type type) const {
 }
 
 const Token& Parser::Advance() {
-  if (!AtEnd()) current_++;
+  if (!AtEnd()) ++current_;
   return Previous();
 }
 
 }  // namespace oxid
 
 // Local Variables:
-// compile-command : "bazel test //oxid:all"
+// compile-command : "bazel test //oxid:parser_test"
 // End:

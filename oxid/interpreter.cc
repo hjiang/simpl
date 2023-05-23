@@ -83,16 +83,15 @@ std::unordered_map<std::string, Interpreter::function_type>
                "Invalid types for operator -");  // FIXME: error handling
          }}};
 
-Interpreter::atom_value_type Interpreter::evaluate(
-    const std::unique_ptr<const Expr>& expr) {
-  expr->Accept(this);
+Interpreter::atom_value_type Interpreter::evaluate(const Expr& expr) {
+  expr.Accept(this);
   return last_atom_result_;
 }
 
 Interpreter::atom_value_type Interpreter::evaluate(
     const std::list<std::unique_ptr<const Expr>>& exprs) {
-  for (auto& e : exprs) {
-    evaluate(e);
+  for (const auto& e : exprs) {
+    evaluate(*e);
   }
   return last_atom_result_;
 }
@@ -116,6 +115,10 @@ std::string Interpreter::StringifyValue(const Interpreter::atom_value_type& v) {
   throw std::runtime_error("Unknown atom type");
 }
 
+bool Interpreter::IsBuiltInFn(const std::string& name) {
+  return built_in_functions_.find(name) != built_in_functions_.end();
+}
+
 template <typename T>
 bool Interpreter::MaybeSetAtomResult(const Expr::Atom& atom) {
   if (atom.has_value<T>()) {
@@ -128,8 +131,12 @@ bool Interpreter::MaybeSetAtomResult(const Expr::Atom& atom) {
 template <>
 bool Interpreter::MaybeSetAtomResult<Expr::Symbol>(const Expr::Atom& atom) {
   if (atom.has_value<Expr::Symbol>()) {
-    last_atom_result_ =
-        atom_value_type(Symbol{.name = atom.value<Expr::Symbol>().name});
+    auto name = atom.value<Expr::Symbol>().name;
+    if (IsBuiltInFn(name)) {
+      last_atom_result_ = atom_value_type(Symbol{.name = name});
+    } else {
+      last_atom_result_ = env_->Get(name);
+    }
     return true;
   }
   return false;
@@ -164,6 +171,16 @@ void Interpreter::Visit(const Expr::List& list) {
     args.push_back(last_atom_result_);
   }
   last_atom_result_ = func(args);
+}
+
+void Interpreter::Visit(const Expr::Def& def) {
+  def.expr().Accept(this);
+  DefVar(def.name(), last_atom_result_);
+}
+
+void Interpreter::DefVar(const std::string& name,
+                         const atom_value_type& value) {
+  env_->Define(name, value);
 }
 
 }  // namespace oxid

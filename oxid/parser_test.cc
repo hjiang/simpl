@@ -53,7 +53,40 @@ TEST(Parser, List) {
   Lexer lexer("(+ 1 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
-  EXPECT_TRUE(nullptr != parser.Parse().front());
+  auto exprs = parser.Parse();
+  EXPECT_TRUE(nullptr != exprs.front());
+  Expr::List const *list =
+      dynamic_cast<Expr::List const *>(exprs.front().get());
+  EXPECT_TRUE(nullptr != list);
+  EXPECT_EQ(list->exprs().size(), 3);
+  auto i = list->exprs().begin();
+  auto atom = dynamic_cast<Expr::Atom const *>(i->get());
+  EXPECT_EQ(atom->value<Expr::Symbol>().name, "+");
+  i++;
+  atom = dynamic_cast<Expr::Atom const *>(i->get());
+  EXPECT_EQ(atom->value<long>(), 1);
+  i++;
+  atom = dynamic_cast<Expr::Atom const *>(i->get());
+  EXPECT_EQ(atom->value<long>(), 2);
+}
+
+TEST(Parser, DefConstructor) {
+  std::unique_ptr<Expr> def =
+      std::make_unique<Expr::Def>("foo", std::make_unique<Expr::Atom>(42));
+  auto defptr = dynamic_cast<Expr::Def const *>(def.get());
+  EXPECT_EQ("foo", defptr->name());
+}
+
+TEST(Parser, Def) {
+  Lexer lexer("(def foo 42)");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(6, tokens.size());
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  EXPECT_EQ(1, exprs.size());
+  auto def = dynamic_cast<Expr::Def const *>(exprs.front().get());
+  EXPECT_TRUE(nullptr != def);
+  EXPECT_EQ("foo", def->name());
 }
 
 // Local Variables:
