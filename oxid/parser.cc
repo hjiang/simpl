@@ -77,8 +77,10 @@ std::unique_ptr<Expr> Parser::ParseAtom() {
     case Token::Type::kWhile:
     case Token::Type::kSymbol:
       return std::make_unique<Expr::Atom>(Expr::Symbol{atom.lexeme});
+      break;
     case Token::Type::kNil:
       return std::make_unique<Expr::Atom>(nullptr);
+      break;
     default:
       throw Error(atom, "Unexpected token");
   }

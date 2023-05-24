@@ -106,6 +106,16 @@ TEST(Parser, If) {
   auto exprs = parser.Parse();
   EXPECT_EQ(1, exprs.size());
 }
+
+TEST(Parser, Nil) {
+  Lexer lexer("nil");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  EXPECT_EQ(1, exprs.size());
+  auto atom = dynamic_cast<Expr::Atom const *>(exprs.front().get());
+  EXPECT_EQ(atom->value<nullptr_t>(), nullptr);
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:parser_test"
 // End:

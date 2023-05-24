@@ -59,6 +59,15 @@ std::unordered_map<std::string, Interpreter::function_type>
              result = result % *i;
            }
            return result;
+         }},
+        {"not",
+         [](const std::vector<Interpreter::atom_value_type>& args)
+             -> Interpreter::atom_value_type {
+           if (args.size() != 1) {
+             throw std::runtime_error("NOT takes exactly one argument");
+           }
+           return Interpreter::atom_value_type(
+               static_cast<bool>(!IsTruthy(args[0])));
          }}};
 
 Interpreter::atom_value_type Interpreter::evaluate(const Expr& expr) {
@@ -124,7 +133,8 @@ void Interpreter::Visit(const Expr::Atom& atom) {
   if (!(MaybeSetAtomResult<long>(atom) || MaybeSetAtomResult<double>(atom) ||
         MaybeSetAtomResult<bool>(atom) ||
         MaybeSetAtomResult<std::string>(atom) ||
-        MaybeSetAtomResult<Expr::Symbol>(atom))) {
+        MaybeSetAtomResult<Expr::Symbol>(atom) ||
+        MaybeSetAtomResult<nullptr_t>(atom))) {
     throw std::runtime_error("Unknown atom type");  // FIXME: error handling
   }
 }

@@ -130,6 +130,15 @@ TEST(Lexer, Multiply) {
   EXPECT_EQ((it++)->type, Token::kEof);
   EXPECT_EQ(tokens.size(), 6);
 }
+
+TEST(Lexer, Nil) {
+  Lexer lexer("nil");
+  auto tokens = lexer.scan();
+  auto it = tokens.begin();
+  EXPECT_EQ((it++)->type, Token::kNil);
+  EXPECT_EQ((it++)->type, Token::kEof);
+  EXPECT_EQ(tokens.size(), 2);
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
 // End:

@@ -165,6 +165,15 @@ TEST(Parser, If) {
   exprs = parser2.Parse();
   EXPECT_EQ(std::get<long>(interpreter.evaluate(exprs)), 4);
 }
+
+TEST(Parser, Not) {
+  Lexer lexer("(not nil)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_TRUE(std::get<bool>(interpreter.evaluate(exprs)));
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:all"
 // End:
