@@ -3,6 +3,7 @@
 #ifndef OXID_INTERPRETER_H_
 #define OXID_INTERPRETER_H_
 
+#include <functional>
 #include <list>
 #include <memory>
 #include <string>

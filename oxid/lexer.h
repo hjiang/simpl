@@ -28,9 +28,9 @@ class Lexer {
   void Symbol();
   const std::string source_;
   std::list<Token> tokens_;
-  int start_ = 0;
-  int current_ = 0;
-  int line_ = 1;
+  size_t start_ = 0;
+  size_t current_ = 0;
+  size_t line_ = 1;
 };
 
 }  // namespace oxid
