@@ -5,116 +5,12 @@
 #include <stdexcept>
 #include <string>
 
+#include "arithmetic.h"
+#include "interpreter_util.h"
 #include "parser.h"
 
 namespace oxid {
 
-template <typename T>
-static bool holds(Interpreter::atom_value_type value) {
-  return std::holds_alternative<T>(value);
-}
-
-Interpreter::atom_value_type operator+(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) + std::get<long>(rhs);
-  }
-  if (std::holds_alternative<long>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<long>(lhs) + std::get<double>(rhs);
-  }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<long>(rhs)) {
-    return std::get<double>(lhs) + std::get<long>(rhs);
-  }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<double>(lhs) + std::get<double>(rhs);
-  }
-  if (std::holds_alternative<std::string>(lhs) &&
-      std::holds_alternative<std::string>(rhs)) {
-    return std::get<std::string>(lhs) + std::get<std::string>(rhs);
-  }
-  throw std::runtime_error(
-      "Invalid types for operator +");  // FIXME: error handling
-}
-
-Interpreter::atom_value_type operator-(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) - std::get<long>(rhs);
-  }
-  if (std::holds_alternative<long>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<long>(lhs) - std::get<double>(rhs);
-  }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<long>(rhs)) {
-    return std::get<double>(lhs) - std::get<long>(rhs);
-  }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<double>(lhs) - std::get<double>(rhs);
-  }
-  throw std::runtime_error(
-      "Invalid types for operator -");  // FIXME: error handling
-}
-
-Interpreter::atom_value_type operator*(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) * std::get<long>(rhs);
-  }
-  if (std::holds_alternative<long>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<long>(lhs) * std::get<double>(rhs);
-  }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<long>(rhs)) {
-    return std::get<double>(lhs) * std::get<long>(rhs);
-  }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<double>(lhs) * std::get<double>(rhs);
-  }
-  throw std::runtime_error(
-      "Invalid types for operator *");  // FIXME: error handling
-}
-
-Interpreter::atom_value_type operator/(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) / std::get<long>(rhs);
-  }
-  if (std::holds_alternative<long>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<long>(lhs) / std::get<double>(rhs);
-  }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<long>(rhs)) {
-    return std::get<double>(lhs) / std::get<long>(rhs);
-  }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<double>(lhs) / std::get<double>(rhs);
-  }
-  throw std::runtime_error(
-      "Invalid types for operator /");  // FIXME: error handling
-}
-
-Interpreter::atom_value_type operator%(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) % std::get<long>(rhs);
-  }
-  throw std::runtime_error(
-      "Invalid types for operator %");  // FIXME: error handling
-}
 std::unordered_map<std::string, Interpreter::function_type>
     Interpreter::built_in_functions_{
         {"+",

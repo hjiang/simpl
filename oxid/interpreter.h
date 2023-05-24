@@ -84,16 +84,6 @@ class Interpreter : public Expr::Visitor {
   static bool IsBuiltInFn(const std::string& name);
 };
 
-Interpreter::atom_value_type operator+(const Interpreter::atom_value_type& lhs,
-                                       const Interpreter::atom_value_type& rhs);
-Interpreter::atom_value_type operator-(const Interpreter::atom_value_type& lhs,
-                                       const Interpreter::atom_value_type& rhs);
-Interpreter::atom_value_type operator*(const Interpreter::atom_value_type& lhs,
-                                       const Interpreter::atom_value_type& rhs);
-Interpreter::atom_value_type operator/(const Interpreter::atom_value_type& lhs,
-                                       const Interpreter::atom_value_type& rhs);
-Interpreter::atom_value_type operator%(const Interpreter::atom_value_type& lhs,
-                                       const Interpreter::atom_value_type& rhs);
 }  // namespace oxid
 
 #endif  // INTERPRETER_H_

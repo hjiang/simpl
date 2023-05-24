@@ -42,8 +42,8 @@ cc_test(
     size = "small")
 
 cc_library(name = 'interpreter',
-           srcs = ['interpreter.cc'],
-           hdrs = ['interpreter.h'],
+           srcs = ['interpreter.cc', 'arithmetic.cc', 'interpreter_util.cc'],
+           hdrs = ['interpreter.h', 'arithmetic.h', 'interpreter_util.h'],
            deps = ['parser', 'error'])
 
 cc_test(name = 'interpreter_test',
