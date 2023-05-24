@@ -29,7 +29,7 @@ class Expr {
 
 class Expr::Atom : public Expr {
   using value_type =
-      std::variant<long, double, bool, std::string, Symbol, nullptr_t>;
+      std::variant<int_type, float_type, bool, std::string, Symbol, nullptr_t>;
 
  public:
   explicit Atom(value_type v) : value_(v) {}

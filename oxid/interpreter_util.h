@@ -20,13 +20,13 @@ template <typename T>
 std::string TypeStr();
 
 template <>
-inline std::string TypeStr<long>() {
-  return "long";
+inline std::string TypeStr<int_type>() {
+  return "int_type";
 }
 
 template <>
-inline std::string TypeStr<double>() {
-  return "double";
+inline std::string TypeStr<float_type>() {
+  return "float_type";
 }
 
 template <>

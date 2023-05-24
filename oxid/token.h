@@ -4,6 +4,8 @@
 #include <string>
 #include <variant>
 
+#include "config.h"
+
 namespace oxid {
 
 class Token {
@@ -62,7 +64,7 @@ class Token {
     kEof
   };
 
-  using literal_t = std::variant<long, double, std::string, nullptr_t>;
+  using literal_t = std::variant<int_type, float_type, std::string, nullptr_t>;
   const Type type;
   const std::string lexeme;
   const literal_t literal;

@@ -60,7 +60,7 @@ TEST(Lexer, Float) {
   Lexer lexer("3.14");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.size(), 2);
-  EXPECT_DOUBLE_EQ(std::get<double>(tokens.front().literal), 3.14);
+  EXPECT_DOUBLE_EQ(std::get<float_type>(tokens.front().literal), 3.14);
   EXPECT_FALSE(oxid::HadError());
 }
 
@@ -69,7 +69,7 @@ TEST(Lexer, Integer) {
   Lexer lexer("256");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.size(), 2);
-  EXPECT_EQ(std::get<long>(tokens.front().literal), 256);
+  EXPECT_EQ(std::get<int_type>(tokens.front().literal), 256);
   EXPECT_FALSE(oxid::HadError());
 }
 
@@ -95,7 +95,7 @@ TEST(Lexer, NegativeInteger) {
   Lexer lexer("-123");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.size(), 2);
-  EXPECT_EQ(std::get<long>(tokens.front().literal), -123);
+  EXPECT_EQ(std::get<int_type>(tokens.front().literal), -123);
   EXPECT_FALSE(oxid::HadError());
 }
 

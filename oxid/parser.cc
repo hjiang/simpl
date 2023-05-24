@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include "config.h"
 #include "error.h"
 
 namespace oxid {
@@ -44,13 +45,13 @@ std::unique_ptr<Expr> Parser::ParseAtom() {
   auto atom = Advance();
   switch (atom.type) {
     case Token::Type::kInteger:
-      return std::make_unique<Expr::Atom>(std::get<long>(atom.literal));
+      return std::make_unique<Expr::Atom>(std::get<int_type>(atom.literal));
       break;
     case Token::Type::kString:
       return std::make_unique<Expr::Atom>(std::get<std::string>(atom.literal));
       break;
     case Token::Type::kFloat:
-      return std::make_unique<Expr::Atom>(std::get<double>(atom.literal));
+      return std::make_unique<Expr::Atom>(std::get<float_type>(atom.literal));
       break;
     case Token::Type::kFalse:
       return std::make_unique<Expr::Atom>(false);

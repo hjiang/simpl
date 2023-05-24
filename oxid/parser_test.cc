@@ -12,11 +12,11 @@ TEST(Parser, Integer) {
   Lexer lexer("1");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kInteger);
-  EXPECT_EQ(std::get<long>(tokens.front().literal), 1);
+  EXPECT_EQ(std::get<int_type>(tokens.front().literal), 1);
   Parser parser(tokens);
   auto exprs = parser.Parse();
   auto atom = dynamic_cast<Expr::Atom const *>(exprs.front().get());
-  EXPECT_EQ(atom->value<long>(), 1);
+  EXPECT_EQ(atom->value<int_type>(), 1);
 }
 
 TEST(Parser, String) {
@@ -64,10 +64,10 @@ TEST(Parser, List) {
   EXPECT_EQ(atom->value<Expr::Symbol>().name, "+");
   i++;
   atom = dynamic_cast<Expr::Atom const *>(i->get());
-  EXPECT_EQ(atom->value<long>(), 1);
+  EXPECT_EQ(atom->value<int_type>(), 1);
   i++;
   atom = dynamic_cast<Expr::Atom const *>(i->get());
-  EXPECT_EQ(atom->value<long>(), 2);
+  EXPECT_EQ(atom->value<int_type>(), 2);
 }
 
 TEST(Parser, DefConstructor) {

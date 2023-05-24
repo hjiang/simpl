@@ -7,20 +7,20 @@ namespace oxid {
 Interpreter::atom_value_type operator+(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) + std::get<long>(rhs);
+  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+    return std::get<int_type>(lhs) + std::get<int_type>(rhs);
   }
-  if (std::holds_alternative<long>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<long>(lhs) + std::get<double>(rhs);
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<float_type>(rhs)) {
+    return std::get<int_type>(lhs) + std::get<float_type>(rhs);
   }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<long>(rhs)) {
-    return std::get<double>(lhs) + std::get<long>(rhs);
+  if (std::holds_alternative<float_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
+    return std::get<float_type>(lhs) + std::get<int_type>(rhs);
   }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<double>(lhs) + std::get<double>(rhs);
+  if (std::holds_alternative<float_type>(lhs) &&
+      std::holds_alternative<float_type>(rhs)) {
+    return std::get<float_type>(lhs) + std::get<double>(rhs);
   }
   if (std::holds_alternative<std::string>(lhs) &&
       std::holds_alternative<std::string>(rhs)) {
@@ -33,20 +33,20 @@ Interpreter::atom_value_type operator+(
 Interpreter::atom_value_type operator-(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) - std::get<long>(rhs);
+  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+    return std::get<int_type>(lhs) - std::get<int_type>(rhs);
   }
-  if (std::holds_alternative<long>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<long>(lhs) - std::get<double>(rhs);
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<float_type>(rhs)) {
+    return std::get<int_type>(lhs) - std::get<float_type>(rhs);
   }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<long>(rhs)) {
-    return std::get<double>(lhs) - std::get<long>(rhs);
+  if (std::holds_alternative<float_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
+    return std::get<float_type>(lhs) - std::get<int_type>(rhs);
   }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<double>(lhs) - std::get<double>(rhs);
+  if (std::holds_alternative<float_type>(lhs) &&
+      std::holds_alternative<float_type>(rhs)) {
+    return std::get<float_type>(lhs) - std::get<double>(rhs);
   }
   throw std::runtime_error(
       "Invalid types for operator -");  // FIXME: error handling
@@ -55,20 +55,20 @@ Interpreter::atom_value_type operator-(
 Interpreter::atom_value_type operator*(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) * std::get<long>(rhs);
+  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+    return std::get<int_type>(lhs) * std::get<int_type>(rhs);
   }
-  if (std::holds_alternative<long>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<long>(lhs) * std::get<double>(rhs);
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<float_type>(rhs)) {
+    return std::get<int_type>(lhs) * std::get<float_type>(rhs);
   }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<long>(rhs)) {
-    return std::get<double>(lhs) * std::get<long>(rhs);
+  if (std::holds_alternative<float_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
+    return std::get<float_type>(lhs) * std::get<int_type>(rhs);
   }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<double>(lhs) * std::get<double>(rhs);
+  if (std::holds_alternative<float_type>(lhs) &&
+      std::holds_alternative<float_type>(rhs)) {
+    return std::get<float_type>(lhs) * std::get<double>(rhs);
   }
   throw std::runtime_error(
       "Invalid types for operator *");  // FIXME: error handling
@@ -77,20 +77,20 @@ Interpreter::atom_value_type operator*(
 Interpreter::atom_value_type operator/(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) / std::get<long>(rhs);
+  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+    return std::get<int_type>(lhs) / std::get<int_type>(rhs);
   }
-  if (std::holds_alternative<long>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<long>(lhs) / std::get<double>(rhs);
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<float_type>(rhs)) {
+    return std::get<int_type>(lhs) / std::get<float_type>(rhs);
   }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<long>(rhs)) {
-    return std::get<double>(lhs) / std::get<long>(rhs);
+  if (std::holds_alternative<float_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
+    return std::get<float_type>(lhs) / std::get<int_type>(rhs);
   }
-  if (std::holds_alternative<double>(lhs) &&
-      std::holds_alternative<double>(rhs)) {
-    return std::get<double>(lhs) / std::get<double>(rhs);
+  if (std::holds_alternative<float_type>(lhs) &&
+      std::holds_alternative<float_type>(rhs)) {
+    return std::get<float_type>(lhs) / std::get<double>(rhs);
   }
   throw std::runtime_error(
       "Invalid types for operator /");  // FIXME: error handling
@@ -99,8 +99,8 @@ Interpreter::atom_value_type operator/(
 Interpreter::atom_value_type operator%(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<long>(lhs) && std::holds_alternative<long>(rhs)) {
-    return std::get<long>(lhs) % std::get<long>(rhs);
+  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+    return std::get<int_type>(lhs) % std::get<int_type>(rhs);
   }
   throw std::runtime_error(
       "Invalid types for operator %");  // FIXME: error handling

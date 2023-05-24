@@ -5,6 +5,7 @@
 #include <string>
 
 #include "arithmetic.h"
+#include "config.h"
 #include "interpreter_util.h"
 #include "parser.h"
 
@@ -84,11 +85,11 @@ Interpreter::atom_value_type Interpreter::evaluate(
 }
 
 std::string Interpreter::StringifyValue(const Interpreter::atom_value_type& v) {
-  if (holds<long>(v)) {
-    return std::to_string(std::get<long>(v));
+  if (holds<int_type>(v)) {
+    return std::to_string(std::get<int_type>(v));
   }
-  if (holds<double>(v)) {
-    return std::to_string(std::get<double>(v));
+  if (holds<float_type>(v)) {
+    return std::to_string(std::get<float_type>(v));
   }
   if (holds<bool>(v)) {
     return std::get<bool>(v) ? "true" : "false";
@@ -130,7 +131,8 @@ bool Interpreter::MaybeSetAtomResult<Expr::Symbol>(const Expr::Atom& atom) {
 };
 
 void Interpreter::Visit(const Expr::Atom& atom) {
-  if (!(MaybeSetAtomResult<long>(atom) || MaybeSetAtomResult<double>(atom) ||
+  if (!(MaybeSetAtomResult<int_type>(atom) ||
+        MaybeSetAtomResult<float_type>(atom) ||
         MaybeSetAtomResult<bool>(atom) ||
         MaybeSetAtomResult<std::string>(atom) ||
         MaybeSetAtomResult<Expr::Symbol>(atom) ||

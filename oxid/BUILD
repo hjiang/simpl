@@ -1,3 +1,6 @@
+cc_library(name= 'config',
+           hdrs = ['config.h'])
+
 cc_binary(name = 'oxid',
           srcs = ['main.cc'],
           deps = ['oxid-imp'])
@@ -9,12 +12,13 @@ cc_library(name = 'oxid-imp',
 
 cc_library(name = 'token',
            srcs = ['token.cc'],
-           hdrs = ['token.h'])
+           hdrs = ['token.h'],
+           deps = ['config'])
 
 cc_library(name = 'lexer',
            srcs = ['lexer.cc'],
            hdrs = ['lexer.h'],
-           deps = [ 'token', 'error' ])
+           deps = [ 'token', 'error', 'config' ])
 
 cc_test(
     name = "lexer_test",
@@ -28,7 +32,7 @@ cc_test(
 cc_library(name = 'parser',
            srcs = ['parser.cc'],
            hdrs = ['parser.h'],
-           deps = ['token', 'error'])
+           deps = ['token', 'error', 'config'])
 
 cc_test(
     name = "parser_test",
@@ -44,7 +48,7 @@ cc_test(
 cc_library(name = 'interpreter',
            srcs = ['interpreter.cc', 'arithmetic.cc', 'interpreter_util.cc'],
            hdrs = ['interpreter.h', 'arithmetic.h', 'interpreter_util.h'],
-           deps = ['parser', 'error'])
+           deps = ['parser', 'error', 'config'])
 
 cc_test(name = 'interpreter_test',
         srcs = ['interpreter_test.cc'],
