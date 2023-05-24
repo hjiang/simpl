@@ -3,7 +3,7 @@
 #ifndef ARITHMETIC_H_
 #define ARITHMETIC_H_
 
-#include "interpreter.h"
+#include "oxid/interpreter.h"
 
 namespace oxid {
 

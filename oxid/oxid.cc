@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid.h"
+#include "oxid/oxid.h"
 
 #include <fstream>
 #include <iostream>
@@ -8,10 +8,10 @@
 #include <stdexcept>
 #include <string>
 
-#include "error.h"
-#include "interpreter.h"
-#include "lexer.h"
-#include "parser.h"
+#include "oxid/error.h"
+#include "oxid/interpreter.h"
+#include "oxid/lexer.h"
+#include "oxid/parser.h"
 
 namespace oxid {
 

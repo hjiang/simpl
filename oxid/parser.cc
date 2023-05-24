@@ -1,12 +1,12 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "parser.h"
+#include "oxid/parser.h"
 
 #include <memory>
 #include <string>
 
-#include "config.h"
-#include "error.h"
+#include "oxid/config.h"
+#include "oxid/error.h"
 
 namespace oxid {
 

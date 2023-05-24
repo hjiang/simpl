@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <variant>
 
-#include "parser.h"
+#include "oxid/parser.h"
 
 namespace oxid {
 

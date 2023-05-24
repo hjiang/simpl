@@ -6,7 +6,7 @@
 #include <string>
 #include <variant>
 
-#include "config.h"
+#include "oxid/config.h"
 
 namespace oxid {
 

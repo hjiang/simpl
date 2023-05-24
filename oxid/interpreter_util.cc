@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "interpreter_util.h"
+#include "oxid/interpreter_util.h"
 
 namespace oxid {
 

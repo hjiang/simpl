@@ -10,7 +10,7 @@
 #include <string>
 #include <variant>
 
-#include "token.h"
+#include "oxid/token.h"
 
 namespace oxid {
 

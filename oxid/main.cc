@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "oxid.h"
+#include "oxid/oxid.h"
 
 int main(int argc, char *argv[]) {
   if (argc > 2) {

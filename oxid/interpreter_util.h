@@ -7,7 +7,7 @@
 #include <string>
 #include <variant>
 
-#include "interpreter.h"
+#include "oxid/interpreter.h"
 
 namespace oxid {
 

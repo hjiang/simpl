@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "lexer.h"
+#include "oxid/lexer.h"
 
 #include <cassert>
 #include <cctype>
@@ -8,8 +8,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "error.h"
-#include "token.h"
+#include "oxid/error.h"
+#include "oxid/token.h"
 
 namespace oxid {
 

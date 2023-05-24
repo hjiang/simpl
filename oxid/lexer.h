@@ -6,7 +6,7 @@
 #include <list>
 #include <string>
 
-#include "token.h"
+#include "oxid/token.h"
 
 namespace oxid {
 

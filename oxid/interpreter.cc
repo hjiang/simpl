@@ -1,15 +1,15 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "interpreter.h"
+#include "oxid/interpreter.h"
 
 #include <numeric>
 #include <stdexcept>
 #include <string>
 
-#include "arithmetic.h"
-#include "config.h"
-#include "interpreter_util.h"
-#include "parser.h"
+#include "oxid/arithmetic.h"
+#include "oxid/config.h"
+#include "oxid/interpreter_util.h"
+#include "oxid/parser.h"
 
 namespace oxid {
 

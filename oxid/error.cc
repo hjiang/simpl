@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "error.h"
+#include "oxid/error.h"
 
 #include <iostream>
 #include <string>
