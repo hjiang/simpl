@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef OXID_CONFIG_H_
+#define OXID_CONFIG_H_
 
 #include <cstdint>
 
@@ -12,4 +12,4 @@ using float_type = double;
 
 }  // namespace oxid
 
-#endif  // CONFIG_H_
+#endif  // OXID_CONFIG_H_

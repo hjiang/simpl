@@ -8,7 +8,7 @@
 
 #include "oxid/lexer.h"
 
-using namespace oxid;
+namespace oxid {
 
 TEST(Parser, Integer) {
   Lexer lexer("1");
@@ -118,6 +118,8 @@ TEST(Parser, Nil) {
   auto atom = dynamic_cast<Expr::Atom const *>(exprs.front().get());
   EXPECT_EQ(atom->value<nullptr_t>(), nullptr);
 }
+
+}  // namespace oxid
 // Local Variables:
 // compile-command : "bazel test //oxid:parser_test"
 // End:

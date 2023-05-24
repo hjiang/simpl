@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef ERROR_H_
-#define ERROR_H_
+#ifndef OXID_ERROR_H_
+#define OXID_ERROR_H_
 
 #include <stdexcept>
 #include <string>
@@ -22,4 +22,4 @@ void ClearRuntimeError();
 
 }  // namespace oxid
 
-#endif  // ERROR_H_
+#endif  // OXID_ERROR_H_

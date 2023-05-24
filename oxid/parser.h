@@ -1,13 +1,14 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef PARSER_H_
-#define PARSER_H_
+#ifndef OXID_PARSER_H_
+#define OXID_PARSER_H_
 
 #include <initializer_list>
 #include <iterator>
 #include <list>
 #include <memory>
 #include <string>
+#include <utility>
 #include <variant>
 
 #include "oxid/token.h"
@@ -44,7 +45,7 @@ class Expr::Atom : public Expr {
   bool has_value() const {
     return std::holds_alternative<T>(value_);
   }
-  virtual void Accept(Expr::Visitor* visitor) const override;
+  void Accept(Expr::Visitor* visitor) const override;
 
  private:
   value_type value_;
@@ -54,7 +55,7 @@ class Expr::List : public Expr {
  public:
   explicit List(std::list<std::unique_ptr<Expr>>&& l) : exprs_(std::move(l)) {}
   virtual ~List() {}
-  virtual void Accept(Expr::Visitor* visitor) const override;
+  void Accept(Expr::Visitor* visitor) const override;
   const std::list<std::unique_ptr<Expr>>& exprs() const { return exprs_; }
 
  private:
@@ -66,7 +67,7 @@ class Expr::Def : public Expr {
   Def(std::string name, std::unique_ptr<Expr> expr)
       : name_(std::move(name)), expr_(std::move(expr)) {}
   virtual ~Def() {}
-  virtual void Accept(Expr::Visitor* visitor) const override;
+  void Accept(Expr::Visitor* visitor) const override;
   const std::string& name() const { return name_; }
   const Expr& expr() const { return *expr_; }
 
@@ -83,7 +84,7 @@ class Expr::Let : public Expr {
   Let(binding_list_t&& bindings, body_t&& body)
       : bindings_(std::move(bindings)), body_(std::move(body)) {}
   virtual ~Let() = default;
-  virtual void Accept(Expr::Visitor* visitor) const override;
+  void Accept(Expr::Visitor* visitor) const override;
   const binding_list_t& bindings() const { return bindings_; }
   const body_t& body() const { return body_; }
 
@@ -92,16 +93,19 @@ class Expr::Let : public Expr {
   const body_t body_;
 };
 
-class Expr::If: public Expr {
+class Expr::If : public Expr {
  public:
   If(std::unique_ptr<Expr>&& cond, std::unique_ptr<Expr>&& then,
      std::unique_ptr<Expr>&& otherwise)
-      : cond_(std::move(cond)), then_(std::move(then)), otherwise_(std::move(otherwise)) {}
+      : cond_(std::move(cond)),
+        then_(std::move(then)),
+        otherwise_(std::move(otherwise)) {}
   virtual ~If() = default;
-  virtual void Accept(Expr::Visitor* visitor) const override;
+  void Accept(Expr::Visitor* visitor) const override;
   const Expr& cond() const { return *cond_; }
   const Expr& then() const { return *then_; }
   const Expr& otherwise() const { return *otherwise_; }
+
  private:
   const std::unique_ptr<Expr> cond_;
   const std::unique_ptr<Expr> then_;
@@ -154,7 +158,7 @@ class Expr::Visitor {
 
 }  // namespace oxid
 
-#endif  // PARSER_H_
+#endif  // OXID_PARSER_H_
 
 // Local Variables:
 // compile-command : "bazel test //oxid:all"

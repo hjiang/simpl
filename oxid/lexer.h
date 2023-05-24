@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef LEXER_H_
-#define LEXER_H_
+#ifndef OXID_LEXER_H_
+#define OXID_LEXER_H_
 
 #include <list>
 #include <string>
@@ -16,12 +16,12 @@ class Lexer {
   std::list<Token> scan();
 
  private:
-  bool AtEnd() { return current_ >= source_.length(); };
+  bool AtEnd() { return current_ >= source_.length(); }
   void ScanToken();
-  char Advance() { return source_[current_++]; };
+  char Advance() { return source_[current_++]; }
   void AddToken(Token::Type type, const Token::literal_t &literal = nullptr);
   bool Match(char expected);
-  char Peek() { return AtEnd() ? '\0' : source_[current_]; };
+  char Peek() { return AtEnd() ? '\0' : source_[current_]; }
   char PeekNext();
   void String();
   void Number();
@@ -35,7 +35,7 @@ class Lexer {
 
 }  // namespace oxid
 
-#endif  // LEXER_H_
+#endif  // OXID_LEXER_H_
 
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"

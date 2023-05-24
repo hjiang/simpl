@@ -130,7 +130,7 @@ bool Interpreter::MaybeSetAtomResult<Expr::Symbol>(const Expr::Atom& atom) {
     return true;
   }
   return false;
-};
+}
 
 void Interpreter::Visit(const Expr::Atom& atom) {
   if (!(MaybeSetAtomResult<int_type>(atom) ||

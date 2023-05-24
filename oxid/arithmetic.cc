@@ -2,6 +2,8 @@
 
 #include "oxid/arithmetic.h"
 
+#include <string>
+
 #include "oxid/interpreter_util.h"
 
 namespace oxid {
@@ -9,7 +11,8 @@ namespace oxid {
 Interpreter::atom_value_type operator+(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
     return std::get<int_type>(lhs) + std::get<int_type>(rhs);
   }
   if (std::holds_alternative<int_type>(lhs) &&
@@ -35,7 +38,8 @@ Interpreter::atom_value_type operator+(
 Interpreter::atom_value_type operator-(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
     return std::get<int_type>(lhs) - std::get<int_type>(rhs);
   }
   if (std::holds_alternative<int_type>(lhs) &&
@@ -57,7 +61,8 @@ Interpreter::atom_value_type operator-(
 Interpreter::atom_value_type operator*(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
     return std::get<int_type>(lhs) * std::get<int_type>(rhs);
   }
   if (std::holds_alternative<int_type>(lhs) &&
@@ -79,7 +84,8 @@ Interpreter::atom_value_type operator*(
 Interpreter::atom_value_type operator/(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
     return std::get<int_type>(lhs) / std::get<int_type>(rhs);
   }
   if (std::holds_alternative<int_type>(lhs) &&
@@ -101,7 +107,8 @@ Interpreter::atom_value_type operator/(
 Interpreter::atom_value_type operator%(
     const Interpreter::atom_value_type& lhs,
     const Interpreter::atom_value_type& rhs) {
-  if (std::holds_alternative<int_type>(lhs) && std::holds_alternative<int_type>(rhs)) {
+  if (std::holds_alternative<int_type>(lhs) &&
+      std::holds_alternative<int_type>(rhs)) {
     return std::get<int_type>(lhs) % std::get<int_type>(rhs);
   }
   throw std::runtime_error(

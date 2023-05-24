@@ -6,7 +6,7 @@
 
 #include "oxid/error.h"
 
-using namespace oxid;
+namespace oxid {
 
 TEST(Lexer, SingleChar) {
   Lexer lexer("(");
@@ -141,6 +141,9 @@ TEST(Lexer, Nil) {
   EXPECT_EQ((it++)->type, Token::kEof);
   EXPECT_EQ(tokens.size(), 2);
 }
+
+}  // namespace oxid
+
 // Local Variables:
 // compile-command : "bazel test //oxid:lexer_test"
 // End:

@@ -8,7 +8,7 @@
 
 #include "oxid/lexer.h"
 
-using namespace oxid;
+namespace oxid {
 
 TEST(Parser, Integer) {
   Lexer lexer("42");
@@ -176,6 +176,8 @@ TEST(Parser, Not) {
   Interpreter interpreter;
   EXPECT_TRUE(std::get<bool>(interpreter.evaluate(exprs)));
 }
+
+}  // namespace oxid
 // Local Variables:
 // compile-command : "bazel test //oxid:all"
 // End:

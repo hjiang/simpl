@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -15,11 +16,9 @@
 
 namespace oxid {
 
-using namespace std;
-
 static void run(const string &source) {
   Lexer lexer(source);
-  list<Token> tokens = lexer.scan();
+  std::list<Token> tokens = lexer.scan();
   Parser parser(tokens);
   auto ast = parser.Parse();
   if (HadError()) {
@@ -33,11 +32,11 @@ static void run(const string &source) {
   }
 }
 
-void RunFile(const string &path) {
-  cout << "Running file: " << path << endl;
-  ifstream file(path);
+void RunFile(const std::string &path) {
+  std::cout << "Running file: " << path << std::endl;
+  std::ifstream file(path);
   if (file) {
-    ostringstream ss;
+    std::ostringstream ss;
     ss << file.rdbuf();
     file.close();
     run(ss.str());
@@ -48,17 +47,17 @@ void RunFile(const string &path) {
       exit(70);
     }
   } else {
-    cout << "Could not open file: " << path << endl;
+    std::cout << "Could not open file: " << path << std::endl;
   }
 }
 
 void RunREPL() {
   while (true) {
     ClearError();
-    cout << "> ";
-    string line;
-    getline(cin, line);
-    if (cin.eof()) {
+    std::cout << "> ";
+    std::string line;
+    getline(std::cin, line);
+    if (std::cin.eof()) {
       break;
     }
     run(line);

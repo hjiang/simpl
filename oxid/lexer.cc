@@ -134,7 +134,7 @@ bool Lexer::Match(char expected) {
 void Lexer::AddToken(Token::Type type, const Token::literal_t &literal) {
   tokens_.push_back(
       Token(type, source_.substr(start_, current_ - start_), literal, line_));
-};
+}
 
 void Lexer::String() {
   while (Peek() != '"' && !AtEnd()) {

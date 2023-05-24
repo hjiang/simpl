@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef ARITHMETIC_H_
-#define ARITHMETIC_H_
+#ifndef OXID_ARITHMETIC_H_
+#define OXID_ARITHMETIC_H_
 
 #include "oxid/interpreter.h"
 
@@ -20,4 +20,4 @@ Interpreter::atom_value_type operator%(const Interpreter::atom_value_type& lhs,
 
 }  // namespace oxid
 
-#endif  // ARITHMETIC_H_
+#endif  // OXID_ARITHMETIC_H_

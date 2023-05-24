@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef TOKEN_H_
-#define TOKEN_H_
+#ifndef OXID_TOKEN_H_
+#define OXID_TOKEN_H_
 
 #include <string>
 #include <variant>
@@ -80,7 +80,7 @@ class Token {
 
 }  // namespace oxid
 
-#endif  // TOKEN_H_
+#endif  // OXID_TOKEN_H_
 
 // Local Variables:
 // compile-command : "bazel build //oxid:lexer"

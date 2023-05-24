@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef INTERPRETER_UTIL_H_
-#define INTERPRETER_UTIL_H_
+#ifndef OXID_INTERPRETER_UTIL_H_
+#define OXID_INTERPRETER_UTIL_H_
 
 #include <cstddef>
 #include <string>
@@ -58,4 +58,4 @@ inline std::string TypeStr<bool>() {
 
 }  // namespace oxid
 
-#endif  // INTERPRETER_UTIL_H_
+#endif  // OXID_INTERPRETER_UTIL_H_
