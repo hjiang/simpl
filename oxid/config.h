@@ -1,3 +1,5 @@
+// Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
+
 #ifndef CONFIG_H_
 #define CONFIG_H_
 

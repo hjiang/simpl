@@ -1,3 +1,5 @@
+// Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
+
 #ifndef OXID_H_
 #define OXID_H_
 

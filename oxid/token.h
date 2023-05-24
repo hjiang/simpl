@@ -1,3 +1,5 @@
+// Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
+
 #ifndef TOKEN_H_
 #define TOKEN_H_
 

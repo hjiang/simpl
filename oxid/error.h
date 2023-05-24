@@ -1,3 +1,5 @@
+// Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
+
 #ifndef ERROR_H_
 #define ERROR_H_
 

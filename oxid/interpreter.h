@@ -1,3 +1,5 @@
+// Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
+
 #ifndef INTERPRETER_H_
 #define INTERPRETER_H_
 

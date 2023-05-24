@@ -1,3 +1,5 @@
+// Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
+
 #include "lexer.h"
 
 #include <gtest/gtest.h>
