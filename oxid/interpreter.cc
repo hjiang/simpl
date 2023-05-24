@@ -174,6 +174,25 @@ void Interpreter::Visit(const Expr::Let& let) {
   env_ = env_->ReleaseParent();
 }
 
+static bool IsTruthy(const Interpreter::atom_value_type& v) {
+  if (holds<bool>(v)) {
+    return std::get<bool>(v);
+  } else if (holds<nullptr_t>(v)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+void Interpreter::Visit(const Expr::If& if_expr) {
+  if_expr.cond().Accept(this);
+  if (IsTruthy(last_atom_result_)) {
+    if_expr.then().Accept(this);
+  } else {
+    if_expr.otherwise().Accept(this);
+  }
+}
+
 void Interpreter::DefVar(std::string name, atom_value_type value) {
   env_->Define(std::move(name), std::move(value));
 }

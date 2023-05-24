@@ -15,7 +15,8 @@ class Interpreter : public Expr::Visitor {
     std::string name;
   };
 
-  using atom_value_type = std::variant<long, double, bool, std::string, Symbol>;
+  using atom_value_type =
+      std::variant<long, double, bool, std::string, Symbol, nullptr_t>;
 
   class Environment {
    public:
@@ -68,6 +69,7 @@ class Interpreter : public Expr::Visitor {
   virtual void Visit(const Expr::List& list) override;
   virtual void Visit(const Expr::Def& expr) override;
   virtual void Visit(const Expr::Let& expr) override;
+  virtual void Visit(const Expr::If& expr) override;
   atom_value_type evaluate(const Expr& expr);
   atom_value_type evaluate(const std::list<std::unique_ptr<const Expr>>& expr);
   static std::string StringifyValue(const atom_value_type& value);

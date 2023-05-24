@@ -97,6 +97,15 @@ TEST(Parser, Let) {
   auto exprs = parser.Parse();
   EXPECT_EQ(1, exprs.size());
 }
+
+TEST(Parser, If) {
+  Lexer lexer("(if a 2 3)");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(7, tokens.size());
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  EXPECT_EQ(1, exprs.size());
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:parser_test"
 // End:

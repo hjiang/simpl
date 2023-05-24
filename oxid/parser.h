@@ -19,6 +19,7 @@ class Expr {
   class Visitor;
   class Def;
   class Let;
+  class If;
   virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
   struct Symbol {
@@ -89,6 +90,22 @@ class Expr::Let : public Expr {
   const body_t body_;
 };
 
+class Expr::If: public Expr {
+ public:
+  If(std::unique_ptr<Expr>&& cond, std::unique_ptr<Expr>&& then,
+     std::unique_ptr<Expr>&& otherwise)
+      : cond_(std::move(cond)), then_(std::move(then)), otherwise_(std::move(otherwise)) {}
+  virtual ~If() = default;
+  virtual void Accept(Expr::Visitor* visitor) const override;
+  const Expr& cond() const { return *cond_; }
+  const Expr& then() const { return *then_; }
+  const Expr& otherwise() const { return *otherwise_; }
+ private:
+  const std::unique_ptr<Expr> cond_;
+  const std::unique_ptr<Expr> then_;
+  const std::unique_ptr<Expr> otherwise_;
+};
+
 class Parser {
   using token_list_t = std::list<Token>;
   using expr_ptr = std::unique_ptr<Expr>;
@@ -109,6 +126,7 @@ class Parser {
   expr_ptr ParseAtom();
   expr_ptr ParseDef();
   expr_ptr ParseLet();
+  expr_ptr ParseIf();
   Expr::Let::binding_list_t ParseBindings();
   Expr::Let::binding_t ParseBinding();
   bool Match(Token::Type type);
@@ -128,6 +146,7 @@ class Expr::Visitor {
   virtual void Visit(const Expr::Atom& expr) = 0;
   virtual void Visit(const Expr::Def& expr) = 0;
   virtual void Visit(const Expr::Let& expr) = 0;
+  virtual void Visit(const Expr::If& expr) = 0;
   virtual ~Visitor() {}
 };
 

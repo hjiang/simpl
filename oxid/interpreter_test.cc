@@ -153,6 +153,18 @@ TEST(Parser, NestedLet) {
   EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 2);
 }
 
+TEST(Parser, If) {
+  Lexer lexer("(if true 3 4)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(exprs)), 3);
+  Lexer lexer2("(if false 3 4)");
+  Parser parser2(lexer2.scan());
+  exprs = parser2.Parse();
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(exprs)), 4);
+}
 // Local Variables:
 // compile-command : "bazel test //oxid:all"
 // End:
