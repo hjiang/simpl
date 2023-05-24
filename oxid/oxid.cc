@@ -16,7 +16,7 @@
 
 namespace oxid {
 
-static void run(const string &source) {
+static void run(const std::string &source) {
   Lexer lexer(source);
   std::list<Token> tokens = lexer.scan();
   Parser parser(tokens);
@@ -26,7 +26,8 @@ static void run(const string &source) {
   }
   static Interpreter interpreter;
   try {
-    cout << Interpreter::StringifyValue(interpreter.evaluate(ast)) << endl;
+    std::cout << Interpreter::StringifyValue(interpreter.evaluate(ast))
+              << std::endl;
   } catch (const std::runtime_error &e) {
     HandleRuntimeError(e);
   }
