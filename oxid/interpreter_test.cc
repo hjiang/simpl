@@ -135,6 +135,24 @@ TEST(Parser, DefineVar) {
   EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 6);
 }
 
+TEST(Parser, Let) {
+  Lexer lexer("(let [a 3] (+ a 4))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 7);
+}
+
+TEST(Parser, NestedLet) {
+  Lexer lexer("(let [a 2] (let [a 3] (+ a 4)) a)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<long>(interpreter.evaluate(expr)), 2);
+}
+
 // Local Variables:
 // compile-command : "bazel test //oxid:all"
 // End:

@@ -262,7 +262,21 @@ void Interpreter::Visit(const Expr::Def& def) {
   DefVar(def.name(), last_atom_result_);
 }
 
-void Interpreter::Visit([[maybe_unused]] const Expr::Let& let) {}
+void Interpreter::Visit([[maybe_unused]] const Expr::Let& let) {
+  const auto& bindings = let.bindings();
+  const auto& body = let.body();
+  auto env = std::make_unique<Environment>();
+  for (const auto& binding : bindings) {
+    binding.second->Accept(this);
+    env->Bind(binding.first, last_atom_result_);
+  }
+  env->ResetParent(std::move(env_));
+  env_ = std::move(env);
+  for (const auto& expr : body) {
+    expr->Accept(this);
+  }
+  env_ = env_->ReleaseParent();
+}
 
 void Interpreter::DefVar(std::string name, atom_value_type value) {
   env_->Define(std::move(name), std::move(value));

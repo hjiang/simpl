@@ -58,30 +58,32 @@ class Expr::List : public Expr {
   const std::list<std::unique_ptr<Expr>> exprs_;
 };
 
-class Expr::Def: public Expr {
+class Expr::Def : public Expr {
  public:
   Def(std::string name, std::unique_ptr<Expr> expr)
-      : name_(std::move(name)), expr_(std::move(expr)) {
-  }
+      : name_(std::move(name)), expr_(std::move(expr)) {}
   virtual ~Def() {}
   virtual void Accept(Expr::Visitor* visitor) const override;
   const std::string& name() const { return name_; }
   const Expr& expr() const { return *expr_; }
+
  private:
   const std::string name_;
   const std::unique_ptr<Expr> expr_;
 };
 
-class Expr::Let: public Expr {
+class Expr::Let : public Expr {
  public:
   using body_t = std::list<std::unique_ptr<Expr>>;
   using binding_t = std::pair<std::string, std::unique_ptr<Expr>>;
   using binding_list_t = std::list<binding_t>;
   Let(binding_list_t&& bindings, body_t&& body)
-      : bindings_(std::move(bindings)), body_(std::move(body)) {
-  }
+      : bindings_(std::move(bindings)), body_(std::move(body)) {}
   virtual ~Let() = default;
   virtual void Accept(Expr::Visitor* visitor) const override;
+  const binding_list_t& bindings() const { return bindings_; }
+  const body_t& body() const { return body_; }
+
  private:
   const binding_list_t bindings_;
   const body_t body_;

@@ -45,6 +45,14 @@ class Interpreter : public Expr::Visitor {
       throw std::runtime_error("Undefined variable '" + name + "'");
     }
 
+    void ResetParent(std::unique_ptr<Environment>&& parent) {
+      parent_ = std::move(parent);
+    }
+
+    std::unique_ptr<Environment>&& ReleaseParent() {
+      return std::move(parent_);
+    }
+
    private:
     std::unordered_map<std::string, atom_value_type> values_;
     std::unique_ptr<Environment> parent_;
