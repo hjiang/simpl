@@ -1,6 +1,5 @@
 #include "interpreter.h"
 
-#include <iostream>
 #include <numeric>
 #include <stdexcept>
 #include <string>
@@ -37,7 +36,6 @@ std::unordered_map<std::string, Interpreter::function_type>
              -> Interpreter::atom_value_type {
            Interpreter::atom_value_type result = 1;
            for (auto arg : args) {
-             std::cerr << "arg: " << std::get<long>(arg) << std::endl;
              result = result * arg;
            }
            return result;
