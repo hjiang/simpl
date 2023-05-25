@@ -116,7 +116,7 @@ TEST(Parser, Nil) {
   auto exprs = parser.Parse();
   EXPECT_EQ(1, exprs.size());
   auto atom = dynamic_cast<Expr::Atom const *>(exprs.front().get());
-  EXPECT_EQ(atom->value<nullptr_t>(), nullptr);
+  EXPECT_EQ(atom->value<std::nullptr_t>(), nullptr);
 }
 
 }  // namespace oxid

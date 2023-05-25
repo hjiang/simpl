@@ -138,7 +138,7 @@ void Interpreter::Visit(const Expr::Atom& atom) {
         MaybeSetAtomResult<bool>(atom) ||
         MaybeSetAtomResult<std::string>(atom) ||
         MaybeSetAtomResult<Expr::Symbol>(atom) ||
-        MaybeSetAtomResult<nullptr_t>(atom))) {
+        MaybeSetAtomResult<std::nullptr_t>(atom))) {
     throw std::runtime_error("Unknown atom type");  // FIXME: error handling
   }
 }

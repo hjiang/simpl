@@ -1,0 +1,9 @@
+name: run-tests
+run-name: ${{ github.actor }} is running all tests.
+on: [push]
+jobs:
+  run-all-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: bazel test //...
