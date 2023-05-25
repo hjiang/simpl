@@ -45,6 +45,11 @@ Interpreter::atom_value_type Equals::CallImpl(Interpreter*,
   return Compare(args) == std::partial_ordering::equivalent;
 }
 
+Interpreter::atom_value_type GreaterThan::CallImpl(Interpreter*,
+                                                   const args_type& args) {
+  return Compare(args) == std::partial_ordering::greater;
+}
+
 }  // namespace builtin_fn
 
 }  // namespace simpl

@@ -195,6 +195,24 @@ TEST(Parser, EqualityFalse) {
   EXPECT_FALSE(std::get<bool>(interpreter.evaluate(exprs)));
 }
 
+TEST(Parser, GreaterThan) {
+  Lexer lexer("(> 3.2 2)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_TRUE(std::get<bool>(interpreter.evaluate(exprs)));
+}
+
+TEST(Parser, GreaterThan_False) {
+  Lexer lexer("(> 3 5)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_FALSE(std::get<bool>(interpreter.evaluate(exprs)));
+}
+
 }  // namespace simpl
 // Local Variables:
 // compile-command : "bazel test //simpl:all"
