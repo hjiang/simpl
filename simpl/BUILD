@@ -1,13 +1,13 @@
 cc_library(name= 'config',
            hdrs = ['config.h'])
 
-cc_binary(name = 'oxid',
+cc_binary(name = 'simpl',
           srcs = ['main.cc'],
-          deps = ['oxid-imp'])
+          deps = ['simpl-imp'])
 
-cc_library(name = 'oxid-imp',
-           srcs = ['oxid.cc'],
-           hdrs = ['oxid.h'],
+cc_library(name = 'simpl-imp',
+           srcs = ['simpl.cc'],
+           hdrs = ['simpl.h'],
            deps = ['error', 'token', 'lexer', 'interpreter'])
 
 cc_library(name = 'token',

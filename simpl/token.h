@@ -1,14 +1,14 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef OXID_TOKEN_H_
-#define OXID_TOKEN_H_
+#ifndef SIMPL_TOKEN_H_
+#define SIMPL_TOKEN_H_
 
 #include <string>
 #include <variant>
 
-#include "oxid/config.h"
+#include "simpl/config.h"
 
-namespace oxid {
+namespace simpl {
 
 class Token {
  public:
@@ -66,7 +66,8 @@ class Token {
     kEof
   };
 
-  using literal_t = std::variant<int_type, float_type, std::string, std::nullptr_t>;
+  using literal_t =
+      std::variant<int_type, float_type, std::string, std::nullptr_t>;
   const Type type;
   const std::string lexeme;
   const literal_t literal;
@@ -78,10 +79,10 @@ class Token {
   operator std::string() { return lexeme; }
 };
 
-}  // namespace oxid
+}  // namespace simpl
 
-#endif  // OXID_TOKEN_H_
+#endif  // SIMPL_TOKEN_H_
 
 // Local Variables:
-// compile-command : "bazel build //oxid:lexer"
+// compile-command : "bazel build //simpl:lexer"
 // End:

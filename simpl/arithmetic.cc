@@ -1,12 +1,12 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/arithmetic.h"
+#include "simpl/arithmetic.h"
 
 #include <string>
 
-#include "oxid/interpreter_util.h"
+#include "simpl/interpreter_util.h"
 
-namespace oxid {
+namespace simpl {
 
 Interpreter::atom_value_type operator+(
     const Interpreter::atom_value_type& lhs,
@@ -115,4 +115,4 @@ Interpreter::atom_value_type operator%(
       "Invalid types for operator %");  // FIXME: error handling
 }
 
-}  // namespace oxid
+}  // namespace simpl

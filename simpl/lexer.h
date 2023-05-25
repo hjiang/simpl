@@ -1,14 +1,14 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef OXID_LEXER_H_
-#define OXID_LEXER_H_
+#ifndef SIMPL_LEXER_H_
+#define SIMPL_LEXER_H_
 
 #include <list>
 #include <string>
 
-#include "oxid/token.h"
+#include "simpl/token.h"
 
-namespace oxid {
+namespace simpl {
 
 class Lexer {
  public:
@@ -33,10 +33,10 @@ class Lexer {
   size_t line_ = 1;
 };
 
-}  // namespace oxid
+}  // namespace simpl
 
-#endif  // OXID_LEXER_H_
+#endif  // SIMPL_LEXER_H_
 
 // Local Variables:
-// compile-command : "bazel test //oxid:lexer_test"
+// compile-command : "bazel test //simpl:lexer_test"
 // End:

@@ -1,14 +1,14 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/parser.h"
+#include "simpl/parser.h"
 
 #include <gtest/gtest.h>
 
 #include <memory>
 
-#include "oxid/lexer.h"
+#include "simpl/lexer.h"
 
-namespace oxid {
+namespace simpl {
 
 TEST(Parser, Integer) {
   Lexer lexer("1");
@@ -119,7 +119,7 @@ TEST(Parser, Nil) {
   EXPECT_EQ(atom->value<std::nullptr_t>(), nullptr);
 }
 
-}  // namespace oxid
+}  // namespace simpl
 // Local Variables:
-// compile-command : "bazel test //oxid:parser_test"
+// compile-command : "bazel test //simpl:parser_test"
 // End:

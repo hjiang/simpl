@@ -1,16 +1,16 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef OXID_OXID_H_
-#define OXID_OXID_H_
+#ifndef SIMPL_SIMPL_H_
+#define SIMPL_SIMPL_H_
 
 #include <string>
 
-namespace oxid {
+namespace simpl {
 
 void RunREPL();
 
 void RunFile(const std::string &path);
 
-}  // namespace oxid
+}  // namespace simpl
 
-#endif  // OXID_OXID_H_
+#endif  // SIMPL_SIMPL_H_

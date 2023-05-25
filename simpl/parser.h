@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef OXID_PARSER_H_
-#define OXID_PARSER_H_
+#ifndef SIMPL_PARSER_H_
+#define SIMPL_PARSER_H_
 
 #include <initializer_list>
 #include <iterator>
@@ -11,9 +11,9 @@
 #include <utility>
 #include <variant>
 
-#include "oxid/token.h"
+#include "simpl/token.h"
 
-namespace oxid {
+namespace simpl {
 
 class Expr {
  public:
@@ -31,8 +31,8 @@ class Expr {
 };
 
 class Expr::Atom : public Expr {
-  using value_type =
-      std::variant<int_type, float_type, bool, std::string, Symbol, std::nullptr_t>;
+  using value_type = std::variant<int_type, float_type, bool, std::string,
+                                  Symbol, std::nullptr_t>;
 
  public:
   explicit Atom(value_type v) : value_(v) {}
@@ -156,10 +156,10 @@ class Expr::Visitor {
   virtual ~Visitor() {}
 };
 
-}  // namespace oxid
+}  // namespace simpl
 
-#endif  // OXID_PARSER_H_
+#endif  // SIMPL_PARSER_H_
 
 // Local Variables:
-// compile-command : "bazel test //oxid:all"
+// compile-command : "bazel test //simpl:all"
 // End:

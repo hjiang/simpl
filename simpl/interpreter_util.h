@@ -1,15 +1,15 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef OXID_INTERPRETER_UTIL_H_
-#define OXID_INTERPRETER_UTIL_H_
+#ifndef SIMPL_INTERPRETER_UTIL_H_
+#define SIMPL_INTERPRETER_UTIL_H_
 
 #include <cstddef>
 #include <string>
 #include <variant>
 
-#include "oxid/interpreter.h"
+#include "simpl/interpreter.h"
 
-namespace oxid {
+namespace simpl {
 
 template <typename T>
 bool holds(Interpreter::atom_value_type value) {
@@ -56,6 +56,6 @@ inline std::string TypeStr<bool>() {
   return "bool";
 }
 
-}  // namespace oxid
+}  // namespace simpl
 
-#endif  // OXID_INTERPRETER_UTIL_H_
+#endif  // SIMPL_INTERPRETER_UTIL_H_

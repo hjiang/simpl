@@ -1,17 +1,17 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/interpreter.h"
+#include "simpl/interpreter.h"
 
 #include <numeric>
 #include <stdexcept>
 #include <string>
 
-#include "oxid/arithmetic.h"
-#include "oxid/config.h"
-#include "oxid/interpreter_util.h"
-#include "oxid/parser.h"
+#include "simpl/arithmetic.h"
+#include "simpl/config.h"
+#include "simpl/interpreter_util.h"
+#include "simpl/parser.h"
 
-namespace oxid {
+namespace simpl {
 
 std::unordered_map<std::string, Interpreter::function_type>
     Interpreter::built_in_functions_{
@@ -199,4 +199,4 @@ void Interpreter::DefVar(std::string name, atom_value_type value) {
   env_->Define(std::move(name), std::move(value));
 }
 
-}  // namespace oxid
+}  // namespace simpl

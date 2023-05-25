@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef OXID_INTERPRETER_H_
-#define OXID_INTERPRETER_H_
+#ifndef SIMPL_INTERPRETER_H_
+#define SIMPL_INTERPRETER_H_
 
 #include <functional>
 #include <list>
@@ -12,9 +12,9 @@
 #include <variant>
 #include <vector>
 
-#include "oxid/parser.h"
+#include "simpl/parser.h"
 
-namespace oxid {
+namespace simpl {
 
 class Interpreter : public Expr::Visitor {
  public:
@@ -22,8 +22,8 @@ class Interpreter : public Expr::Visitor {
     std::string name;
   };
 
-  using atom_value_type =
-      std::variant<int_type, float_type, bool, std::string, Symbol, std::nullptr_t>;
+  using atom_value_type = std::variant<int_type, float_type, bool, std::string,
+                                       Symbol, std::nullptr_t>;
 
   class Environment {
    public:
@@ -93,10 +93,10 @@ class Interpreter : public Expr::Visitor {
   static bool IsBuiltInFn(const std::string& name);
 };
 
-}  // namespace oxid
+}  // namespace simpl
 
-#endif  // OXID_INTERPRETER_H_
+#endif  // SIMPL_INTERPRETER_H_
 
 // Local Variables:
-// compile-command : "bazel build //oxid:all"
+// compile-command : "bazel build //simpl:all"
 // End:
