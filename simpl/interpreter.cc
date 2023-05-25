@@ -77,6 +77,9 @@ std::unordered_map<std::string, Interpreter::function_type>
 Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("=", std::make_shared<builtin_fn::Equals>());
   env_->Define(">", std::make_shared<builtin_fn::GreaterThan>());
+  env_->Define(">=", std::make_shared<builtin_fn::GreaterThanOrEqualTo>());
+  env_->Define("<", std::make_shared<builtin_fn::LessThan>());
+  env_->Define("<=", std::make_shared<builtin_fn::LessThanOrEqualTo>());
 }
 
 Interpreter::atom_value_type Interpreter::evaluate(const Expr& expr) {

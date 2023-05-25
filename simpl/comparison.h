@@ -30,6 +30,33 @@ class GreaterThan : public Callable {
                                         const args_type& args) override;
 };
 
+class GreaterThanOrEqualTo : public Callable {
+ public:
+  int arity() const override { return 2; }
+
+ private:
+  Interpreter::atom_value_type CallImpl(Interpreter*,
+                                        const args_type& args) override;
+};
+
+class LessThan : public Callable {
+ public:
+  int arity() const override { return 2; }
+
+ private:
+  Interpreter::atom_value_type CallImpl(Interpreter*,
+                                        const args_type& args) override;
+};
+
+class LessThanOrEqualTo : public Callable {
+ public:
+  int arity() const override { return 2; }
+
+ private:
+  Interpreter::atom_value_type CallImpl(Interpreter*,
+                                        const args_type& args) override;
+};
+
 }  // namespace builtin_fn
 
 }  // namespace simpl

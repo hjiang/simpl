@@ -50,6 +50,23 @@ Interpreter::atom_value_type GreaterThan::CallImpl(Interpreter*,
   return Compare(args) == std::partial_ordering::greater;
 }
 
+Interpreter::atom_value_type GreaterThanOrEqualTo::CallImpl(
+    Interpreter*, const args_type& args) {
+  return Compare(args) == std::partial_ordering::greater ||
+         Compare(args) == std::partial_ordering::equivalent;
+}
+
+Interpreter::atom_value_type LessThan::CallImpl(Interpreter*,
+                                                const args_type& args) {
+  return Compare(args) == std::partial_ordering::less;
+}
+
+Interpreter::atom_value_type LessThanOrEqualTo::CallImpl(
+    Interpreter*, const args_type& args) {
+  return Compare(args) == std::partial_ordering::less ||
+         Compare(args) == std::partial_ordering::equivalent;
+}
+
 }  // namespace builtin_fn
 
 }  // namespace simpl
