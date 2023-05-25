@@ -52,6 +52,7 @@ cc_library(name = 'interpreter',
                'comparison.cc',
                'interpreter.cc',
                'interpreter_util.cc',
+               'logic.cc',
            ],
            hdrs = [
                'arithmetic.h',
@@ -59,6 +60,7 @@ cc_library(name = 'interpreter',
                'comparison.h',
                'interpreter.h',
                'interpreter_util.h',
+               'logic.h',
            ],
            deps = ['parser', 'error', 'config'])
 

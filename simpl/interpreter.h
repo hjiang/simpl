@@ -91,9 +91,6 @@ class Interpreter : public Expr::Visitor {
 
   atom_value_type last_atom_result_;
   std::unique_ptr<Environment> env_;
-
-  static std::unordered_map<std::string, function_type> built_in_functions_;
-  static bool IsBuiltInFn(const std::string& name);
 };
 
 }  // namespace simpl

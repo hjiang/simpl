@@ -10,69 +10,10 @@
 #include "simpl/comparison.h"
 #include "simpl/config.h"
 #include "simpl/interpreter_util.h"
+#include "simpl/logic.h"
 #include "simpl/parser.h"
 
 namespace simpl {
-
-std::unordered_map<std::string, Interpreter::function_type>
-    Interpreter::built_in_functions_{
-        {"+",
-         [](const std::vector<Interpreter::atom_value_type>& args)
-             -> Interpreter::atom_value_type {
-           Interpreter::atom_value_type result = 0;
-           for (auto arg : args) {
-             result = result + arg;
-           }
-           return result;
-         }},
-        {"-",
-         [](const std::vector<Interpreter::atom_value_type>& args)
-             -> Interpreter::atom_value_type {
-           auto i = args.begin();
-           Interpreter::atom_value_type result = *i++;
-           for (; i != args.end(); ++i) {
-             result = result - *i;
-           }
-           return args.size() > 1 ? result : 0 - result;
-         }},
-        {"*",
-         [](const std::vector<Interpreter::atom_value_type>& args)
-             -> Interpreter::atom_value_type {
-           Interpreter::atom_value_type result = 1;
-           for (auto arg : args) {
-             result = result * arg;
-           }
-           return result;
-         }},
-        {"/",
-         [](const std::vector<Interpreter::atom_value_type>& args)
-             -> Interpreter::atom_value_type {
-           auto i = args.begin();
-           Interpreter::atom_value_type result = *i++;
-           for (; i != args.end(); ++i) {
-             result = result / *i;
-           }
-           return result;
-         }},
-        {"%",
-         [](const std::vector<Interpreter::atom_value_type>& args)
-             -> Interpreter::atom_value_type {
-           auto i = args.begin();
-           Interpreter::atom_value_type result = *i++;
-           for (; i != args.end(); ++i) {
-             result = result % *i;
-           }
-           return result;
-         }},
-        {"not",
-         [](const std::vector<Interpreter::atom_value_type>& args)
-             -> Interpreter::atom_value_type {
-           if (args.size() != 1) {
-             throw std::runtime_error("NOT takes exactly one argument");
-           }
-           return Interpreter::atom_value_type(
-               static_cast<bool>(!IsTruthy(args[0])));
-         }}};
 
 Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("=", std::make_shared<builtin_fn::Equals>());
@@ -80,6 +21,12 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define(">=", std::make_shared<builtin_fn::GreaterThanOrEqualTo>());
   env_->Define("<", std::make_shared<builtin_fn::LessThan>());
   env_->Define("<=", std::make_shared<builtin_fn::LessThanOrEqualTo>());
+  env_->Define("+", std::make_shared<builtin_fn::Sum>());
+  env_->Define("-", std::make_shared<builtin_fn::Substract>());
+  env_->Define("*", std::make_shared<builtin_fn::Multiply>());
+  env_->Define("/", std::make_shared<builtin_fn::Divide>());
+  env_->Define("%", std::make_shared<builtin_fn::Modulo>());
+  env_->Define("not", std::make_shared<builtin_fn::Not>());
 }
 
 Interpreter::atom_value_type Interpreter::evaluate(const Expr& expr) {
@@ -114,10 +61,6 @@ std::string Interpreter::StringifyValue(const Interpreter::atom_value_type& v) {
   throw std::runtime_error("Unknown atom type");
 }
 
-bool Interpreter::IsBuiltInFn(const std::string& name) {
-  return built_in_functions_.find(name) != built_in_functions_.end();
-}
-
 template <typename T>
 bool Interpreter::MaybeSetAtomResult(const Expr::Atom& atom) {
   if (atom.has_value<T>()) {
@@ -130,12 +73,7 @@ bool Interpreter::MaybeSetAtomResult(const Expr::Atom& atom) {
 template <>
 bool Interpreter::MaybeSetAtomResult<Expr::Symbol>(const Expr::Atom& atom) {
   if (atom.has_value<Expr::Symbol>()) {
-    auto name = atom.value<Expr::Symbol>().name;
-    if (IsBuiltInFn(name)) {
-      last_atom_result_ = atom_value_type(Symbol{.name = name});
-    } else {
-      last_atom_result_ = env_->Get(name);
-    }
+    last_atom_result_ = env_->Get(atom.value<Expr::Symbol>().name);
     return true;
   }
   return false;
@@ -164,22 +102,6 @@ void Interpreter::Visit(const Expr::List& list) {
       args.push_back(last_atom_result_);
     }
     last_atom_result_ = callable->Call(this, args);
-  } else if (std::holds_alternative<Symbol>(last_atom_result_)) {
-    auto name = std::get<Symbol>(last_atom_result_).name;
-    auto fit = built_in_functions_.find(name);
-    if (fit == built_in_functions_.end()) {
-      throw std::runtime_error("Unknown function: " +
-                               name);  // FIXME: error handling
-    }
-    auto func = fit->second;
-    std::vector<atom_value_type> args;
-    auto it = list.exprs().begin();
-    ++it;
-    for (; it != list.exprs().end(); ++it) {
-      (*it)->Accept(this);
-      args.push_back(last_atom_result_);
-    }
-    last_atom_result_ = func(args);
   } else {
     throw std::runtime_error("Cannot apply a non-callable");
   }
