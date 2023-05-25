@@ -26,7 +26,7 @@ static void run(const std::string &source) {
   }
   static Interpreter interpreter;
   try {
-    std::cout << Interpreter::StringifyValue(interpreter.evaluate(ast))
+    std::cout << Interpreter::StringifyValue(interpreter.Evaluate(ast))
               << std::endl;
   } catch (const std::runtime_error &e) {
     HandleRuntimeError(e);

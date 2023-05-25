@@ -29,15 +29,15 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("not", std::make_shared<builtin_fn::Not>());
 }
 
-Interpreter::atom_value_type Interpreter::evaluate(const Expr& expr) {
+Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
   expr.Accept(this);
   return last_atom_result_;
 }
 
-Interpreter::atom_value_type Interpreter::evaluate(
+Interpreter::atom_value_type Interpreter::Evaluate(
     const std::list<std::unique_ptr<const Expr>>& exprs) {
   for (const auto& e : exprs) {
-    evaluate(*e);
+    Evaluate(*e);
   }
   return last_atom_result_;
 }
@@ -91,15 +91,14 @@ void Interpreter::Visit(const Expr::Atom& atom) {
 }
 
 void Interpreter::Visit(const Expr::List& list) {
-  list.exprs().front()->Accept(this);
-  if (std::holds_alternative<callable_ptr>(last_atom_result_)) {
-    auto callable = std::get<callable_ptr>(last_atom_result_);
+  auto result = Evaluate(*list.exprs().front());
+  if (holds<callable_ptr>(result)) {
+    auto callable = std::get<callable_ptr>(result);
     auto it = list.exprs().begin();
     ++it;
     std::list<atom_value_type> args;
     for (; it != list.exprs().end(); ++it) {
-      (*it)->Accept(this);
-      args.push_back(last_atom_result_);
+      args.push_back(Evaluate(**it));
     }
     last_atom_result_ = callable->Call(this, args);
   } else {
@@ -108,8 +107,7 @@ void Interpreter::Visit(const Expr::List& list) {
 }
 
 void Interpreter::Visit(const Expr::Def& def) {
-  def.expr().Accept(this);
-  DefVar(def.name(), last_atom_result_);
+  DefVar(def.name(), Evaluate(def.expr()));
 }
 
 void Interpreter::Visit(const Expr::Let& let) {
@@ -117,8 +115,7 @@ void Interpreter::Visit(const Expr::Let& let) {
   const auto& body = let.body();
   auto env = std::make_unique<Environment>();
   for (const auto& binding : bindings) {
-    binding.second->Accept(this);
-    env->Bind(binding.first, last_atom_result_);
+    env->Bind(binding.first, Evaluate(*binding.second));
   }
   env->ResetParent(std::move(env_));
   env_ = std::move(env);
@@ -129,11 +126,10 @@ void Interpreter::Visit(const Expr::Let& let) {
 }
 
 void Interpreter::Visit(const Expr::If& if_expr) {
-  if_expr.cond().Accept(this);
-  if (IsTruthy(last_atom_result_)) {
-    if_expr.then().Accept(this);
+  if (IsTruthy(Evaluate(if_expr.cond()))) {
+    Evaluate(if_expr.then());
   } else {
-    if_expr.otherwise().Accept(this);
+    Evaluate(if_expr.otherwise());
   }
 }
 

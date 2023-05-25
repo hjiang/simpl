@@ -80,8 +80,8 @@ class Interpreter : public Expr::Visitor {
   void Visit(const Expr::Def& expr) override;
   void Visit(const Expr::Let& expr) override;
   void Visit(const Expr::If& expr) override;
-  atom_value_type evaluate(const Expr& expr);
-  atom_value_type evaluate(const std::list<std::unique_ptr<const Expr>>& expr);
+  atom_value_type Evaluate(const Expr& expr);
+  atom_value_type Evaluate(const std::list<std::unique_ptr<const Expr>>& expr);
   static std::string StringifyValue(const atom_value_type& value);
 
  private:
