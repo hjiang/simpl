@@ -5,12 +5,23 @@
 
 #include <vector>
 
+#include "simpl/callable.h"
 #include "simpl/interpreter.h"
 
 namespace simpl {
 
-Interpreter::atom_value_type Equal(
-    const std::vector<Interpreter::atom_value_type>& args);
+namespace builtin_fn {
+
+class Equals : public Callable {
+ public:
+  int arity() const override { return 2; }
+
+ private:
+  Interpreter::atom_value_type CallImpl(Interpreter*,
+                                        const args_type& args) override;
+};
+
+}  // namespace builtin_fn
 
 }  // namespace simpl
 

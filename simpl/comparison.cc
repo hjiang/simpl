@@ -2,39 +2,49 @@
 
 #include "simpl/comparison.h"
 
+#include <compare>
+#include <list>
 #include <string>
+#include <variant>
+
+#include "simpl/interpreter.h"
 
 namespace simpl {
 
-Interpreter::atom_value_type Equal(
-    const std::vector<Interpreter::atom_value_type>& args) {
+namespace builtin_fn {
+
+static std::partial_ordering Compare(
+    const std::list<Interpreter::atom_value_type>& args) {
   if (args.size() != 2) {
-    throw std::runtime_error("'=' takes 2 arguments");
+    throw std::runtime_error("comparison requires 2 arguments");
   }
-  auto lhs = args[0];
-  auto rhs = args[1];
+  auto lhs = args.front();
+  auto rhs = args.back();
   if (std::holds_alternative<int_type>(lhs) &&
       std::holds_alternative<int_type>(rhs)) {
-    return std::get<int_type>(lhs) == std::get<int_type>(rhs);
+    return std::get<int_type>(lhs) <=> std::get<int_type>(rhs);
   }
   if (std::holds_alternative<int_type>(lhs) &&
       std::holds_alternative<float_type>(rhs)) {
-    return std::get<int_type>(lhs) == std::get<float_type>(rhs);
+    return std::get<int_type>(lhs) <=> std::get<float_type>(rhs);
   }
   if (std::holds_alternative<float_type>(lhs) &&
       std::holds_alternative<int_type>(rhs)) {
-    return std::get<float_type>(lhs) == std::get<int_type>(rhs);
+    return std::get<float_type>(lhs) <=> std::get<int_type>(rhs);
   }
   if (std::holds_alternative<float_type>(lhs) &&
       std::holds_alternative<float_type>(rhs)) {
-    return std::get<float_type>(lhs) == std::get<double>(rhs);
-  }
-  if (std::holds_alternative<std::string>(lhs) &&
-      std::holds_alternative<std::string>(rhs)) {
-    return std::get<std::string>(lhs) == std::get<std::string>(rhs);
+    return std::get<float_type>(lhs) <=> std::get<double>(rhs);
   }
   throw std::runtime_error(
       "Invalid types for operator +");  // FIXME: error handling
 }
+
+Interpreter::atom_value_type Equals::CallImpl(Interpreter*,
+                                              const args_type& args) {
+  return Compare(args) == std::partial_ordering::equivalent;
+}
+
+}  // namespace builtin_fn
 
 }  // namespace simpl

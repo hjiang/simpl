@@ -72,8 +72,11 @@ std::unordered_map<std::string, Interpreter::function_type>
            }
            return Interpreter::atom_value_type(
                static_cast<bool>(!IsTruthy(args[0])));
-         }},
-        {"=", Equal}};
+         }}};
+
+Interpreter::Interpreter() : env_(new Environment()) {
+  env_->Define("=", std::make_shared<builtin_fn::Equals>());
+}
 
 Interpreter::atom_value_type Interpreter::evaluate(const Expr& expr) {
   expr.Accept(this);
@@ -147,24 +150,35 @@ void Interpreter::Visit(const Expr::Atom& atom) {
 
 void Interpreter::Visit(const Expr::List& list) {
   list.exprs().front()->Accept(this);
-  if (!std::holds_alternative<Symbol>(last_atom_result_)) {
-    throw std::runtime_error("First element of list must be a symbol");
+  if (std::holds_alternative<callable_ptr>(last_atom_result_)) {
+    auto callable = std::get<callable_ptr>(last_atom_result_);
+    auto it = list.exprs().begin();
+    ++it;
+    std::list<atom_value_type> args;
+    for (; it != list.exprs().end(); ++it) {
+      (*it)->Accept(this);
+      args.push_back(last_atom_result_);
+    }
+    last_atom_result_ = callable->Call(this, args);
+  } else if (std::holds_alternative<Symbol>(last_atom_result_)) {
+    auto name = std::get<Symbol>(last_atom_result_).name;
+    auto fit = built_in_functions_.find(name);
+    if (fit == built_in_functions_.end()) {
+      throw std::runtime_error("Unknown function: " +
+                               name);  // FIXME: error handling
+    }
+    auto func = fit->second;
+    std::vector<atom_value_type> args;
+    auto it = list.exprs().begin();
+    ++it;
+    for (; it != list.exprs().end(); ++it) {
+      (*it)->Accept(this);
+      args.push_back(last_atom_result_);
+    }
+    last_atom_result_ = func(args);
+  } else {
+    throw std::runtime_error("Cannot apply a non-callable");
   }
-  auto name = std::get<Symbol>(last_atom_result_).name;
-  auto fit = built_in_functions_.find(name);
-  if (fit == built_in_functions_.end()) {
-    throw std::runtime_error("Unknown function: " +
-                             name);  // FIXME: error handling
-  }
-  auto func = fit->second;
-  std::vector<atom_value_type> args;
-  auto it = list.exprs().begin();
-  ++it;
-  for (; it != list.exprs().end(); ++it) {
-    (*it)->Accept(this);
-    args.push_back(last_atom_result_);
-  }
-  last_atom_result_ = func(args);
 }
 
 void Interpreter::Visit(const Expr::Def& def) {
