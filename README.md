@@ -1,6 +1,7 @@
 # SimpL 
 
 ![Tests](https://github.com/hjiang/simpl/actions/workflows/run-tests.yml/badge.svg?branch=master)
+![Lint](https://github.com/hjiang/simpl/actions/workflows/lint.yml/badge.svg?branch=master)
 
 ## Introduction
 
