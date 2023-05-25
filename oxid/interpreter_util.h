@@ -47,8 +47,8 @@ inline std::string TypeStr<std::string>() {
 }
 
 template <>
-inline std::string TypeStr<nullptr_t>() {
-  return "nullptr_t";
+inline std::string TypeStr<std::nullptr_t>() {
+  return "std::nullptr_t";
 }
 
 template <>

@@ -23,7 +23,7 @@ class Interpreter : public Expr::Visitor {
   };
 
   using atom_value_type =
-      std::variant<int_type, float_type, bool, std::string, Symbol, nullptr_t>;
+      std::variant<int_type, float_type, bool, std::string, Symbol, std::nullptr_t>;
 
   class Environment {
    public:
