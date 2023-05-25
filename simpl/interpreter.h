@@ -16,14 +16,17 @@
 
 namespace simpl {
 
+class Callable;
+
 class Interpreter : public Expr::Visitor {
  public:
   struct Symbol {
     std::string name;
   };
 
+  using callable_ptr = std::shared_ptr<Callable>;
   using atom_value_type = std::variant<int_type, float_type, bool, std::string,
-                                       Symbol, std::nullptr_t>;
+                                       Symbol, std::nullptr_t, callable_ptr>;
 
   class Environment {
    public:
@@ -42,7 +45,7 @@ class Interpreter : public Expr::Visitor {
       values_[std::move(name)] = std::move(value);
     }
 
-    atom_value_type Get(const std::string& name) const {
+    const atom_value_type& Get(const std::string& name) const {
       auto it = values_.find(name);
       if (it != values_.end()) {
         return it->second;
@@ -70,7 +73,7 @@ class Interpreter : public Expr::Visitor {
       std::function<atom_value_type(const std::vector<atom_value_type>&)>;
   using fn_args_type = const std::vector<Interpreter::atom_value_type>&;
 
-  Interpreter() : env_(new Environment()) {}
+  Interpreter();
   virtual ~Interpreter() {}
   void Visit(const Expr::Atom& atom) override;
   void Visit(const Expr::List& list) override;

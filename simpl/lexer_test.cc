@@ -142,6 +142,12 @@ TEST(Lexer, Nil) {
   EXPECT_EQ(tokens.size(), 2);
 }
 
+TEST(Lexer, Equal) {
+  Lexer lexer("=");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kEqual);
+}
+
 }  // namespace simpl
 
 // Local Variables:
