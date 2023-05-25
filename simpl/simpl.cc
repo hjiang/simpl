@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/oxid.h"
+#include "simpl/simpl.h"
 
 #include <fstream>
 #include <iostream>
@@ -9,12 +9,12 @@
 #include <stdexcept>
 #include <string>
 
-#include "oxid/error.h"
-#include "oxid/interpreter.h"
-#include "oxid/lexer.h"
-#include "oxid/parser.h"
+#include "simpl/error.h"
+#include "simpl/interpreter.h"
+#include "simpl/lexer.h"
+#include "simpl/parser.h"
 
-namespace oxid {
+namespace simpl {
 
 static void run(const std::string &source) {
   Lexer lexer(source);
@@ -65,4 +65,4 @@ void RunREPL() {
   }
 }
 
-}  // namespace oxid
+}  // namespace simpl

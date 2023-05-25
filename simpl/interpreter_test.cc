@@ -1,14 +1,14 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/interpreter.h"
+#include "simpl/interpreter.h"
 
 #include <gtest/gtest.h>
 
 #include <memory>
 
-#include "oxid/lexer.h"
+#include "simpl/lexer.h"
 
-namespace oxid {
+namespace simpl {
 
 TEST(Parser, Integer) {
   Lexer lexer("42");
@@ -177,7 +177,7 @@ TEST(Parser, Not) {
   EXPECT_TRUE(std::get<bool>(interpreter.evaluate(exprs)));
 }
 
-}  // namespace oxid
+}  // namespace simpl
 // Local Variables:
-// compile-command : "bazel test //oxid:all"
+// compile-command : "bazel test //simpl:all"
 // End:

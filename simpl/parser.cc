@@ -1,14 +1,14 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/parser.h"
+#include "simpl/parser.h"
 
 #include <memory>
 #include <string>
 
-#include "oxid/config.h"
-#include "oxid/error.h"
+#include "simpl/config.h"
+#include "simpl/error.h"
 
-namespace oxid {
+namespace simpl {
 
 static void Error(const Token& token, const std::string& message) {
   if (token.type == Token::Type::kEof) {
@@ -20,7 +20,7 @@ static void Error(const Token& token, const std::string& message) {
 
 Parser::ParseError Parser::Error(const Token& token,
                                  const std::string& message) {
-  oxid::Error(token, message);
+  simpl::Error(token, message);
   return ParseError(message);
 }
 
@@ -180,8 +180,8 @@ const Token& Parser::Advance() {
   return Previous();
 }
 
-}  // namespace oxid
+}  // namespace simpl
 
 // Local Variables:
-// compile-command : "bazel test //oxid:parser_test"
+// compile-command : "bazel test //simpl:parser_test"
 // End:

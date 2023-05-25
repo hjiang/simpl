@@ -1,11 +1,11 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/error.h"
+#include "simpl/error.h"
 
 #include <iostream>
 #include <string>
 
-namespace oxid {
+namespace simpl {
 
 static bool gHadError = false;
 static bool gHadRuntimeError = false;
@@ -29,8 +29,8 @@ bool HadRuntimeError() { return gHadRuntimeError; }
 void ClearError() { gHadError = false; }
 void ClearRuntimeError() { gHadRuntimeError = false; }
 
-}  // namespace oxid
+}  // namespace simpl
 
 // Local Variables:
-// compile-command : "bazel build //oxid:error"
+// compile-command : "bazel build //simpl:error"
 // End:

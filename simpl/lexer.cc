@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/lexer.h"
+#include "simpl/lexer.h"
 
 #include <cassert>
 #include <cctype>
@@ -8,10 +8,10 @@
 #include <string>
 #include <unordered_map>
 
-#include "oxid/error.h"
-#include "oxid/token.h"
+#include "simpl/error.h"
+#include "simpl/token.h"
 
-namespace oxid {
+namespace simpl {
 
 static const std::unordered_map<std::string, Token::Type> kKeywords{
     {"and", Token::kAnd},     {"class", Token::kClass},
@@ -183,8 +183,8 @@ char Lexer::PeekNext() {
   return source_[current_ + 1];
 }
 
-}  // namespace oxid
+}  // namespace simpl
 
 // Local Variables:
-// compile-command : "bazel test //oxid:lexer_test"
+// compile-command : "bazel test //simpl:lexer_test"
 // End:

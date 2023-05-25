@@ -1,8 +1,8 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "oxid/interpreter_util.h"
+#include "simpl/interpreter_util.h"
 
-namespace oxid {
+namespace simpl {
 
 bool IsTruthy(const Interpreter::atom_value_type& v) {
   if (holds<bool>(v)) {
@@ -14,4 +14,4 @@ bool IsTruthy(const Interpreter::atom_value_type& v) {
   }
 }
 
-}  // namespace oxid
+}  // namespace simpl

@@ -1,12 +1,12 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef OXID_ERROR_H_
-#define OXID_ERROR_H_
+#ifndef SIMPL_ERROR_H_
+#define SIMPL_ERROR_H_
 
 #include <stdexcept>
 #include <string>
 
-namespace oxid {
+namespace simpl {
 
 void Error(int line, const std::string &message);
 
@@ -20,6 +20,6 @@ bool HadRuntimeError();
 void ClearError();
 void ClearRuntimeError();
 
-}  // namespace oxid
+}  // namespace simpl
 
-#endif  // OXID_ERROR_H_
+#endif  // SIMPL_ERROR_H_
