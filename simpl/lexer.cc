@@ -102,6 +102,9 @@ void Lexer::ScanToken() {
     case '>':
       AddToken(Match('=') ? Token::kGreaterEqual : Token::kGreater);
       break;
+    case '=':
+      AddToken(Token::kEqual);
+      break;
     case '"':
       String();
       break;

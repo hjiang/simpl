@@ -177,6 +177,24 @@ TEST(Parser, Not) {
   EXPECT_TRUE(std::get<bool>(interpreter.evaluate(exprs)));
 }
 
+TEST(Parser, EqualityTrue) {
+  Lexer lexer("(= 2 2)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_TRUE(std::get<bool>(interpreter.evaluate(exprs)));
+}
+
+TEST(Parser, EqualityFalse) {
+  Lexer lexer("(= 2 3)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_FALSE(std::get<bool>(interpreter.evaluate(exprs)));
+}
+
 }  // namespace simpl
 // Local Variables:
 // compile-command : "bazel test //simpl:all"

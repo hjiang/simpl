@@ -7,6 +7,7 @@
 #include <string>
 
 #include "simpl/arithmetic.h"
+#include "simpl/comparison.h"
 #include "simpl/config.h"
 #include "simpl/interpreter_util.h"
 #include "simpl/parser.h"
@@ -71,7 +72,8 @@ std::unordered_map<std::string, Interpreter::function_type>
            }
            return Interpreter::atom_value_type(
                static_cast<bool>(!IsTruthy(args[0])));
-         }}};
+         }},
+        {"=", Equal}};
 
 Interpreter::atom_value_type Interpreter::evaluate(const Expr& expr) {
   expr.Accept(this);
