@@ -23,6 +23,7 @@ class Expr {
   class Def;
   class Let;
   class If;
+  class Fn;
   virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
   struct Symbol {
@@ -78,8 +79,8 @@ class Expr::Def : public Expr {
 
 class Expr::Let : public Expr {
  public:
-  using body_t = std::list<std::unique_ptr<Expr>>;
-  using binding_t = std::pair<std::string, std::unique_ptr<Expr>>;
+  using body_t = std::list<std::unique_ptr<const Expr>>;
+  using binding_t = std::pair<std::string, std::unique_ptr<const Expr>>;
   using binding_list_t = std::list<binding_t>;
   Let(binding_list_t&& bindings, body_t&& body)
       : bindings_(std::move(bindings)), body_(std::move(body)) {}
@@ -112,6 +113,22 @@ class Expr::If : public Expr {
   const std::unique_ptr<Expr> otherwise_;
 };
 
+class Expr::Fn : public Expr {
+ public:
+  using param_list_t = std::list<std::string>;
+  using body_t = std::list<std::unique_ptr<const Expr>>;
+  Fn(param_list_t&& params, body_t&& body)
+      : params_(std::move(params)), body_(std::move(body)) {}
+  virtual ~Fn() = default;
+  void Accept(Expr::Visitor* visitor) const override;
+  const param_list_t& params() const { return params_; }
+  const body_t& body() const { return body_; }
+
+ private:
+  const param_list_t params_;
+  const body_t body_;
+};
+
 class Parser {
   using token_list_t = std::list<Token>;
   using expr_ptr = std::unique_ptr<Expr>;
@@ -133,8 +150,11 @@ class Parser {
   expr_ptr ParseDef();
   expr_ptr ParseLet();
   expr_ptr ParseIf();
+  expr_ptr ParseFn();
+  Expr::Fn::param_list_t ParseParamList();
   Expr::Let::binding_list_t ParseBindings();
   Expr::Let::binding_t ParseBinding();
+  std::list<std::unique_ptr<const Expr>> ParseExprs();
   bool Match(Token::Type type);
   bool Check(Token::Type type) const;
   const Token& Consume(Token::Type type, const std::string& msg);
@@ -153,6 +173,7 @@ class Expr::Visitor {
   virtual void Visit(const Expr::Def& expr) = 0;
   virtual void Visit(const Expr::Let& expr) = 0;
   virtual void Visit(const Expr::If& expr) = 0;
+  virtual void Visit(const Expr::Fn& expr) = 0;
   virtual ~Visitor() {}
 };
 

@@ -231,6 +231,15 @@ TEST(Parser, LessThan) {
   EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
 }
 
+TEST(Parser, LetAndFn) {
+  Lexer lexer("(let [plus (fn [a b] (+ a b))] (plus 3 4))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+}
+
 }  // namespace simpl
 // Local Variables:
 // compile-command : "bazel test //simpl:all"

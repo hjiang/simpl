@@ -12,6 +12,7 @@
 #include "simpl/interpreter_util.h"
 #include "simpl/logic.h"
 #include "simpl/parser.h"
+#include "simpl/user_fn.h"
 
 namespace simpl {
 
@@ -35,9 +36,17 @@ Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(
-    const std::list<std::unique_ptr<const Expr>>& exprs) {
+    const std::list<std::unique_ptr<const Expr>>& exprs,
+    std::shared_ptr<Environment> env) {
+  auto old_env = env_;
+  if (env) {
+    env_ = env;
+  }
   for (const auto& e : exprs) {
     Evaluate(*e);
+  }
+  if (env) {
+    env_ = old_env;
   }
   return last_atom_result_;
 }
@@ -113,16 +122,11 @@ void Interpreter::Visit(const Expr::Def& def) {
 void Interpreter::Visit(const Expr::Let& let) {
   const auto& bindings = let.bindings();
   const auto& body = let.body();
-  auto env = std::make_unique<Environment>();
+  auto env = std::make_shared<Environment>(env_);
   for (const auto& binding : bindings) {
     env->Bind(binding.first, Evaluate(*binding.second));
   }
-  env->ResetParent(std::move(env_));
-  env_ = std::move(env);
-  for (const auto& expr : body) {
-    expr->Accept(this);
-  }
-  env_ = env_->ReleaseParent();
+  Evaluate(body, env);
 }
 
 void Interpreter::Visit(const Expr::If& if_expr) {
@@ -131,6 +135,10 @@ void Interpreter::Visit(const Expr::If& if_expr) {
   } else {
     Evaluate(if_expr.otherwise());
   }
+}
+
+void Interpreter::Visit(const Expr::Fn& fn) {
+  last_atom_result_ = std::make_shared<UserFn>(fn);
 }
 
 void Interpreter::DefVar(std::string name, atom_value_type value) {

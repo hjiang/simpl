@@ -30,8 +30,8 @@ class Interpreter : public Expr::Visitor {
 
   class Environment {
    public:
-    explicit Environment(std::unique_ptr<Environment>&& parent = nullptr)
-        : values_(), parent_(parent.release()) {}
+    explicit Environment(std::shared_ptr<Environment> parent = nullptr)
+        : values_(), parent_(parent) {}
 
     void Define(std::string name, atom_value_type value) {
       if (parent_) {
@@ -56,17 +56,12 @@ class Interpreter : public Expr::Visitor {
       throw std::runtime_error("Undefined variable '" + name + "'");
     }
 
-    void ResetParent(std::unique_ptr<Environment>&& parent) {
-      parent_ = std::move(parent);
-    }
-
-    std::unique_ptr<Environment>&& ReleaseParent() {
-      return std::move(parent_);
-    }
+    void set_parent(std::shared_ptr<Environment>&& parent) { parent_ = parent; }
+    std::shared_ptr<Environment> parent() const { return parent_; }
 
    private:
     std::unordered_map<std::string, atom_value_type> values_;
-    std::unique_ptr<Environment> parent_;
+    std::shared_ptr<Environment> parent_;
   };
 
   using function_type =
@@ -80,9 +75,13 @@ class Interpreter : public Expr::Visitor {
   void Visit(const Expr::Def& expr) override;
   void Visit(const Expr::Let& expr) override;
   void Visit(const Expr::If& expr) override;
+  void Visit(const Expr::Fn& expr) override;
   atom_value_type Evaluate(const Expr& expr);
-  atom_value_type Evaluate(const std::list<std::unique_ptr<const Expr>>& expr);
+  atom_value_type Evaluate(const std::list<std::unique_ptr<const Expr>>& expr,
+                           std::shared_ptr<Environment> env = nullptr);
   static std::string StringifyValue(const atom_value_type& value);
+
+  std::shared_ptr<Environment> env() const { return env_; }
 
  private:
   template <typename T>
@@ -90,7 +89,7 @@ class Interpreter : public Expr::Visitor {
   void DefVar(std::string name, atom_value_type value);
 
   atom_value_type last_atom_result_;
-  std::unique_ptr<Environment> env_;
+  std::shared_ptr<Environment> env_;
 };
 
 }  // namespace simpl

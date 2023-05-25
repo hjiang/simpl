@@ -119,6 +119,14 @@ TEST(Parser, Nil) {
   EXPECT_EQ(atom->value<std::nullptr_t>(), nullptr);
 }
 
+TEST(Parser, Fn) {
+  Lexer lexer("(fn [a b c] (+ a b c))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  EXPECT_EQ(1, exprs.size());
+}
+
 }  // namespace simpl
 // Local Variables:
 // compile-command : "bazel test //simpl:parser_test"
