@@ -172,6 +172,12 @@ void Interpreter::Visit(const Expr::And& logic_and) {
   }
 }
 
+void Interpreter::Visit(const Expr::Do& do_form) {
+  for (const auto& term : do_form.exprs()) {
+    Evaluate(*term);
+  }
+}
+
 void Interpreter::DefVar(std::string name, atom_value_type value) {
   env_->Define(std::move(name), std::move(value));
 }

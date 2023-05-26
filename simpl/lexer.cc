@@ -22,7 +22,8 @@ static const std::unordered_map<std::string, Token::Type> kKeywords{
     {"nil", Token::kNil},     {"or", Token::kOr},
     {"print", Token::kPrint}, {"super", Token::kSuper},
     {"this", Token::kThis},   {"true", Token::kTrue},
-    {"var", Token::kVar},     {"while", Token::kWhile}};
+    {"var", Token::kVar},     {"while", Token::kWhile},
+    {"do", Token::kDo}};
 
 static bool IsAlphaOrUnderscore(char c) { return isalpha(c) || c == '_'; }
 static bool IsAlphaNumOrUnderscore(char c) { return isalnum(c) || c == '_'; }

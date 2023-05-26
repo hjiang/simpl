@@ -285,6 +285,15 @@ TEST(Interpreter, EmptyListIsNil) {
   EXPECT_TRUE(nullptr == std::get<nullptr_t>(interpreter.Evaluate(expr)));
 }
 
+TEST(Interpreter, Do) {
+  Lexer lexer("(do 12 42)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(42, std::get<int_type>(interpreter.Evaluate(expr)));
+}
+
 }  // namespace simpl
 // Local Variables:
 // compile-command : "bazel test //simpl:all"

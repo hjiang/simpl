@@ -29,14 +29,15 @@ const Token& Parser::Consume(Token::Type type, const std::string& message) {
   throw Error(Peek(), message);
 }
 
-void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Def::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Let::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::If::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Fn::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Or::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::And::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::Def::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::Do::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::Fn::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::If::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::Let::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::Or::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
 std::list<std::unique_ptr<const Expr>> Parser::Parse() {
   std::list<std::unique_ptr<const Expr>> exprs;
@@ -114,6 +115,9 @@ std::unique_ptr<Expr> Parser::ParseExpr() {
     }
     if (Match(Token::Type::kAnd)) {
       return ParseAnd();
+    }
+    if (Match(Token::Type::kDo)) {
+      return ParseDo();
     }
     return ParseList();
   } else {
@@ -201,6 +205,12 @@ Parser::expr_ptr Parser::ParseIf() {
   Consume(Token::Type::kRightParen, "Expect ')' at end of 'if' form.");
   return std::make_unique<Expr::If>(std::move(cond), std::move(then),
                                     std::move(otherwise));
+}
+
+Parser::expr_ptr Parser::ParseDo() {
+  auto terms = ParseExprs();
+  Consume(Token::Type::kRightParen, "Expect ')' at end of 'do' form.");
+  return std::make_unique<Expr::Do>(std::move(terms));
 }
 
 Parser::expr_ptr Parser::ParseOr() {

@@ -17,15 +17,17 @@ namespace simpl {
 
 class Expr {
  public:
-  class Atom;
-  class List;
-  class Visitor;
-  class Def;
-  class Let;
-  class If;
-  class Fn;
-  class Or;
   class And;
+  class Atom;
+  class Def;
+  class Do;
+  class Fn;
+  class If;
+  class Let;
+  class List;
+  class Or;
+  class Visitor;
+
   virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
   struct Symbol {
@@ -63,6 +65,18 @@ class Expr::List : public Expr {
 
  private:
   const std::list<std::unique_ptr<Expr>> exprs_;
+};
+
+class Expr::Do: public Expr {
+ public:
+  explicit Do(std::list<std::unique_ptr<const Expr>>&& exprs)
+      : exprs_(std::move(exprs)) {}
+  virtual ~Do() = default;
+  void Accept(Expr::Visitor* visitor) const override;
+  const std::list<std::unique_ptr<const Expr>>& exprs() const { return exprs_; }
+
+ private:
+  const std::list<std::unique_ptr<const Expr>> exprs_;
 };
 
 class Expr::Def : public Expr {
@@ -168,16 +182,17 @@ class Parser {
     explicit ParseError(const std::string& msg) : std::runtime_error(msg) {}
   };
   ParseError Error(const Token& token, const std::string& msg);
-  expr_ptr ParseExpr();
-  expr_ptr ParseList();
+  expr_ptr ParseAnd();
   expr_ptr ParseAtom();
   expr_ptr ParseDef();
   expr_ptr ParseDefn();
-  expr_ptr ParseLet();
-  expr_ptr ParseIf();
+  expr_ptr ParseDo();
+  expr_ptr ParseExpr();
   expr_ptr ParseFn();
+  expr_ptr ParseIf();
+  expr_ptr ParseLet();
+  expr_ptr ParseList();
   expr_ptr ParseOr();
-  expr_ptr ParseAnd();
   Expr::Fn::param_list_t ParseParamList();
   Expr::Let::binding_list_t ParseBindings();
   Expr::Let::binding_t ParseBinding();
@@ -195,14 +210,15 @@ class Parser {
 
 class Expr::Visitor {
  public:
-  virtual void Visit(const Expr::List& expr) = 0;
+  virtual void Visit(const Expr::And& expr) = 0;
   virtual void Visit(const Expr::Atom& expr) = 0;
   virtual void Visit(const Expr::Def& expr) = 0;
-  virtual void Visit(const Expr::Let& expr) = 0;
-  virtual void Visit(const Expr::If& expr) = 0;
+  virtual void Visit(const Expr::Do& expr) = 0;
   virtual void Visit(const Expr::Fn& expr) = 0;
+  virtual void Visit(const Expr::If& expr) = 0;
+  virtual void Visit(const Expr::Let& expr) = 0;
+  virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Or& expr) = 0;
-  virtual void Visit(const Expr::And& expr) = 0;
   virtual ~Visitor() {}
 };
 
