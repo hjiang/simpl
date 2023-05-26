@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+for prog in simpl_tests/simpl_progs/*; do
+    echo "Running $prog"
+    ./simpl/simpl $prog
+done

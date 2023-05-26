@@ -3,7 +3,8 @@ cc_library(name= 'config',
 
 cc_binary(name = 'simpl',
           srcs = ['main.cc'],
-          deps = ['simpl-imp'])
+          deps = ['simpl-imp'],
+          visibility = ["//visibility:public"])
 
 cc_library(name = 'simpl-imp',
            srcs = ['simpl.cc'],
