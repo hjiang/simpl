@@ -48,6 +48,7 @@ cc_test(
 cc_library(name = 'interpreter',
            srcs = [
                'arithmetic.cc',
+               'built_in/assert.cc',
                'callable.cc',
                'comparison.cc',
                'interpreter.cc',
@@ -58,6 +59,7 @@ cc_library(name = 'interpreter',
            ],
            hdrs = [
                'arithmetic.h',
+               'built_in/assert.h',
                'callable.h',
                'comparison.h',
                'interpreter.h',

@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <memory>
+#include <stdexcept>
 
 #include "simpl/lexer.h"
 
@@ -294,7 +295,26 @@ TEST(Interpreter, Do) {
   EXPECT_EQ(42, std::get<int_type>(interpreter.Evaluate(expr)));
 }
 
+TEST(Interpreter, AssertTrue) {
+  Lexer lexer("(assert (= 2 2) \"True\")");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_NO_THROW(interpreter.Evaluate(expr));
+}
+
+TEST(Interpreter, AssertFalse) {
+  Lexer lexer("(assert (> 2 3.0) \"True\")");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_THROW(interpreter.Evaluate(expr), std::runtime_error);
+}
+
 }  // namespace simpl
+
 // Local Variables:
 // compile-command : "bazel test //simpl:all"
 // End:

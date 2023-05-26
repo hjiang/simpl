@@ -7,6 +7,7 @@
 #include <string>
 
 #include "simpl/arithmetic.h"
+#include "simpl/built_in/assert.h"
 #include "simpl/comparison.h"
 #include "simpl/config.h"
 #include "simpl/interpreter_util.h"
@@ -31,6 +32,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("not", std::make_shared<builtin_fn::Not>());
   env_->Define("print", std::make_shared<builtin_fn::Print>());
   env_->Define("println", std::make_shared<builtin_fn::Println>());
+  env_->Define("assert", std::make_shared<builtin_fn::Assert>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
