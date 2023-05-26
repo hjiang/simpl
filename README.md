@@ -5,7 +5,7 @@
 
 ## Introduction
 
-SimpL is a LISP dialect for scripting. It borrows many syntax features from
+SimpL is a LISP dialect for scripting. It borrows many syntactic features from
 Clojure.
 
 It was motivated by the author's desire for a scripting language with nice
