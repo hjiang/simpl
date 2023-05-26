@@ -6,12 +6,13 @@
 
 ## Introduction
 
-SimpL is a LISP dialect for scripting. It borrows many syntactic features from
-Clojure.
+SimpL (pronounced "simple") is a programming language. It aims to be a LISP
+dialect suitable for scripting and borrows many syntactic features from
+[Clojure](https://clojure.org).
 
 It was motivated by the author's desire for a scripting language with nice
 syntax and without large dependencies like the JVM. It is implemented in modern
-C++ without any third-party dependencies other than the standard library.
+C++ without any third-party dependency other than the standard library.
 
 ## How to use
 
