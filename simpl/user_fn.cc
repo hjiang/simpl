@@ -10,7 +10,7 @@ namespace simpl {
 
 Interpreter::atom_value_type UserFn::CallImpl(Interpreter* interpreter,
                                               const Callable::args_type& args) {
-  auto env = make_shared<Interpreter::Environment>(interpreter->env());
+  auto env = make_shared<Interpreter::Environment>(closure_);
   auto arg = args.begin();
   for (const auto& param : definition_.params()) {
     env->Bind(param, *arg++);

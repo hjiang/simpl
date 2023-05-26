@@ -3,6 +3,8 @@
 #ifndef SIMPL_USER_FN_H_
 #define SIMPL_USER_FN_H_
 
+#include <memory>
+
 #include "simpl/callable.h"
 #include "simpl/interpreter.h"
 #include "simpl/parser.h"
@@ -12,12 +14,15 @@ namespace simpl {
 class UserFn : public Callable {
  public:
   int arity() const override { return definition_.params().size(); }
-  explicit UserFn(const Expr::Fn& definition) : definition_(definition) {}
+  UserFn(const Expr::Fn& definition,
+         std::shared_ptr<Interpreter::Environment> closure = nullptr)
+      : definition_(definition), closure_(closure) {}
 
  private:
   Interpreter::atom_value_type CallImpl(Interpreter*,
                                         const args_type& args) override;
   const Expr::Fn& definition_;
+  std::shared_ptr<Interpreter::Environment> closure_;
 };
 
 }  // namespace simpl

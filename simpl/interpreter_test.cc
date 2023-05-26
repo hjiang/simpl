@@ -240,6 +240,15 @@ TEST(Parser, LetAndFn) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
 }
 
+TEST(Parser, Closure) {
+  Lexer lexer("(let [a 5] (def plus (fn [b] (+ a b)))) (plus 2)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+}
+
 }  // namespace simpl
 // Local Variables:
 // compile-command : "bazel test //simpl:all"

@@ -138,7 +138,7 @@ void Interpreter::Visit(const Expr::If& if_expr) {
 }
 
 void Interpreter::Visit(const Expr::Fn& fn) {
-  last_atom_result_ = std::make_shared<UserFn>(fn);
+  last_atom_result_ = std::make_shared<UserFn>(fn, env_);
 }
 
 void Interpreter::DefVar(std::string name, atom_value_type value) {
