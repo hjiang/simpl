@@ -52,7 +52,7 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
     (+ (fab (- n 1)) (fab (- n 2)))))
 ```
 
-### Local binding
+### Local binding (and closure)
 
 ``` clojure
 (let [a 5]
