@@ -104,6 +104,9 @@ std::unique_ptr<Expr> Parser::ParseExpr() {
     if (Match(Token::Type::kFn)) {
       return ParseFn();
     }
+    if (Match(Token::Type::kDefn)) {
+      return ParseDefn();
+    }
     return ParseList();
   } else {
     return ParseAtom();
@@ -140,6 +143,14 @@ std::unique_ptr<Expr> Parser::ParseDef() {
   auto expr = ParseExpr();
   Consume(Token::Type::kRightParen, "Expect ')' after definition.");
   return std::make_unique<Expr::Def>(std::move(name), std::move(expr));
+}
+
+Parser::expr_ptr Parser::ParseDefn() {
+  auto token = Advance();
+  if (token.type != Token::Type::kSymbol) {
+    throw Error(token, "Expected symbol after defn");
+  }
+  return std::make_unique<Expr::Def>(std::move(token.lexeme), ParseFn());
 }
 
 Expr::Let::binding_t Parser::ParseBinding() {

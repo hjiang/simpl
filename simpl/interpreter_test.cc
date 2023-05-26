@@ -249,6 +249,15 @@ TEST(Parser, Closure) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
 }
 
+TEST(Parser, Defn) {
+  Lexer lexer("(defn plus [a b] (+ a b)) (plus 3 4)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+}
+
 }  // namespace simpl
 // Local Variables:
 // compile-command : "bazel test //simpl:all"

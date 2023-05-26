@@ -148,6 +148,7 @@ class Parser {
   expr_ptr ParseList();
   expr_ptr ParseAtom();
   expr_ptr ParseDef();
+  expr_ptr ParseDefn();
   expr_ptr ParseLet();
   expr_ptr ParseIf();
   expr_ptr ParseFn();
