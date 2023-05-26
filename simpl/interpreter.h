@@ -64,10 +64,6 @@ class Interpreter : public Expr::Visitor {
     std::shared_ptr<Environment> parent_;
   };
 
-  using function_type =
-      std::function<atom_value_type(const std::vector<atom_value_type>&)>;
-  using fn_args_type = const std::vector<Interpreter::atom_value_type>&;
-
   Interpreter();
   virtual ~Interpreter() {}
   void Visit(const Expr::Atom& atom) override;
