@@ -1,0 +1,6 @@
+(defn fab [n]
+  (if (or (= n 0) (= n 1))
+    1
+    (+ (fab (- n 1)) (fab (- n 2)))))
+
+(fab 20)
