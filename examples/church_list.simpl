@@ -1,0 +1,18 @@
+(defn cons [h t]
+  (fn [f] (f h t)))
+
+(defn car [l]
+  (l (fn [h _] h)))
+
+(defn cdr [l]
+  (l (fn [_ t] t)))
+
+(defn printl [l]
+  (if l
+    (do (print (car l))
+        (printl (cdr l)))
+    (println)))
+
+(def lst (cons 1 (cons 2 (cons 3 nil))))
+
+(printl lst)
