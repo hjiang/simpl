@@ -120,6 +120,24 @@ TEST(Interpreter, mod) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 2);
 }
 
+TEST(Interpreter, StringConcat) {
+  Lexer lexer("(+ \"foo\" \"bar\")");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<std::string>(interpreter.Evaluate(expr)), "foobar");
+}
+
+TEST(Interpreter, StringCompare) {
+  Lexer lexer("(= \"foobar\" (+ \"foo\" \"bar\"))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(expr)));
+}
+
 TEST(Interpreter, InterpretProgram) {
   Lexer lexer("(- 1 2)\n(+ 3 4)");
   auto tokens = lexer.scan();

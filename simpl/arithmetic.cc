@@ -24,7 +24,7 @@ static Interpreter::atom_value_type operator+(
     return std::get<float_type>(lhs) + std::get<int_type>(rhs);
   }
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<float_type>(lhs) + std::get<double>(rhs);
+    return std::get<float_type>(lhs) + std::get<float_type>(rhs);
   }
   if (holds<std::string>(lhs) && holds<std::string>(rhs)) {
     return std::get<std::string>(lhs) + std::get<std::string>(rhs);
@@ -46,7 +46,7 @@ static Interpreter::atom_value_type operator-(
     return std::get<float_type>(lhs) - std::get<int_type>(rhs);
   }
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<float_type>(lhs) - std::get<double>(rhs);
+    return std::get<float_type>(lhs) - std::get<float_type>(rhs);
   }
   throw std::runtime_error(
       "Invalid types for operator -");  // FIXME: error handling
@@ -65,7 +65,7 @@ static Interpreter::atom_value_type operator*(
     return std::get<float_type>(lhs) * std::get<int_type>(rhs);
   }
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<float_type>(lhs) * std::get<double>(rhs);
+    return std::get<float_type>(lhs) * std::get<float_type>(rhs);
   }
   throw std::runtime_error(
       "Invalid types for operator *");  // FIXME: error handling
@@ -84,7 +84,7 @@ static Interpreter::atom_value_type operator/(
     return std::get<float_type>(lhs) / std::get<int_type>(rhs);
   }
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<float_type>(lhs) / std::get<double>(rhs);
+    return std::get<float_type>(lhs) / std::get<float_type>(rhs);
   }
   throw std::runtime_error(
       "Invalid types for operator /");  // FIXME: error handling
@@ -102,9 +102,11 @@ static Interpreter::atom_value_type operator%(
 
 Interpreter::atom_value_type Sum::CallImpl(Interpreter*,
                                            const args_type& args) {
-  Interpreter::atom_value_type result = 0;
-  for (auto arg : args) {
-    result = result + arg;
+  Interpreter::atom_value_type result = args.front();
+  auto i = args.begin();
+  ++i;
+  for (; i != args.end(); ++i) {
+    result = result + *i;
   }
   return result;
 }
