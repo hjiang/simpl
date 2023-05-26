@@ -88,6 +88,7 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 
 - More control flow options
 - `loop`, `recur` and tail-call optimization
+- Macros
 - A standard library (include the battery)
 - Standard data structures: `list`, `vector`, `map`, `set`
 
