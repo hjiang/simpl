@@ -18,7 +18,7 @@ SimpL isn't quite ready for day-to-day use yet, but you can play with it by
 installing [Bazel](https://bazel.build) and running:
 
 ``` sh
-bazel build //simpl:simpl
+bazel build -c opt //simpl:simpl
 ```
 
 The executable will be at `bazel-bin/simpl/simpl`. It's both a REPL and a source

@@ -151,8 +151,7 @@ void Lexer::String() {
     return;
   }
 
-  char c = Advance();
-  assert('"' == c);
+  Advance();  // move past the closing '"'
   AddToken(Token::kString, source_.substr(start_ + 1, current_ - start_ - 2));
 }
 
