@@ -100,6 +100,10 @@ void Interpreter::Visit(const Expr::Atom& atom) {
 }
 
 void Interpreter::Visit(const Expr::List& list) {
+  if (list.exprs().empty()) {
+    last_atom_result_ = nullptr;
+    return;
+  }
   auto result = Evaluate(*list.exprs().front());
   if (holds<callable_ptr>(result)) {
     auto callable = std::get<callable_ptr>(result);
