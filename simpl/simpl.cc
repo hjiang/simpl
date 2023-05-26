@@ -34,7 +34,6 @@ static void run(const std::string &source) {
 }
 
 void RunFile(const std::string &path) {
-  std::cout << "Running file: " << path << std::endl;
   std::ifstream file(path);
   if (file) {
     std::ostringstream ss;
@@ -55,6 +54,7 @@ void RunFile(const std::string &path) {
 void RunREPL() {
   while (true) {
     ClearError();
+    std::cout << "SimpL " << kVersion << std::endl;
     std::cout << "> ";
     std::string line;
     getline(std::cin, line);
