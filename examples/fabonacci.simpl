@@ -3,4 +3,4 @@
     1
     (+ (fab (- n 1)) (fab (- n 2)))))
 
-(fab 20)
+(println (fab 20))

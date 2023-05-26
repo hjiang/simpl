@@ -10,6 +10,7 @@
 #include "simpl/comparison.h"
 #include "simpl/config.h"
 #include "simpl/interpreter_util.h"
+#include "simpl/io.h"
 #include "simpl/logic.h"
 #include "simpl/parser.h"
 #include "simpl/user_fn.h"
@@ -28,6 +29,8 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("/", std::make_shared<builtin_fn::Divide>());
   env_->Define("%", std::make_shared<builtin_fn::Modulo>());
   env_->Define("not", std::make_shared<builtin_fn::Not>());
+  env_->Define("print", std::make_shared<builtin_fn::Print>());
+  env_->Define("println", std::make_shared<builtin_fn::Println>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
@@ -65,7 +68,13 @@ std::string Interpreter::StringifyValue(const Interpreter::atom_value_type& v) {
     return std::get<std::string>(v);
   }
   if (holds<Symbol>(v)) {
-    return std::get<Symbol>(v).name;
+    return "<symbol: " + std::get<Symbol>(v).name + ">";
+  }
+  if (holds<nullptr_t>(v)) {
+    return "nil";
+  }
+  if (holds<callable_ptr>(v)) {
+    return "<function>";
   }
   throw std::runtime_error("Unknown atom type");
 }
