@@ -15,7 +15,7 @@ C++ without any third-party dependencies other than the standard library.
 ## How to use
 
 SimpL isn't quite ready for day-to-day use yet, but you can play with it by
-installing Bazel and running:
+installing [Bazel](https://bazel.build) and running:
 
 ``` sh
 bazel build //simpl:simpl
@@ -88,11 +88,16 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 
 - More control flow options
 - `loop`, `recur` and tail-call optimization
-- A standard library
+- A standard library (include the battery)
 - Standard data structures: `list`, `vector`, `map`, `set`
 
 ## Longer-term road map
 
 - Coroutines
 - Threading
-- A virtual machine
+- A virtual machine (maybe)
+
+## Contributing
+
+- Bug reports and pull requests are welcome
+- More guidelines coming soon
