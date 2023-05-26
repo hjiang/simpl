@@ -72,6 +72,8 @@ class Interpreter : public Expr::Visitor {
   void Visit(const Expr::Let& expr) override;
   void Visit(const Expr::If& expr) override;
   void Visit(const Expr::Fn& expr) override;
+  void Visit(const Expr::Or& expr) override;
+  void Visit(const Expr::And& expr) override;
   atom_value_type Evaluate(const Expr& expr);
   atom_value_type Evaluate(const std::list<std::unique_ptr<const Expr>>& expr,
                            std::shared_ptr<Environment> env = nullptr);

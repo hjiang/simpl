@@ -141,6 +141,24 @@ void Interpreter::Visit(const Expr::Fn& fn) {
   last_atom_result_ = std::make_shared<UserFn>(fn, env_);
 }
 
+void Interpreter::Visit(const Expr::Or& logic_or) {
+  for (const auto& term : logic_or.terms()) {
+    Evaluate(*term);
+    if (IsTruthy(last_atom_result_)) {
+      return;
+    }
+  }
+}
+
+void Interpreter::Visit(const Expr::And& logic_and) {
+  for (const auto& term : logic_and.terms()) {
+    Evaluate(*term);
+    if (!IsTruthy(last_atom_result_)) {
+      return;
+    }
+  }
+}
+
 void Interpreter::DefVar(std::string name, atom_value_type value) {
   env_->Define(std::move(name), std::move(value));
 }

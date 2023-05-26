@@ -24,6 +24,8 @@ class Expr {
   class Let;
   class If;
   class Fn;
+  class Or;
+  class And;
   virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
   struct Symbol {
@@ -129,6 +131,28 @@ class Expr::Fn : public Expr {
   const body_t body_;
 };
 
+class Expr::Or: public Expr {
+ public:
+  using term_list_t = std::list<std::unique_ptr<const Expr>>;
+  explicit Or(term_list_t&& terms) : terms_(std::move(terms)) {}
+  virtual ~Or() = default;
+  void Accept(Expr::Visitor* visitor) const override;
+  const term_list_t& terms() const { return terms_; }
+ private:
+  const term_list_t terms_;
+};
+
+class Expr::And: public Expr {
+ public:
+  using term_list_t = std::list<std::unique_ptr<const Expr>>;
+  explicit And(term_list_t&& terms) : terms_(std::move(terms)) {}
+  virtual ~And() = default;
+  void Accept(Expr::Visitor* visitor) const override;
+  const term_list_t& terms() const { return terms_; }
+ private:
+  const term_list_t terms_;
+};
+
 class Parser {
   using token_list_t = std::list<Token>;
   using expr_ptr = std::unique_ptr<Expr>;
@@ -152,6 +176,8 @@ class Parser {
   expr_ptr ParseLet();
   expr_ptr ParseIf();
   expr_ptr ParseFn();
+  expr_ptr ParseOr();
+  expr_ptr ParseAnd();
   Expr::Fn::param_list_t ParseParamList();
   Expr::Let::binding_list_t ParseBindings();
   Expr::Let::binding_t ParseBinding();
@@ -175,6 +201,8 @@ class Expr::Visitor {
   virtual void Visit(const Expr::Let& expr) = 0;
   virtual void Visit(const Expr::If& expr) = 0;
   virtual void Visit(const Expr::Fn& expr) = 0;
+  virtual void Visit(const Expr::Or& expr) = 0;
+  virtual void Visit(const Expr::And& expr) = 0;
   virtual ~Visitor() {}
 };
 

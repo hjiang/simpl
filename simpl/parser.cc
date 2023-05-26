@@ -35,6 +35,8 @@ void Expr::Def::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Let::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::If::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Fn::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::Or::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
+void Expr::And::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
 std::list<std::unique_ptr<const Expr>> Parser::Parse() {
   std::list<std::unique_ptr<const Expr>> exprs;
@@ -106,6 +108,12 @@ std::unique_ptr<Expr> Parser::ParseExpr() {
     }
     if (Match(Token::Type::kDefn)) {
       return ParseDefn();
+    }
+    if (Match(Token::Type::kOr)) {
+      return ParseOr();
+    }
+    if (Match(Token::Type::kAnd)) {
+      return ParseAnd();
     }
     return ParseList();
   } else {
@@ -185,13 +193,26 @@ std::list<std::unique_ptr<const Expr>> Parser::ParseExprs() {
   }
   return exprs;
 }
+
 Parser::expr_ptr Parser::ParseIf() {
   auto cond = ParseExpr();
   auto then = ParseExpr();
   auto otherwise = ParseExpr();
-  Consume(Token::Type::kRightParen, "Expect ')' at end of IF form.");
+  Consume(Token::Type::kRightParen, "Expect ')' at end of 'if' form.");
   return std::make_unique<Expr::If>(std::move(cond), std::move(then),
                                     std::move(otherwise));
+}
+
+Parser::expr_ptr Parser::ParseOr() {
+  auto terms = ParseExprs();
+  Consume(Token::Type::kRightParen, "Expect ')' at end of 'or' form.");
+  return std::make_unique<Expr::Or>(std::move(terms));
+}
+
+Parser::expr_ptr Parser::ParseAnd() {
+  auto terms = ParseExprs();
+  Consume(Token::Type::kRightParen, "Expect ')' at end of 'and' form.");
+  return std::make_unique<Expr::And>(std::move(terms));
 }
 
 std::unique_ptr<Expr> Parser::ParseList() {

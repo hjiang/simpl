@@ -10,7 +10,7 @@
 
 namespace simpl {
 
-TEST(Parser, Integer) {
+TEST(Interpreter, Integer) {
   Lexer lexer("42");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -19,7 +19,7 @@ TEST(Parser, Integer) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 42);
 }
 
-TEST(Parser, Bool) {
+TEST(Interpreter, Bool) {
   Lexer lexer("true");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -28,7 +28,7 @@ TEST(Parser, Bool) {
   EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(expr)));
 }
 
-TEST(Parser, Plus) {
+TEST(Interpreter, Plus) {
   Lexer lexer("(+ 1 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -38,7 +38,7 @@ TEST(Parser, Plus) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(*exprs.front())), 3);
 }
 
-TEST(Parser, NestedSum) {
+TEST(Interpreter, NestedSum) {
   Lexer lexer("(+ 1 2 (+ 3 4))");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -47,7 +47,7 @@ TEST(Parser, NestedSum) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 10);
 }
 
-TEST(Parser, UnarySum) {
+TEST(Interpreter, UnarySum) {
   Lexer lexer("(+ 42)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -56,7 +56,7 @@ TEST(Parser, UnarySum) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 42);
 }
 
-TEST(Parser, Substract) {
+TEST(Interpreter, Substract) {
   Lexer lexer("(- 1 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -65,7 +65,7 @@ TEST(Parser, Substract) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), -1);
 }
 
-TEST(Parser, MoreSubstract) {
+TEST(Interpreter, MoreSubstract) {
   Lexer lexer("(- 1 2 3 4)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -74,7 +74,7 @@ TEST(Parser, MoreSubstract) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), -8);
 }
 
-TEST(Parser, UnarySubstract) {
+TEST(Interpreter, UnarySubstract) {
   Lexer lexer("(- 12)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -83,7 +83,7 @@ TEST(Parser, UnarySubstract) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), -12);
 }
 
-TEST(Parser, Multiply) {
+TEST(Interpreter, Multiply) {
   Lexer lexer("(* 3 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -92,7 +92,7 @@ TEST(Parser, Multiply) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 6);
 }
 
-TEST(Parser, MoreMultiply) {
+TEST(Interpreter, MoreMultiply) {
   Lexer lexer("(* 2 3 4)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -101,7 +101,7 @@ TEST(Parser, MoreMultiply) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 24);
 }
 
-TEST(Parser, divide) {
+TEST(Interpreter, divide) {
   Lexer lexer("(/ 6 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -110,7 +110,7 @@ TEST(Parser, divide) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 3);
 }
 
-TEST(Parser, mod) {
+TEST(Interpreter, mod) {
   Lexer lexer("(% 11 3)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -119,7 +119,7 @@ TEST(Parser, mod) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 2);
 }
 
-TEST(Parser, InterpretProgram) {
+TEST(Interpreter, InterpretProgram) {
   Lexer lexer("(- 1 2)\n(+ 3 4)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -128,7 +128,7 @@ TEST(Parser, InterpretProgram) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
 }
 
-TEST(Parser, DefineVar) {
+TEST(Interpreter, DefineVar) {
   Lexer lexer("(def a 2)\n(+ a 4)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -137,7 +137,7 @@ TEST(Parser, DefineVar) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 6);
 }
 
-TEST(Parser, Let) {
+TEST(Interpreter, Let) {
   Lexer lexer("(let [a 3] (+ a 4))");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -146,7 +146,7 @@ TEST(Parser, Let) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
 }
 
-TEST(Parser, NestedLet) {
+TEST(Interpreter, NestedLet) {
   Lexer lexer("(let [a 2] (let [a 3] (+ a 4)) a)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -155,7 +155,7 @@ TEST(Parser, NestedLet) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 2);
 }
 
-TEST(Parser, If) {
+TEST(Interpreter, If) {
   Lexer lexer("(if true 3 4)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -168,7 +168,7 @@ TEST(Parser, If) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(exprs)), 4);
 }
 
-TEST(Parser, Not) {
+TEST(Interpreter, Not) {
   Lexer lexer("(not nil)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -177,7 +177,7 @@ TEST(Parser, Not) {
   EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
 }
 
-TEST(Parser, EqualityTrue) {
+TEST(Interpreter, EqualityTrue) {
   Lexer lexer("(= 2 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -186,7 +186,7 @@ TEST(Parser, EqualityTrue) {
   EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
 }
 
-TEST(Parser, EqualityFalse) {
+TEST(Interpreter, EqualityFalse) {
   Lexer lexer("(= 2 3)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -195,7 +195,7 @@ TEST(Parser, EqualityFalse) {
   EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(exprs)));
 }
 
-TEST(Parser, GreaterThan) {
+TEST(Interpreter, GreaterThan) {
   Lexer lexer("(> 3.2 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -204,7 +204,7 @@ TEST(Parser, GreaterThan) {
   EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
 }
 
-TEST(Parser, GreaterThan_False) {
+TEST(Interpreter, GreaterThan_False) {
   Lexer lexer("(> 3 5)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -213,7 +213,7 @@ TEST(Parser, GreaterThan_False) {
   EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(exprs)));
 }
 
-TEST(Parser, LessThan_False) {
+TEST(Interpreter, LessThan_False) {
   Lexer lexer("(< 3.2 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -222,7 +222,7 @@ TEST(Parser, LessThan_False) {
   EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(exprs)));
 }
 
-TEST(Parser, LessThan) {
+TEST(Interpreter, LessThan) {
   Lexer lexer("(< 3 5)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -231,7 +231,7 @@ TEST(Parser, LessThan) {
   EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
 }
 
-TEST(Parser, LetAndFn) {
+TEST(Interpreter, LetAndFn) {
   Lexer lexer("(let [plus (fn [a b] (+ a b))] (plus 3 4))");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -240,7 +240,7 @@ TEST(Parser, LetAndFn) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
 }
 
-TEST(Parser, Closure) {
+TEST(Interpreter, Closure) {
   Lexer lexer("(let [a 5] (def plus (fn [b] (+ a b)))) (plus 2)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
@@ -249,13 +249,31 @@ TEST(Parser, Closure) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
 }
 
-TEST(Parser, Defn) {
+TEST(Interpreter, Defn) {
   Lexer lexer("(defn plus [a b] (+ a b)) (plus 3 4)");
   auto tokens = lexer.scan();
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+}
+
+TEST(Interpreter, Or) {
+  Lexer lexer("(or true false)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(expr)));
+}
+
+TEST(Interpreter, And) {
+  Lexer lexer("(and true false)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(expr)));
 }
 
 }  // namespace simpl
