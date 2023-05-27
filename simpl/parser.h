@@ -190,11 +190,12 @@ class Parser {
       : tokens_(tokens), current_(tokens_.begin()) {}
   expr_list_t Parse();
 
- private:
   class ParseError : std::runtime_error {
    public:
     explicit ParseError(const std::string& msg) : std::runtime_error(msg) {}
   };
+
+ private:
   ParseError Error(const Token& token, const std::string& msg);
   expr_ptr_t ParseAnd();
   expr_ptr_t ParseAtom();

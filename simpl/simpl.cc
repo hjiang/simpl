@@ -2,6 +2,9 @@
 
 #include "simpl/simpl.h"
 
+#include <ctype.h>
+
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <list>
@@ -19,17 +22,19 @@ namespace simpl {
 static Interpreter::atom_value_type run(const std::string &source) {
   Lexer lexer(source);
   std::list<Token> tokens = lexer.scan();
-  Parser parser(tokens);
-  auto ast = parser.Parse();
   if (HadError()) {
-    return nullptr;
+    throw std::runtime_error("An error occurred while scanning tokens.");
   }
-  static Interpreter interpreter;
   try {
+    Parser parser(tokens);
+    auto ast = parser.Parse();
+    static Interpreter interpreter;
     return interpreter.Evaluate(ast);
+  } catch (const Parser::ParseError &e) {
+    throw std::runtime_error("An error occurred while parsing the input.");
   } catch (const std::runtime_error &e) {
     HandleRuntimeError(e);
-    return nullptr;
+    throw std::runtime_error("An error occurred while evaluating the program.");
   }
 }
 
@@ -61,7 +66,16 @@ void RunREPL() {
     if (std::cin.eof()) {
       break;
     }
-    std::cout << Interpreter::StringifyValue(run(line)) << std::endl;
+    if (std::all_of(line.begin(), line.end(), isspace)) {
+      continue;
+    }
+    try {
+      std::cout << Interpreter::StringifyValue(run(line)) << std::endl;
+    } catch (const std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
+      ClearError();
+      ClearRuntimeError();
+    }
   }
 }
 
