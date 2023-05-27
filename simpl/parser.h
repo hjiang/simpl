@@ -35,6 +35,10 @@ class Expr {
   };
 };
 
+using token_list_t = std::list<Token>;
+using expr_ptr_t = std::unique_ptr<const Expr>;
+using expr_list_t = std::list<expr_ptr_t>;
+
 class Expr::Atom : public Expr {
   using value_type = std::variant<int_type, float_type, bool, std::string,
                                   Symbol, std::nullptr_t>;
@@ -58,30 +62,30 @@ class Expr::Atom : public Expr {
 
 class Expr::List : public Expr {
  public:
-  explicit List(std::list<std::unique_ptr<Expr>>&& l) : exprs_(std::move(l)) {}
+  explicit List(expr_list_t&& l) : exprs_(std::move(l)) {}
   virtual ~List() {}
   void Accept(Expr::Visitor* visitor) const override;
-  const std::list<std::unique_ptr<Expr>>& exprs() const { return exprs_; }
+  const expr_list_t& exprs() const { return exprs_; }
 
  private:
-  const std::list<std::unique_ptr<Expr>> exprs_;
+  const expr_list_t exprs_;
 };
 
 class Expr::Do: public Expr {
  public:
-  explicit Do(std::list<std::unique_ptr<const Expr>>&& exprs)
+  explicit Do(expr_list_t&& exprs)
       : exprs_(std::move(exprs)) {}
   virtual ~Do() = default;
   void Accept(Expr::Visitor* visitor) const override;
-  const std::list<std::unique_ptr<const Expr>>& exprs() const { return exprs_; }
+  const expr_list_t& exprs() const { return exprs_; }
 
  private:
-  const std::list<std::unique_ptr<const Expr>> exprs_;
+  const expr_list_t exprs_;
 };
 
 class Expr::Def : public Expr {
  public:
-  Def(std::string name, std::unique_ptr<Expr> expr)
+  Def(std::string name, expr_ptr_t expr)
       : name_(std::move(name)), expr_(std::move(expr)) {}
   virtual ~Def() {}
   void Accept(Expr::Visitor* visitor) const override;
@@ -90,30 +94,29 @@ class Expr::Def : public Expr {
 
  private:
   const std::string name_;
-  const std::unique_ptr<Expr> expr_;
+  const expr_ptr_t expr_;
 };
 
 class Expr::Let : public Expr {
  public:
-  using body_t = std::list<std::unique_ptr<const Expr>>;
-  using binding_t = std::pair<std::string, std::unique_ptr<const Expr>>;
+  using binding_t = std::pair<std::string, expr_ptr_t>;
   using binding_list_t = std::list<binding_t>;
-  Let(binding_list_t&& bindings, body_t&& body)
+  Let(binding_list_t&& bindings, expr_list_t&& body)
       : bindings_(std::move(bindings)), body_(std::move(body)) {}
   virtual ~Let() = default;
   void Accept(Expr::Visitor* visitor) const override;
   const binding_list_t& bindings() const { return bindings_; }
-  const body_t& body() const { return body_; }
+  const expr_list_t& body() const { return body_; }
 
  private:
   const binding_list_t bindings_;
-  const body_t body_;
+  const expr_list_t body_;
 };
 
 class Expr::If : public Expr {
  public:
-  If(std::unique_ptr<Expr>&& cond, std::unique_ptr<Expr>&& then,
-     std::unique_ptr<Expr>&& otherwise)
+  If(expr_ptr_t&& cond, expr_ptr_t&& then,
+     expr_ptr_t&& otherwise)
       : cond_(std::move(cond)),
         then_(std::move(then)),
         otherwise_(std::move(otherwise)) {}
@@ -124,15 +127,15 @@ class Expr::If : public Expr {
   const Expr& otherwise() const { return *otherwise_; }
 
  private:
-  const std::unique_ptr<Expr> cond_;
-  const std::unique_ptr<Expr> then_;
-  const std::unique_ptr<Expr> otherwise_;
+  const expr_ptr_t cond_;
+  const expr_ptr_t then_;
+  const expr_ptr_t otherwise_;
 };
 
 class Expr::Fn : public Expr {
  public:
   using param_list_t = std::list<std::string>;
-  using body_t = std::list<std::unique_ptr<const Expr>>;
+  using body_t = expr_list_t;
   Fn(param_list_t&& params, body_t&& body)
       : params_(std::move(params)), body_(std::move(body)) {}
   virtual ~Fn() = default;
@@ -147,7 +150,7 @@ class Expr::Fn : public Expr {
 
 class Expr::Or: public Expr {
  public:
-  using term_list_t = std::list<std::unique_ptr<const Expr>>;
+  using term_list_t = expr_list_t;
   explicit Or(term_list_t&& terms) : terms_(std::move(terms)) {}
   virtual ~Or() = default;
   void Accept(Expr::Visitor* visitor) const override;
@@ -158,55 +161,14 @@ class Expr::Or: public Expr {
 
 class Expr::And: public Expr {
  public:
-  using term_list_t = std::list<std::unique_ptr<const Expr>>;
-  explicit And(term_list_t&& terms) : terms_(std::move(terms)) {}
+  explicit And(expr_list_t&& terms) : terms_(std::move(terms)) {}
   virtual ~And() = default;
   void Accept(Expr::Visitor* visitor) const override;
-  const term_list_t& terms() const { return terms_; }
+  const expr_list_t& terms() const { return terms_; }
  private:
-  const term_list_t terms_;
+  const expr_list_t terms_;
 };
 
-class Parser {
-  using token_list_t = std::list<Token>;
-  using expr_ptr = std::unique_ptr<Expr>;
-
- public:
-  explicit Parser(const token_list_t& tokens)
-      : tokens_(tokens), current_(tokens_.begin()) {}
-  std::list<std::unique_ptr<const Expr>> Parse();
-
- private:
-  class ParseError : std::runtime_error {
-   public:
-    explicit ParseError(const std::string& msg) : std::runtime_error(msg) {}
-  };
-  ParseError Error(const Token& token, const std::string& msg);
-  expr_ptr ParseAnd();
-  expr_ptr ParseAtom();
-  expr_ptr ParseDef();
-  expr_ptr ParseDefn();
-  expr_ptr ParseDo();
-  expr_ptr ParseExpr();
-  expr_ptr ParseFn();
-  expr_ptr ParseIf();
-  expr_ptr ParseLet();
-  expr_ptr ParseList();
-  expr_ptr ParseOr();
-  Expr::Fn::param_list_t ParseParamList();
-  Expr::Let::binding_list_t ParseBindings();
-  Expr::Let::binding_t ParseBinding();
-  std::list<std::unique_ptr<const Expr>> ParseExprs();
-  bool Match(Token::Type type);
-  bool Check(Token::Type type) const;
-  const Token& Consume(Token::Type type, const std::string& msg);
-  const Token& Advance();
-  bool AtEnd() const { return Peek().type == Token::kEof; }
-  const Token& Peek() const { return *current_; }
-  const Token& Previous() const { return *(std::prev(current_)); }
-  const token_list_t tokens_;
-  token_list_t::const_iterator current_;
-};
 
 class Expr::Visitor {
  public:
@@ -220,6 +182,44 @@ class Expr::Visitor {
   virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Or& expr) = 0;
   virtual ~Visitor() {}
+};
+
+class Parser {
+ public:
+  explicit Parser(const token_list_t& tokens)
+      : tokens_(tokens), current_(tokens_.begin()) {}
+  expr_list_t Parse();
+
+ private:
+  class ParseError : std::runtime_error {
+   public:
+    explicit ParseError(const std::string& msg) : std::runtime_error(msg) {}
+  };
+  ParseError Error(const Token& token, const std::string& msg);
+  expr_ptr_t ParseAnd();
+  expr_ptr_t ParseAtom();
+  expr_ptr_t ParseDef();
+  expr_ptr_t ParseDefn();
+  expr_ptr_t ParseDo();
+  expr_ptr_t ParseExpr();
+  expr_ptr_t ParseFn();
+  expr_ptr_t ParseIf();
+  expr_ptr_t ParseLet();
+  expr_ptr_t ParseList();
+  expr_ptr_t ParseOr();
+  Expr::Fn::param_list_t ParseParamList();
+  Expr::Let::binding_list_t ParseBindings();
+  Expr::Let::binding_t ParseBinding();
+  expr_list_t ParseExprs();
+  bool Match(Token::Type type);
+  bool Check(Token::Type type) const;
+  const Token& Consume(Token::Type type, const std::string& msg);
+  const Token& Advance();
+  bool AtEnd() const { return Peek().type == Token::kEof; }
+  const Token& Peek() const { return *current_; }
+  const Token& Previous() const { return *(std::prev(current_)); }
+  const token_list_t tokens_;
+  token_list_t::const_iterator current_;
 };
 
 }  // namespace simpl
