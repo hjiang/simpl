@@ -16,19 +16,20 @@
 
 namespace simpl {
 
-static void run(const std::string &source) {
+static Interpreter::atom_value_type run(const std::string &source) {
   Lexer lexer(source);
   std::list<Token> tokens = lexer.scan();
   Parser parser(tokens);
   auto ast = parser.Parse();
   if (HadError()) {
-    return;
+    return nullptr;
   }
   static Interpreter interpreter;
   try {
-    interpreter.Evaluate(ast);
+    return interpreter.Evaluate(ast);
   } catch (const std::runtime_error &e) {
     HandleRuntimeError(e);
+    return nullptr;
   }
 }
 
@@ -51,16 +52,16 @@ void RunFile(const std::string &path) {
 }
 
 void RunREPL() {
+  std::cout << "SimpL " << kVersion << std::endl;
   while (true) {
     ClearError();
-    std::cout << "SimpL " << kVersion << std::endl;
     std::cout << "> ";
     std::string line;
     getline(std::cin, line);
     if (std::cin.eof()) {
       break;
     }
-    run(line);
+    std::cout << Interpreter::StringifyValue(run(line)) << std::endl;
   }
 }
 
