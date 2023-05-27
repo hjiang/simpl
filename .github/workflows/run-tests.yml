@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - run: sudo apt-get install -y expect
       - run: bazel coverage -c fastbuild --combined_report=lcov //...
       - uses: codecov/codecov-action@v3
         with:
