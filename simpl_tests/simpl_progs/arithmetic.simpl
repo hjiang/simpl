@@ -11,3 +11,15 @@
  "mixing integers and floats")
 
 (assert (< (/ 3.0 2) (/ 15 2.0)) "division")
+
+(assert
+ (= (- 3.0 2) (- 3 2.0))
+ "floating point equality")
+
+(assert
+ (= (- 3.0 2.0) (- 3 2.0))
+ "floating point equality")
+
+(assert
+ (= (/ 12.0 2.0) (* 3.0 2.0))
+ "floating point equality")
