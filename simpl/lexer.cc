@@ -164,12 +164,16 @@ void Lexer::Number() {
     Advance();
     while (isdigit(Peek())) Advance();
   }
-  if (is_float) {
-    AddToken(Token::kFloat,
-             std::stod(source_.substr(start_, current_ - start_)));
-  } else {
-    AddToken(Token::kInteger,
-             std::stoi(source_.substr(start_, current_ - start_)));
+  try {
+    if (is_float) {
+      AddToken(Token::kFloat,
+               std::stod(source_.substr(start_, current_ - start_)));
+    } else {
+      AddToken(Token::kInteger,
+               std::stoi(source_.substr(start_, current_ - start_)));
+    }
+  } catch (const std::invalid_argument &e) {
+    Error(line_, "Invalid number.");
   }
 }
 

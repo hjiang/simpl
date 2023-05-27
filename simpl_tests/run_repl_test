@@ -2,10 +2,24 @@
 
 set timeout 1
 spawn simpl/simpl
-expect "> $"
+expect {
+    "> $" {}
+    timeout { exit 1 }
+}
 send -- "(+ 2 3)\n"
 expect {
     "5" {}
+    timeout { exit 1 }
+}
+send -- "(+ 2\n"
+expect {
+    "Error" {}
+    timeout { exit 1 }
+}
+# Test error recovery
+send -- "(* 2 3.0)\n"
+expect {
+    "6." {}
     timeout { exit 1 }
 }
 close
