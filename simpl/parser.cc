@@ -39,15 +39,15 @@ void Expr::Let::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Or::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
-std::list<std::unique_ptr<const Expr>> Parser::Parse() {
-  std::list<std::unique_ptr<const Expr>> exprs;
+std::list<expr_ptr_t> Parser::Parse() {
+  std::list<expr_ptr_t> exprs;
   while (!AtEnd()) {
     exprs.push_back(ParseExpr());
   }
   return exprs;
 }
 
-std::unique_ptr<Expr> Parser::ParseAtom() {
+expr_ptr_t Parser::ParseAtom() {
   auto atom = Advance();
   switch (atom.type) {
     case Token::Type::kInteger:
@@ -93,7 +93,7 @@ std::unique_ptr<Expr> Parser::ParseAtom() {
   }
 }
 
-std::unique_ptr<Expr> Parser::ParseExpr() {
+expr_ptr_t Parser::ParseExpr() {
   if (Match(Token::Type::kLeftParen)) {
     if (Match(Token::Type::kDef)) {
       return ParseDef();
@@ -139,14 +139,14 @@ Expr::Fn::param_list_t Parser::ParseParamList() {
   return args;
 }
 
-Parser::expr_ptr Parser::ParseFn() {
+expr_ptr_t Parser::ParseFn() {
   auto params = ParseParamList();
   auto body = ParseExprs();
   Consume(Token::Type::kRightParen, "Expect ')' after function.");
   return std::make_unique<Expr::Fn>(std::move(params), std::move(body));
 }
 
-std::unique_ptr<Expr> Parser::ParseDef() {
+expr_ptr_t Parser::ParseDef() {
   auto token = Advance();
   if (token.type != Token::Type::kSymbol) {
     throw Error(token, "Expected symbol after def");
@@ -154,15 +154,15 @@ std::unique_ptr<Expr> Parser::ParseDef() {
   auto name = token.lexeme;
   auto expr = ParseExpr();
   Consume(Token::Type::kRightParen, "Expect ')' after definition.");
-  return std::make_unique<Expr::Def>(std::move(name), std::move(expr));
+  return std::make_unique<const Expr::Def>(std::move(name), std::move(expr));
 }
 
-Parser::expr_ptr Parser::ParseDefn() {
+expr_ptr_t Parser::ParseDefn() {
   auto token = Advance();
   if (token.type != Token::Type::kSymbol) {
     throw Error(token, "Expected symbol after defn");
   }
-  return std::make_unique<Expr::Def>(std::move(token.lexeme), ParseFn());
+  return std::make_unique<const Expr::Def>(std::move(token.lexeme), ParseFn());
 }
 
 Expr::Let::binding_t Parser::ParseBinding() {
@@ -183,22 +183,23 @@ Expr::Let::binding_list_t Parser::ParseBindings() {
   return bindings;
 }
 
-std::unique_ptr<Expr> Parser::ParseLet() {
+expr_ptr_t Parser::ParseLet() {
   Expr::Let::binding_list_t bindings(ParseBindings());
   Expr::Let::body_t body(ParseExprs());
   Consume(Token::Type::kRightParen, "Expect ')' at end of LET form.");
-  return std::make_unique<Expr::Let>(std::move(bindings), std::move(body));
+  return std::make_unique<const Expr::Let>(std::move(bindings),
+                                           std::move(body));
 }
 
-std::list<std::unique_ptr<const Expr>> Parser::ParseExprs() {
-  std::list<std::unique_ptr<const Expr>> exprs;
+std::list<expr_ptr_t> Parser::ParseExprs() {
+  std::list<expr_ptr_t> exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
     exprs.push_back(ParseExpr());
   }
   return exprs;
 }
 
-Parser::expr_ptr Parser::ParseIf() {
+expr_ptr_t Parser::ParseIf() {
   auto cond = ParseExpr();
   auto then = ParseExpr();
   auto otherwise = ParseExpr();
@@ -207,26 +208,26 @@ Parser::expr_ptr Parser::ParseIf() {
                                     std::move(otherwise));
 }
 
-Parser::expr_ptr Parser::ParseDo() {
+expr_ptr_t Parser::ParseDo() {
   auto terms = ParseExprs();
   Consume(Token::Type::kRightParen, "Expect ')' at end of 'do' form.");
   return std::make_unique<Expr::Do>(std::move(terms));
 }
 
-Parser::expr_ptr Parser::ParseOr() {
+expr_ptr_t Parser::ParseOr() {
   auto terms = ParseExprs();
   Consume(Token::Type::kRightParen, "Expect ')' at end of 'or' form.");
   return std::make_unique<Expr::Or>(std::move(terms));
 }
 
-Parser::expr_ptr Parser::ParseAnd() {
+expr_ptr_t Parser::ParseAnd() {
   auto terms = ParseExprs();
   Consume(Token::Type::kRightParen, "Expect ')' at end of 'and' form.");
   return std::make_unique<Expr::And>(std::move(terms));
 }
 
-std::unique_ptr<Expr> Parser::ParseList() {
-  std::list<std::unique_ptr<Expr>> exprs;
+expr_ptr_t Parser::ParseList() {
+  std::list<expr_ptr_t> exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
     exprs.push_back(ParseExpr());
   }
