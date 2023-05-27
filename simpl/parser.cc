@@ -39,8 +39,8 @@ void Expr::Let::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Or::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 
-std::list<expr_ptr_t> Parser::Parse() {
-  std::list<expr_ptr_t> exprs;
+expr_list_t Parser::Parse() {
+  expr_list_t exprs;
   while (!AtEnd()) {
     exprs.push_back(ParseExpr());
   }
@@ -185,14 +185,14 @@ Expr::Let::binding_list_t Parser::ParseBindings() {
 
 expr_ptr_t Parser::ParseLet() {
   Expr::Let::binding_list_t bindings(ParseBindings());
-  Expr::Let::body_t body(ParseExprs());
+  expr_list_t body(ParseExprs());
   Consume(Token::Type::kRightParen, "Expect ')' at end of LET form.");
   return std::make_unique<const Expr::Let>(std::move(bindings),
                                            std::move(body));
 }
 
-std::list<expr_ptr_t> Parser::ParseExprs() {
-  std::list<expr_ptr_t> exprs;
+expr_list_t Parser::ParseExprs() {
+  expr_list_t exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
     exprs.push_back(ParseExpr());
   }
@@ -227,7 +227,7 @@ expr_ptr_t Parser::ParseAnd() {
 }
 
 expr_ptr_t Parser::ParseList() {
-  std::list<expr_ptr_t> exprs;
+  expr_list_t exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
     exprs.push_back(ParseExpr());
   }

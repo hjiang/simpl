@@ -37,6 +37,7 @@ class Expr {
 
 using token_list_t = std::list<Token>;
 using expr_ptr_t = std::unique_ptr<const Expr>;
+using expr_list_t = std::list<expr_ptr_t>;
 
 class Expr::Atom : public Expr {
   using value_type = std::variant<int_type, float_type, bool, std::string,
@@ -61,25 +62,25 @@ class Expr::Atom : public Expr {
 
 class Expr::List : public Expr {
  public:
-  explicit List(std::list<expr_ptr_t>&& l) : exprs_(std::move(l)) {}
+  explicit List(expr_list_t&& l) : exprs_(std::move(l)) {}
   virtual ~List() {}
   void Accept(Expr::Visitor* visitor) const override;
-  const std::list<expr_ptr_t>& exprs() const { return exprs_; }
+  const expr_list_t& exprs() const { return exprs_; }
 
  private:
-  const std::list<expr_ptr_t> exprs_;
+  const expr_list_t exprs_;
 };
 
 class Expr::Do: public Expr {
  public:
-  explicit Do(std::list<expr_ptr_t>&& exprs)
+  explicit Do(expr_list_t&& exprs)
       : exprs_(std::move(exprs)) {}
   virtual ~Do() = default;
   void Accept(Expr::Visitor* visitor) const override;
-  const std::list<expr_ptr_t>& exprs() const { return exprs_; }
+  const expr_list_t& exprs() const { return exprs_; }
 
  private:
-  const std::list<expr_ptr_t> exprs_;
+  const expr_list_t exprs_;
 };
 
 class Expr::Def : public Expr {
@@ -98,19 +99,18 @@ class Expr::Def : public Expr {
 
 class Expr::Let : public Expr {
  public:
-  using body_t = std::list<expr_ptr_t>;
   using binding_t = std::pair<std::string, expr_ptr_t>;
   using binding_list_t = std::list<binding_t>;
-  Let(binding_list_t&& bindings, body_t&& body)
+  Let(binding_list_t&& bindings, expr_list_t&& body)
       : bindings_(std::move(bindings)), body_(std::move(body)) {}
   virtual ~Let() = default;
   void Accept(Expr::Visitor* visitor) const override;
   const binding_list_t& bindings() const { return bindings_; }
-  const body_t& body() const { return body_; }
+  const expr_list_t& body() const { return body_; }
 
  private:
   const binding_list_t bindings_;
-  const body_t body_;
+  const expr_list_t body_;
 };
 
 class Expr::If : public Expr {
@@ -135,7 +135,7 @@ class Expr::If : public Expr {
 class Expr::Fn : public Expr {
  public:
   using param_list_t = std::list<std::string>;
-  using body_t = std::list<expr_ptr_t>;
+  using body_t = expr_list_t;
   Fn(param_list_t&& params, body_t&& body)
       : params_(std::move(params)), body_(std::move(body)) {}
   virtual ~Fn() = default;
@@ -150,7 +150,7 @@ class Expr::Fn : public Expr {
 
 class Expr::Or: public Expr {
  public:
-  using term_list_t = std::list<expr_ptr_t>;
+  using term_list_t = expr_list_t;
   explicit Or(term_list_t&& terms) : terms_(std::move(terms)) {}
   virtual ~Or() = default;
   void Accept(Expr::Visitor* visitor) const override;
@@ -161,13 +161,12 @@ class Expr::Or: public Expr {
 
 class Expr::And: public Expr {
  public:
-  using term_list_t = std::list<expr_ptr_t>;
-  explicit And(term_list_t&& terms) : terms_(std::move(terms)) {}
+  explicit And(expr_list_t&& terms) : terms_(std::move(terms)) {}
   virtual ~And() = default;
   void Accept(Expr::Visitor* visitor) const override;
-  const term_list_t& terms() const { return terms_; }
+  const expr_list_t& terms() const { return terms_; }
  private:
-  const term_list_t terms_;
+  const expr_list_t terms_;
 };
 
 
@@ -189,7 +188,7 @@ class Parser {
  public:
   explicit Parser(const token_list_t& tokens)
       : tokens_(tokens), current_(tokens_.begin()) {}
-  std::list<expr_ptr_t> Parse();
+  expr_list_t Parse();
 
  private:
   class ParseError : std::runtime_error {
@@ -211,7 +210,7 @@ class Parser {
   Expr::Fn::param_list_t ParseParamList();
   Expr::Let::binding_list_t ParseBindings();
   Expr::Let::binding_t ParseBinding();
-  std::list<expr_ptr_t> ParseExprs();
+  expr_list_t ParseExprs();
   bool Match(Token::Type type);
   bool Check(Token::Type type) const;
   const Token& Consume(Token::Type type, const std::string& msg);
