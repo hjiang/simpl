@@ -1,0 +1,11 @@
+#!/usr/bin/env -S expect -f
+
+set timeout 1
+spawn simpl/simpl
+expect "> $"
+send -- "(+ 2 3)\n"
+expect {
+    "5" {}
+    timeout { exit 1 }
+}
+close
