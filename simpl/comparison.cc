@@ -8,6 +8,7 @@
 #include <variant>
 
 #include "simpl/interpreter.h"
+#include "simpl/interpreter_util.h"
 
 namespace simpl {
 
@@ -34,24 +35,19 @@ int Compare(const std::list<Interpreter::atom_value_type>& args) {
   }
   auto lhs = args.front();
   auto rhs = args.back();
-  if (std::holds_alternative<int_type>(lhs) &&
-      std::holds_alternative<int_type>(rhs)) {
+  if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
     return OrderingToInt(std::get<int_type>(lhs) <=> std::get<int_type>(rhs));
   }
-  if (std::holds_alternative<int_type>(lhs) &&
-      std::holds_alternative<float_type>(rhs)) {
+  if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
     return OrderingToInt(std::get<int_type>(lhs) <=> std::get<float_type>(rhs));
   }
-  if (std::holds_alternative<float_type>(lhs) &&
-      std::holds_alternative<int_type>(rhs)) {
+  if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
     return OrderingToInt(std::get<float_type>(lhs) <=> std::get<int_type>(rhs));
   }
-  if (std::holds_alternative<float_type>(lhs) &&
-      std::holds_alternative<float_type>(rhs)) {
+  if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
     return OrderingToInt(std::get<float_type>(lhs) <=> std::get<double>(rhs));
   }
-  if (std::holds_alternative<std::string>(lhs) &&
-      std::holds_alternative<std::string>(rhs)) {
+  if (holds<std::string>(lhs) && holds<std::string>(rhs)) {
     return std::get<std::string>(lhs).compare(std::get<std::string>(rhs));
   }
   throw std::runtime_error("Incomparable types");  // FIXME: error handling
