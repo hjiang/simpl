@@ -148,6 +148,18 @@ TEST(Lexer, Equal) {
   EXPECT_EQ(tokens.front().type, Token::kEqual);
 }
 
+TEST(Lexer, Arrow) {
+  Lexer lexer("-->");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kSymbol);
+}
+
+TEST(Lexer, SymbolCanHaveExclamation) {
+  Lexer lexer("put!");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kSymbol);
+}
+
 }  // namespace simpl
 
 // Local Variables:
