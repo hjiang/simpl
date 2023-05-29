@@ -10,7 +10,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 inline void PrintValues(const Callable::args_type& values) {
   for (const auto& value : values) {
@@ -43,7 +43,7 @@ class Println : public Callable {
   }
 };
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
 

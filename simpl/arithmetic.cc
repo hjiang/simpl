@@ -9,7 +9,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 static Interpreter::atom_value_type operator+(
     const Interpreter::atom_value_type& lhs,
@@ -146,6 +146,6 @@ Interpreter::atom_value_type Modulo::CallImpl(Interpreter*,
   }
   return result;
 }
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl

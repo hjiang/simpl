@@ -9,7 +9,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 class Not : public Callable {
  public:
@@ -23,7 +23,7 @@ class Not : public Callable {
   }
 };
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
 

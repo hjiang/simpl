@@ -19,20 +19,20 @@
 namespace simpl {
 
 Interpreter::Interpreter() : env_(new Environment()) {
-  env_->Define("=", std::make_shared<builtin_fn::Equals>());
-  env_->Define(">", std::make_shared<builtin_fn::GreaterThan>());
-  env_->Define(">=", std::make_shared<builtin_fn::GreaterThanOrEqualTo>());
-  env_->Define("<", std::make_shared<builtin_fn::LessThan>());
-  env_->Define("<=", std::make_shared<builtin_fn::LessThanOrEqualTo>());
-  env_->Define("+", std::make_shared<builtin_fn::Sum>());
-  env_->Define("-", std::make_shared<builtin_fn::Substract>());
-  env_->Define("*", std::make_shared<builtin_fn::Multiply>());
-  env_->Define("/", std::make_shared<builtin_fn::Divide>());
-  env_->Define("%", std::make_shared<builtin_fn::Modulo>());
-  env_->Define("not", std::make_shared<builtin_fn::Not>());
-  env_->Define("print", std::make_shared<builtin_fn::Print>());
-  env_->Define("println", std::make_shared<builtin_fn::Println>());
-  env_->Define("assert", std::make_shared<builtin_fn::Assert>());
+  env_->Define("=", std::make_shared<built_in::Equals>());
+  env_->Define(">", std::make_shared<built_in::GreaterThan>());
+  env_->Define(">=", std::make_shared<built_in::GreaterThanOrEqualTo>());
+  env_->Define("<", std::make_shared<built_in::LessThan>());
+  env_->Define("<=", std::make_shared<built_in::LessThanOrEqualTo>());
+  env_->Define("+", std::make_shared<built_in::Sum>());
+  env_->Define("-", std::make_shared<built_in::Substract>());
+  env_->Define("*", std::make_shared<built_in::Multiply>());
+  env_->Define("/", std::make_shared<built_in::Divide>());
+  env_->Define("%", std::make_shared<built_in::Modulo>());
+  env_->Define("not", std::make_shared<built_in::Not>());
+  env_->Define("print", std::make_shared<built_in::Print>());
+  env_->Define("println", std::make_shared<built_in::Println>());
+  env_->Define("assert", std::make_shared<built_in::Assert>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {

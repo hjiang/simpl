@@ -12,7 +12,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 class Assert : public Callable {
  public:
@@ -28,7 +28,7 @@ class Assert : public Callable {
   }
 };
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
 

@@ -8,7 +8,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 class Sum: public Callable {
  public:
@@ -50,7 +50,7 @@ class Modulo: public Callable {
                                         const args_type& args) override;
 };
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
 

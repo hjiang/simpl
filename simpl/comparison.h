@@ -10,7 +10,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 class Equals : public Callable {
  public:
@@ -57,7 +57,7 @@ class LessThanOrEqualTo : public Callable {
                                         const args_type& args) override;
 };
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
 
