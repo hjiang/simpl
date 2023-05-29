@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_IO_H_
-#define SIMPL_IO_H_
+#ifndef SIMPL_BUILT_IN_IO_H_
+#define SIMPL_BUILT_IN_IO_H_
 
 #include <iostream>
 
@@ -47,4 +47,4 @@ class Println : public Callable {
 
 }  // namespace simpl
 
-#endif  // SIMPL_IO_H_
+#endif  // SIMPL_BUILT_IN_IO_H_
