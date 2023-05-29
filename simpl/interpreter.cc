@@ -6,13 +6,13 @@
 #include <stdexcept>
 #include <string>
 
-#include "simpl/arithmetic.h"
+#include "simpl/built_in/arithmetic.h"
 #include "simpl/built_in/assert.h"
-#include "simpl/comparison.h"
+#include "simpl/built_in/comparison.h"
+#include "simpl/built_in/io.h"
+#include "simpl/built_in/logic.h"
 #include "simpl/config.h"
 #include "simpl/interpreter_util.h"
-#include "simpl/io.h"
-#include "simpl/logic.h"
 #include "simpl/parser.h"
 #include "simpl/user_fn.h"
 

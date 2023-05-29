@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/arithmetic.h"
+#include "simpl/built_in/arithmetic.h"
 
 #include <string>
 
