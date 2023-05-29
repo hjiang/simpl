@@ -160,6 +160,13 @@ TEST(Lexer, SymbolCanHaveExclamation) {
   EXPECT_EQ(tokens.front().type, Token::kSymbol);
 }
 
+TEST(Lexer, QuotedList) {
+  Lexer lexer("'(1 2)");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kQuote);
+  EXPECT_EQ(tokens.size(), 6);
+}
+
 }  // namespace simpl
 
 // Local Variables:

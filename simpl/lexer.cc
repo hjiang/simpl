@@ -96,6 +96,9 @@ void Lexer::ScanToken() {
     case '=':
       AddToken(Token::kEqual);
       break;
+    case '\'':
+      AddToken(Token::kQuote);
+      break;
     case '"':
       String();
       break;

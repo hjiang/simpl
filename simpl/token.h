@@ -36,6 +36,7 @@ class Token {
     kGreaterEqual,
     kLess,
     kLessEqual,
+    kQuote,
 
     // Literals.
     kSymbol,
