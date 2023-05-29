@@ -1,4 +1,4 @@
-# SimpL 
+# Simpl
 
 ![Tests](https://github.com/hjiang/simpl/actions/workflows/run-tests.yml/badge.svg?branch=master)
 ![Lint](https://github.com/hjiang/simpl/actions/workflows/lint.yml/badge.svg?branch=master)
@@ -6,9 +6,10 @@
 
 ## Introduction
 
-SimpL (pronounced "simple") is a programming language. It aims to be a LISP
-dialect suitable for scripting and borrows many syntactic features from
-[Clojure](https://clojure.org).
+Simpl (pronounced "simple", abbreviation for **sim**ple **p**rogramming
+**l**anguage or **simp**le **L**ISP depending on your preference) is a
+programming language. It aims to be a LISP dialect suitable for scripting and
+borrows many syntactic features from [Clojure](https://clojure.org).
 
 It was motivated by the author's desire for a scripting language with nice
 syntax and without large dependencies like the JVM. It is implemented in modern
@@ -16,7 +17,7 @@ C++ without any third-party dependency other than the standard library.
 
 ## How to use
 
-SimpL isn't quite ready for day-to-day use yet, but you can play with it by
+Simpl isn't quite ready for day-to-day use yet, but you can play with it by
 installing [Bazel](https://bazel.build) and running:
 
 ``` sh
