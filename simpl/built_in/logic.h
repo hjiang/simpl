@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_LOGIC_H_
-#define SIMPL_LOGIC_H_
+#ifndef SIMPL_BUILT_IN_LOGIC_H_
+#define SIMPL_BUILT_IN_LOGIC_H_
 
 #include "simpl/callable.h"
 #include "simpl/interpreter.h"
@@ -9,7 +9,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 class Not : public Callable {
  public:
@@ -23,8 +23,8 @@ class Not : public Callable {
   }
 };
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
 
-#endif  // SIMPL_LOGIC_H_
+#endif  // SIMPL_BUILT_IN_LOGIC_H_

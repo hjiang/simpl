@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/comparison.h"
+#include "simpl/built_in/comparison.h"
 
 #include <compare>
 #include <list>
@@ -12,7 +12,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 namespace {
 
@@ -80,6 +80,6 @@ Interpreter::atom_value_type LessThanOrEqualTo::CallImpl(
   return Compare(args) <= 0;
 }
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl

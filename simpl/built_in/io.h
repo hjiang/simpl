@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_IO_H_
-#define SIMPL_IO_H_
+#ifndef SIMPL_BUILT_IN_IO_H_
+#define SIMPL_BUILT_IN_IO_H_
 
 #include <iostream>
 
@@ -10,7 +10,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 inline void PrintValues(const Callable::args_type& values) {
   for (const auto& value : values) {
@@ -43,8 +43,8 @@ class Println : public Callable {
   }
 };
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
 
-#endif  // SIMPL_IO_H_
+#endif  // SIMPL_BUILT_IN_IO_H_

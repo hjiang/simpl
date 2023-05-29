@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_COMPARISON_H_
-#define SIMPL_COMPARISON_H_
+#ifndef SIMPL_BUILT_IN_COMPARISON_H_
+#define SIMPL_BUILT_IN_COMPARISON_H_
 
 #include <vector>
 
@@ -10,7 +10,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 class Equals : public Callable {
  public:
@@ -57,8 +57,8 @@ class LessThanOrEqualTo : public Callable {
                                         const args_type& args) override;
 };
 
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
 
-#endif  // SIMPL_COMPARISON_H_
+#endif  // SIMPL_BUILT_IN_COMPARISON_H_

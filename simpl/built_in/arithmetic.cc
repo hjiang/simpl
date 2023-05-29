@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/arithmetic.h"
+#include "simpl/built_in/arithmetic.h"
 
 #include <string>
 
@@ -9,7 +9,7 @@
 
 namespace simpl {
 
-namespace builtin_fn {
+namespace built_in {
 
 static Interpreter::atom_value_type operator+(
     const Interpreter::atom_value_type& lhs,
@@ -146,6 +146,6 @@ Interpreter::atom_value_type Modulo::CallImpl(Interpreter*,
   }
   return result;
 }
-}  // namespace builtin_fn
+}  // namespace built_in
 
 }  // namespace simpl
