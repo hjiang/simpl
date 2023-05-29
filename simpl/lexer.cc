@@ -25,8 +25,12 @@ static const std::unordered_map<std::string, Token::Type> kKeywords{
     {"var", Token::kVar},     {"while", Token::kWhile},
     {"do", Token::kDo}};
 
-static bool IsAlphaOrUnderscore(char c) { return isalpha(c) || c == '_'; }
-static bool IsAlphaNumOrUnderscore(char c) { return isalnum(c) || c == '_'; }
+static bool CanStartSymbol(char c) {
+  return isalpha(c) || '_' == c || '-' == c;
+}
+static bool CanBeInSymbol(char c) {
+  return isalnum(c) || '_' == c || '-' == c || '!' == c || '/' == c;
+}
 
 Lexer::Lexer(const std::string &source) : source_(source), tokens_() {}
 
@@ -68,20 +72,6 @@ void Lexer::ScanToken() {
     case '.':
       AddToken(Token::kDot);
       break;
-    case '-':
-      if (isspace(Peek())) {
-        AddToken(Token::kMinus);
-      } else {
-        Number();
-      }
-      break;
-    case '+':
-      if (isspace(Peek())) {
-        AddToken(Token::kPlus);
-      } else {
-        Number();
-      }
-      break;
     case ';':
       while (Peek() != '\n' && !AtEnd()) Advance();
       break;
@@ -116,10 +106,27 @@ void Lexer::ScanToken() {
     case '\n':
       line_++;
       break;
+    case '+':
+      if (isspace(Peek())) {
+        AddToken(Token::kPlus);
+      } else {
+        Number();
+      }
+      // Perhaps we will allow + to start a symbol, but let's be strict for now.
+      break;
+    case '-':
+      if (isspace(Peek())) {
+        AddToken(Token::kMinus);
+        break;
+      } else if (isdigit(Peek())) {
+        Number();
+        break;
+      }
+      // fallthrough. - can start a symbol
     default:
       if (isdigit(c)) {
         Number();
-      } else if (IsAlphaOrUnderscore(c)) {
+      } else if (CanStartSymbol(c)) {
         Symbol();
       } else {
         Error(line_, "Unexpected character.");
@@ -178,7 +185,7 @@ void Lexer::Number() {
 }
 
 void Lexer::Symbol() {
-  while (IsAlphaNumOrUnderscore(Peek())) Advance();
+  while (CanBeInSymbol(Peek())) Advance();
 
   const auto text = source_.substr(start_, current_ - start_);
   const auto it = kKeywords.find(text);
