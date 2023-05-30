@@ -68,8 +68,8 @@ std::string Interpreter::StringifyValue(const Interpreter::atom_value_type& v) {
   if (holds<std::string>(v)) {
     return std::get<std::string>(v);
   }
-  if (holds<Symbol>(v)) {
-    return "<symbol: " + std::get<Symbol>(v).name + ">";
+  if (holds<Expr::Symbol>(v)) {
+    return "<symbol: " + std::get<Expr::Symbol>(v).name + ">";
   }
   if (holds<nullptr_t>(v)) {
     return "nil";

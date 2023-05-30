@@ -37,11 +37,6 @@ inline std::string TypeStr<Expr::Symbol>() {
 }
 
 template <>
-inline std::string TypeStr<Interpreter::Symbol>() {
-  return "Interpreter::Symbol";
-}
-
-template <>
 inline std::string TypeStr<std::string>() {
   return "std::string";
 }

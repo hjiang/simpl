@@ -20,13 +20,10 @@ class Callable;
 
 class Interpreter : public Expr::Visitor {
  public:
-  struct Symbol {
-    std::string name;
-  };
-
   using callable_ptr = std::shared_ptr<Callable>;
-  using atom_value_type = std::variant<int_type, float_type, bool, std::string,
-                                       Symbol, std::nullptr_t, callable_ptr>;
+  using atom_value_type =
+      std::variant<int_type, float_type, bool, std::string, Expr::Symbol,
+                   std::nullptr_t, callable_ptr>;
 
   class Environment {
    public:

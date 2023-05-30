@@ -24,12 +24,14 @@ class Expr {
   class List;
   class Or;
   class Visitor;
+  struct Symbol;
 
   virtual void Accept(Visitor* visitor) const = 0;
   virtual ~Expr() {}
-  struct Symbol {
-    const std::string name;
-  };
+};
+
+struct Expr::Symbol {
+  std::string name;
 };
 
 using expr_ptr_t = std::unique_ptr<const Expr>;
