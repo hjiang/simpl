@@ -34,14 +34,17 @@ struct Expr::Symbol {
   std::string name;
 };
 
+class Callable;
+
 using expr_ptr_t = std::unique_ptr<const Expr>;
 using expr_list_t = std::list<expr_ptr_t>;
+using callable_ptr_t = std::shared_ptr<Callable>;
 
 class Expr::Atom : public Expr {
-  using value_type = std::variant<int_type, float_type, bool, std::string,
-                                  Symbol, std::nullptr_t>;
-
  public:
+  using value_type = std::variant<int_type, float_type, bool, std::string,
+                                  Symbol, std::nullptr_t, callable_ptr_t>;
+
   explicit Atom(value_type v) : value_(v) {}
   virtual ~Atom() {}
   template <typename T>

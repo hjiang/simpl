@@ -21,9 +21,7 @@ class Callable;
 class Interpreter : public Expr::Visitor {
  public:
   using callable_ptr = std::shared_ptr<Callable>;
-  using atom_value_type =
-      std::variant<int_type, float_type, bool, std::string, Expr::Symbol,
-                   std::nullptr_t, callable_ptr>;
+  using atom_value_type = Expr::Atom::value_type;
 
   class Environment {
    public:
