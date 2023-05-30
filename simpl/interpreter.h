@@ -12,7 +12,7 @@
 #include <variant>
 #include <vector>
 
-#include "simpl/parser.h"
+#include "simpl/ast.h"
 
 namespace simpl {
 

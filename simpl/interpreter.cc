@@ -13,7 +13,6 @@
 #include "simpl/built_in/logic.h"
 #include "simpl/config.h"
 #include "simpl/interpreter_util.h"
-#include "simpl/parser.h"
 #include "simpl/user_fn.h"
 
 namespace simpl {

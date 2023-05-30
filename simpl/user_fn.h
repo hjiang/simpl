@@ -5,9 +5,9 @@
 
 #include <memory>
 
+#include "simpl/ast.h"
 #include "simpl/callable.h"
 #include "simpl/interpreter.h"
-#include "simpl/parser.h"
 
 namespace simpl {
 

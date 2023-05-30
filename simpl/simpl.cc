@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "simpl/ast.h"
 #include "simpl/error.h"
 #include "simpl/interpreter.h"
 #include "simpl/lexer.h"

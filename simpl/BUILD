@@ -9,7 +9,13 @@ cc_binary(name = 'simpl',
 cc_library(name = 'simpl-imp',
            srcs = ['simpl.cc'],
            hdrs = ['simpl.h'],
-           deps = ['error', 'token', 'lexer', 'interpreter'])
+           deps = [
+               'error',
+               'interpreter',
+               'lexer',
+               'parser',
+               'token',
+           ])
 
 cc_library(name = 'token',
            srcs = ['token.cc'],
@@ -30,10 +36,15 @@ cc_test(
     ],
     size = "small")
 
+cc_library(name ="ast",
+           srcs = [],
+           hdrs = ['ast.h'],
+           deps = ['config'])
+
 cc_library(name = 'parser',
            srcs = ['parser.cc'],
            hdrs = ['parser.h'],
-           deps = ['token', 'error', 'config'])
+           deps = ['ast', 'token', 'error', 'config'])
 
 cc_test(
     name = "parser_test",
@@ -69,7 +80,7 @@ cc_library(name = 'interpreter',
                'interpreter_util.h',
                'user_fn.h',
            ],
-           deps = ['parser', 'error', 'config'])
+           deps = ['ast', 'error', 'config'])
 
 cc_test(name = 'interpreter_test',
         srcs = ['interpreter_test.cc'],

@@ -8,6 +8,7 @@
 #include <stdexcept>
 
 #include "simpl/lexer.h"
+#include "simpl/parser.h"
 
 namespace simpl {
 
