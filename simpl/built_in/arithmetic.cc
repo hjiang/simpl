@@ -100,8 +100,8 @@ static Interpreter::atom_value_type operator%(
       "Invalid types for operator %");  // FIXME: error handling
 }
 
-Interpreter::atom_value_type Sum::CallImpl(Interpreter*,
-                                           const args_type& args) {
+Interpreter::atom_value_type Sum::FnCallImpl(Interpreter*,
+                                             const args_type& args) {
   Interpreter::atom_value_type result = args.front();
   auto i = args.begin();
   ++i;
@@ -111,8 +111,8 @@ Interpreter::atom_value_type Sum::CallImpl(Interpreter*,
   return result;
 }
 
-Interpreter::atom_value_type Substract::CallImpl(Interpreter*,
-                                                 const args_type& args) {
+Interpreter::atom_value_type Substract::FnCallImpl(Interpreter*,
+                                                   const args_type& args) {
   auto i = args.begin();
   Interpreter::atom_value_type result = *i++;
   for (; i != args.end(); ++i) {
@@ -120,16 +120,16 @@ Interpreter::atom_value_type Substract::CallImpl(Interpreter*,
   }
   return args.size() > 1 ? result : 0 - result;
 }
-Interpreter::atom_value_type Multiply::CallImpl(Interpreter*,
-                                                const args_type& args) {
+Interpreter::atom_value_type Multiply::FnCallImpl(Interpreter*,
+                                                  const args_type& args) {
   Interpreter::atom_value_type result = 1;
   for (auto arg : args) {
     result = result * arg;
   }
   return result;
 }
-Interpreter::atom_value_type Divide::CallImpl(Interpreter*,
-                                              const args_type& args) {
+Interpreter::atom_value_type Divide::FnCallImpl(Interpreter*,
+                                                const args_type& args) {
   auto i = args.begin();
   Interpreter::atom_value_type result = *i++;
   for (; i != args.end(); ++i) {
@@ -137,8 +137,8 @@ Interpreter::atom_value_type Divide::CallImpl(Interpreter*,
   }
   return result;
 }
-Interpreter::atom_value_type Modulo::CallImpl(Interpreter*,
-                                              const args_type& args) {
+Interpreter::atom_value_type Modulo::FnCallImpl(Interpreter*,
+                                                const args_type& args) {
   auto i = args.begin();
   Interpreter::atom_value_type result = *i++;
   for (; i != args.end(); ++i) {

@@ -10,49 +10,49 @@ namespace simpl {
 
 namespace built_in {
 
-class Sum : public Callable {
+class Sum : public Function {
  public:
   int arity() const override { return -1; }
 
  private:
-  Interpreter::atom_value_type CallImpl(Interpreter* interpreter,
-                                        const args_type& args) override;
+  Interpreter::atom_value_type FnCallImpl(Interpreter* interpreter,
+                                          const args_type& args) override;
 };
 
-class Substract : public Callable {
+class Substract : public Function {
  public:
   int arity() const override { return -1; }
 
  private:
-  Interpreter::atom_value_type CallImpl(Interpreter* interpreter,
-                                        const args_type& args) override;
+  Interpreter::atom_value_type FnCallImpl(Interpreter* interpreter,
+                                          const args_type& args) override;
 };
 
-class Multiply : public Callable {
+class Multiply : public Function {
  public:
   int arity() const override { return -1; }
 
  private:
-  Interpreter::atom_value_type CallImpl(Interpreter* interpreter,
-                                        const args_type& args) override;
+  Interpreter::atom_value_type FnCallImpl(Interpreter* interpreter,
+                                          const args_type& args) override;
 };
 
-class Divide : public Callable {
+class Divide : public Function {
  public:
   int arity() const override { return -1; }
 
  private:
-  Interpreter::atom_value_type CallImpl(Interpreter* interpreter,
-                                        const args_type& args) override;
+  Interpreter::atom_value_type FnCallImpl(Interpreter* interpreter,
+                                          const args_type& args) override;
 };
 
-class Modulo : public Callable {
+class Modulo : public Function {
  public:
   int arity() const override { return -1; }
 
  private:
-  Interpreter::atom_value_type CallImpl(Interpreter* interpreter,
-                                        const args_type& args) override;
+  Interpreter::atom_value_type FnCallImpl(Interpreter* interpreter,
+                                          const args_type& args) override;
 };
 
 }  // namespace built_in

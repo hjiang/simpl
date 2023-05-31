@@ -36,7 +36,7 @@ struct Expr::Symbol {
 
 class Callable;
 
-using expr_ptr_t = std::unique_ptr<const Expr>;
+using expr_ptr_t = std::shared_ptr<const Expr>;
 using expr_list_t = std::list<expr_ptr_t>;
 using callable_ptr_t = std::shared_ptr<Callable>;
 

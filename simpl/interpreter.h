@@ -71,7 +71,7 @@ class Interpreter : public Expr::Visitor {
   void Visit(const Expr::List& list) override;
   void Visit(const Expr::Or& expr) override;
   atom_value_type Evaluate(const Expr& expr);
-  atom_value_type Evaluate(const std::list<std::unique_ptr<const Expr>>& expr,
+  atom_value_type Evaluate(const expr_list_t& expr,
                            std::shared_ptr<Environment> env = nullptr);
   static std::string StringifyValue(const atom_value_type& value);
 

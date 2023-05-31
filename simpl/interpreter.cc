@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "simpl/ast.h"
 #include "simpl/built_in/arithmetic.h"
 #include "simpl/built_in/assert.h"
 #include "simpl/built_in/comparison.h"
@@ -40,8 +41,7 @@ Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(
-    const std::list<std::unique_ptr<const Expr>>& exprs,
-    std::shared_ptr<Environment> env) {
+    const expr_list_t& exprs, std::shared_ptr<Environment> env) {
   auto old_env = env_;
   if (env) {
     env_ = env;
@@ -119,10 +119,7 @@ void Interpreter::Visit(const Expr::List& list) {
     auto callable = std::get<callable_ptr>(result);
     auto it = list.exprs().begin();
     ++it;
-    std::list<atom_value_type> args;
-    for (; it != list.exprs().end(); ++it) {
-      args.push_back(Evaluate(**it));
-    }
+    expr_list_t args(it, list.exprs().end());
     last_atom_result_ = callable->Call(this, args);
   } else {
     throw std::runtime_error("Cannot apply a non-callable");

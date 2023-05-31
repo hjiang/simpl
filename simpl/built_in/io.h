@@ -12,31 +12,31 @@ namespace simpl {
 
 namespace built_in {
 
-inline void PrintValues(const Callable::args_type& values) {
+inline void PrintValues(const Function::args_type& values) {
   for (const auto& value : values) {
     std::cout << Interpreter::StringifyValue(value) << " ";
   }
 }
 
-class Print : public Callable {
+class Print : public Function {
  public:
   int arity() const override { return -1; }
 
  private:
-  Interpreter::atom_value_type CallImpl(Interpreter*,
-                                        const args_type& args) override {
+  Interpreter::atom_value_type FnCallImpl(Interpreter*,
+                                          const args_type& args) override {
     PrintValues(args);
     return nullptr;
   }
 };
 
-class Println : public Callable {
+class Println : public Function {
  public:
   int arity() const override { return -1; }
 
  private:
-  Interpreter::atom_value_type CallImpl(Interpreter*,
-                                        const args_type& args) override {
+  Interpreter::atom_value_type FnCallImpl(Interpreter*,
+                                          const args_type& args) override {
     PrintValues(args);
     std::cout << std::endl;
     return nullptr;

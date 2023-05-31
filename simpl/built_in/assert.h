@@ -14,13 +14,13 @@ namespace simpl {
 
 namespace built_in {
 
-class Assert : public Callable {
+class Assert : public Function {
  public:
   int arity() const override { return 2; }
 
  private:
-  Interpreter::atom_value_type CallImpl(Interpreter*,
-                                        const args_type& args) override {
+  Interpreter::atom_value_type FnCallImpl(Interpreter*,
+                                          const args_type& args) override {
     if (!IsTruthy(args.front())) {
       throw std::runtime_error(std::get<std::string>(args.back()));
     }
