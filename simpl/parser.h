@@ -38,7 +38,6 @@ class Parser {
   expr_ptr_t ParseDo();
   expr_ptr_t ParseExpr();
   expr_ptr_t ParseFn();
-  expr_ptr_t ParseIf();
   expr_ptr_t ParseLet();
   expr_ptr_t ParseList();
   expr_ptr_t ParseOr();

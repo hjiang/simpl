@@ -34,7 +34,6 @@ void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Def::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Do::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Fn::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::If::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Let::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Or::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
@@ -100,9 +99,6 @@ expr_ptr_t Parser::ParseExpr() {
     }
     if (Match(Token::Type::kLet)) {
       return ParseLet();
-    }
-    if (Match(Token::Type::kIf)) {
-      return ParseIf();
     }
     if (Match(Token::Type::kFn)) {
       return ParseFn();
@@ -197,15 +193,6 @@ expr_list_t Parser::ParseExprs() {
     exprs.push_back(ParseExpr());
   }
   return exprs;
-}
-
-expr_ptr_t Parser::ParseIf() {
-  auto cond = ParseExpr();
-  auto then = ParseExpr();
-  auto otherwise = ParseExpr();
-  Consume(Token::Type::kRightParen, "Expect ')' at end of 'if' form.");
-  return std::make_unique<Expr::If>(std::move(cond), std::move(then),
-                                    std::move(otherwise));
 }
 
 expr_ptr_t Parser::ParseDo() {

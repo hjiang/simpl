@@ -10,6 +10,7 @@
 #include "simpl/built_in/arithmetic.h"
 #include "simpl/built_in/assert.h"
 #include "simpl/built_in/comparison.h"
+#include "simpl/built_in/control_flow.h"
 #include "simpl/built_in/io.h"
 #include "simpl/built_in/logic.h"
 #include "simpl/config.h"
@@ -33,6 +34,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("print", std::make_shared<built_in::Print>());
   env_->Define("println", std::make_shared<built_in::Println>());
   env_->Define("assert", std::make_shared<built_in::Assert>());
+  env_->Define("if", std::make_shared<built_in::If>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
@@ -138,14 +140,6 @@ void Interpreter::Visit(const Expr::Let& let) {
     env->Bind(binding.first, Evaluate(*binding.second));
   }
   Evaluate(body, env);
-}
-
-void Interpreter::Visit(const Expr::If& if_expr) {
-  if (IsTruthy(Evaluate(if_expr.cond()))) {
-    Evaluate(if_expr.then());
-  } else {
-    Evaluate(if_expr.otherwise());
-  }
 }
 
 void Interpreter::Visit(const Expr::Fn& fn) {

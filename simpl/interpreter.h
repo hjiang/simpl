@@ -66,7 +66,6 @@ class Interpreter : public Expr::Visitor {
   void Visit(const Expr::Def& expr) override;
   void Visit(const Expr::Do& expr) override;
   void Visit(const Expr::Fn& expr) override;
-  void Visit(const Expr::If& expr) override;
   void Visit(const Expr::Let& expr) override;
   void Visit(const Expr::List& list) override;
   void Visit(const Expr::Or& expr) override;

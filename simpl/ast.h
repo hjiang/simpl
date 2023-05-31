@@ -19,7 +19,6 @@ class Expr {
   class Def;
   class Do;
   class Fn;
-  class If;
   class Let;
   class List;
   class Or;
@@ -113,24 +112,6 @@ class Expr::Let : public Expr {
   const expr_list_t body_;
 };
 
-class Expr::If : public Expr {
- public:
-  If(expr_ptr_t&& cond, expr_ptr_t&& then, expr_ptr_t&& otherwise)
-      : cond_(std::move(cond)),
-        then_(std::move(then)),
-        otherwise_(std::move(otherwise)) {}
-  virtual ~If() = default;
-  void Accept(Expr::Visitor* visitor) const override;
-  const Expr& cond() const { return *cond_; }
-  const Expr& then() const { return *then_; }
-  const Expr& otherwise() const { return *otherwise_; }
-
- private:
-  const expr_ptr_t cond_;
-  const expr_ptr_t then_;
-  const expr_ptr_t otherwise_;
-};
-
 class Expr::Fn : public Expr {
  public:
   using param_list_t = std::list<std::string>;
@@ -177,7 +158,6 @@ class Expr::Visitor {
   virtual void Visit(const Expr::Def& expr) = 0;
   virtual void Visit(const Expr::Do& expr) = 0;
   virtual void Visit(const Expr::Fn& expr) = 0;
-  virtual void Visit(const Expr::If& expr) = 0;
   virtual void Visit(const Expr::Let& expr) = 0;
   virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Or& expr) = 0;

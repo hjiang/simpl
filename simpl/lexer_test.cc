@@ -88,7 +88,7 @@ TEST(Lexer, Identifier) {
   Lexer lexer("if foobar");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.size(), 3);
-  EXPECT_EQ(tokens.front().type, Token::kIf);
+  EXPECT_EQ(tokens.front().type, Token::kSymbol);
   EXPECT_FALSE(simpl::HadError());
 }
 

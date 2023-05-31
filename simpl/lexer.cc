@@ -18,12 +18,11 @@ static const std::unordered_map<std::string, Token::Type> kKeywords{
     {"def", Token::kDef},     {"defclass", Token::kDefClass},
     {"defn", Token::kDefn},   {"false", Token::kFalse},
     {"for", Token::kFor},     {"fn", Token::kFn},
-    {"if", Token::kIf},       {"let", Token::kLet},
-    {"nil", Token::kNil},     {"or", Token::kOr},
-    {"print", Token::kPrint}, {"super", Token::kSuper},
-    {"this", Token::kThis},   {"true", Token::kTrue},
-    {"var", Token::kVar},     {"while", Token::kWhile},
-    {"do", Token::kDo}};
+    {"let", Token::kLet},     {"nil", Token::kNil},
+    {"or", Token::kOr},       {"print", Token::kPrint},
+    {"super", Token::kSuper}, {"this", Token::kThis},
+    {"true", Token::kTrue},   {"var", Token::kVar},
+    {"while", Token::kWhile}, {"do", Token::kDo}};
 
 static bool CanStartSymbol(char c) {
   return isalpha(c) || '_' == c || '-' == c;

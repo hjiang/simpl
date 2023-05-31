@@ -55,7 +55,6 @@ class Token {
     kFalse,
     kFn,
     kFor,
-    kIf,
     kLet,
     kOr,
     kPrint,
