@@ -13,14 +13,13 @@ namespace simpl {
 
 class UserFn : public Function {
  public:
-  int arity() const override { return definition_.params().size(); }
   UserFn(const Expr::Fn& definition,
          std::shared_ptr<Interpreter::Environment> closure = nullptr)
       : definition_(definition), closure_(closure) {}
 
  private:
-  Interpreter::atom_value_type FnCallImpl(Interpreter*,
-                                          const args_type& args) override;
+  Interpreter::atom_value_type FnCall(Interpreter*,
+                                      const args_type& args) override;
   const Expr::Fn& definition_;
   std::shared_ptr<Interpreter::Environment> closure_;
 };

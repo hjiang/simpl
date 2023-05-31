@@ -100,7 +100,7 @@ static Interpreter::atom_value_type operator%(
       "Invalid types for operator %");  // FIXME: error handling
 }
 
-Interpreter::atom_value_type Sum::FnCallImpl(Interpreter*,
+Interpreter::atom_value_type Sum::FnCall(Interpreter*,
                                              const args_type& args) {
   Interpreter::atom_value_type result = args.front();
   auto i = args.begin();
@@ -111,7 +111,7 @@ Interpreter::atom_value_type Sum::FnCallImpl(Interpreter*,
   return result;
 }
 
-Interpreter::atom_value_type Substract::FnCallImpl(Interpreter*,
+Interpreter::atom_value_type Substract::FnCall(Interpreter*,
                                                    const args_type& args) {
   auto i = args.begin();
   Interpreter::atom_value_type result = *i++;
@@ -120,7 +120,7 @@ Interpreter::atom_value_type Substract::FnCallImpl(Interpreter*,
   }
   return args.size() > 1 ? result : 0 - result;
 }
-Interpreter::atom_value_type Multiply::FnCallImpl(Interpreter*,
+Interpreter::atom_value_type Multiply::FnCall(Interpreter*,
                                                   const args_type& args) {
   Interpreter::atom_value_type result = 1;
   for (auto arg : args) {
@@ -128,7 +128,7 @@ Interpreter::atom_value_type Multiply::FnCallImpl(Interpreter*,
   }
   return result;
 }
-Interpreter::atom_value_type Divide::FnCallImpl(Interpreter*,
+Interpreter::atom_value_type Divide::FnCall(Interpreter*,
                                                 const args_type& args) {
   auto i = args.begin();
   Interpreter::atom_value_type result = *i++;
@@ -137,7 +137,7 @@ Interpreter::atom_value_type Divide::FnCallImpl(Interpreter*,
   }
   return result;
 }
-Interpreter::atom_value_type Modulo::FnCallImpl(Interpreter*,
+Interpreter::atom_value_type Modulo::FnCall(Interpreter*,
                                                 const args_type& args) {
   auto i = args.begin();
   Interpreter::atom_value_type result = *i++;

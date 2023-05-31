@@ -12,12 +12,9 @@ namespace simpl {
 namespace built_in {
 
 class Not : public Function {
- public:
-  int arity() const override { return 1; }
-
  private:
-  Interpreter::atom_value_type FnCallImpl(Interpreter*,
-                                          const args_type& args) override {
+  Interpreter::atom_value_type FnCall(Interpreter*,
+                                      const args_type& args) override {
     return Interpreter::atom_value_type(
         static_cast<bool>(!IsTruthy(args.front())));
   }

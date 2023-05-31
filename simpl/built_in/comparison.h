@@ -13,48 +13,33 @@ namespace simpl {
 namespace built_in {
 
 class Equals : public Function {
- public:
-  int arity() const override { return 2; }
-
  private:
-  Interpreter::atom_value_type FnCallImpl(Interpreter*,
-                                          const args_type& args) override;
+  Interpreter::atom_value_type FnCall(Interpreter*,
+                                      const args_type& args) override;
 };
 
 class GreaterThan : public Function {
- public:
-  int arity() const override { return 2; }
-
  private:
-  Interpreter::atom_value_type FnCallImpl(Interpreter*,
-                                          const args_type& args) override;
+  Interpreter::atom_value_type FnCall(Interpreter*,
+                                      const args_type& args) override;
 };
 
 class GreaterThanOrEqualTo : public Function {
- public:
-  int arity() const override { return 2; }
-
  private:
-  Interpreter::atom_value_type FnCallImpl(Interpreter*,
-                                          const args_type& args) override;
+  Interpreter::atom_value_type FnCall(Interpreter*,
+                                      const args_type& args) override;
 };
 
 class LessThan : public Function {
- public:
-  int arity() const override { return 2; }
-
  private:
-  Interpreter::atom_value_type FnCallImpl(Interpreter*,
-                                          const args_type& args) override;
+  Interpreter::atom_value_type FnCall(Interpreter*,
+                                      const args_type& args) override;
 };
 
 class LessThanOrEqualTo : public Function {
- public:
-  int arity() const override { return 2; }
-
  private:
-  Interpreter::atom_value_type FnCallImpl(Interpreter*,
-                                          const args_type& args) override;
+  Interpreter::atom_value_type FnCall(Interpreter*,
+                                      const args_type& args) override;
 };
 
 }  // namespace built_in

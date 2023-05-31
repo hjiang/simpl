@@ -73,9 +73,9 @@ class Token {
   const Type type;
   const std::string lexeme;
   const literal_t literal;
-  const int line;
+  const size_t line;
 
-  Token(Type type, const std::string &lexeme, literal_t literal, int line)
+  Token(Type type, const std::string &lexeme, literal_t literal, size_t line)
       : type(type), lexeme(lexeme), literal(literal), line(line) {}
 
   operator std::string() { return lexeme; }

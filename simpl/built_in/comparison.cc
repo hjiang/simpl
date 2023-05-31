@@ -55,27 +55,27 @@ int Compare(const std::list<Interpreter::atom_value_type>& args) {
 
 }  // namespace
 
-Interpreter::atom_value_type Equals::FnCallImpl(Interpreter*,
+Interpreter::atom_value_type Equals::FnCall(Interpreter*,
                                                 const args_type& args) {
   return Compare(args) == 0;
 }
 
-Interpreter::atom_value_type GreaterThan::FnCallImpl(Interpreter*,
+Interpreter::atom_value_type GreaterThan::FnCall(Interpreter*,
                                                      const args_type& args) {
   return Compare(args) > 0;
 }
 
-Interpreter::atom_value_type GreaterThanOrEqualTo::FnCallImpl(
+Interpreter::atom_value_type GreaterThanOrEqualTo::FnCall(
     Interpreter*, const args_type& args) {
   return Compare(args) >= 0;
 }
 
-Interpreter::atom_value_type LessThan::FnCallImpl(Interpreter*,
+Interpreter::atom_value_type LessThan::FnCall(Interpreter*,
                                                   const args_type& args) {
   return Compare(args) < 0;
 }
 
-Interpreter::atom_value_type LessThanOrEqualTo::FnCallImpl(
+Interpreter::atom_value_type LessThanOrEqualTo::FnCall(
     Interpreter*, const args_type& args) {
   return Compare(args) <= 0;
 }
