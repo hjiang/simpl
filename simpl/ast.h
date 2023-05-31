@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <variant>
 
 #include "simpl/config.h"
 
