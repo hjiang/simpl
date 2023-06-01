@@ -14,13 +14,8 @@
 namespace simpl {
 
 static const std::unordered_map<std::string, Token::Type> kKeywords{
-    {"class", Token::kClass},       {"def", Token::kDef},
-    {"defclass", Token::kDefClass}, {"defn", Token::kDefn},
-    {"false", Token::kFalse},       {"for", Token::kFor},
-    {"let", Token::kLet},           {"nil", Token::kNil},
-    {"print", Token::kPrint},       {"super", Token::kSuper},
-    {"this", Token::kThis},         {"true", Token::kTrue},
-    {"var", Token::kVar},           {"while", Token::kWhile},
+    {"def", Token::kDef}, {"defn", Token::kDefn}, {"false", Token::kFalse},
+    {"let", Token::kLet}, {"nil", Token::kNil},   {"true", Token::kTrue},
 };
 
 static bool CanStartSymbol(char c) {

@@ -46,19 +46,11 @@ class Token {
     kNil,
 
     // Keywords.
-    kClass,
     kDef,
-    kDefClass,
     kDefn,
     kFalse,
-    kFor,
     kLet,
-    kPrint,
-    kSuper,
-    kThis,
     kTrue,
-    kVar,
-    kWhile,
 
     kEof
   };

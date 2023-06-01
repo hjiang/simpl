@@ -68,9 +68,6 @@ expr_ptr_t Parser::ParseAtom() {
     case Token::Type::kGreaterEqual:
     case Token::Type::kLess:
     case Token::Type::kLessEqual:
-    case Token::Type::kPrint:
-    case Token::Type::kVar:
-    case Token::Type::kWhile:
     case Token::Type::kSymbol:
       return std::make_unique<Expr::Atom>(Expr::Symbol{atom.lexeme});
       break;
