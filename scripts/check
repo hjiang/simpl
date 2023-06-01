@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+PROJECT_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+pushd "$PROJECT_ROOT"
+bazel build //...
+bazel test //...
+scripts/lint
+popd
