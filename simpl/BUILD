@@ -37,7 +37,7 @@ cc_test(
     size = "small")
 
 cc_library(name ="ast",
-           srcs = [],
+           srcs = ['ast.cc'],
            hdrs = ['ast.h'],
            deps = ['config'])
 
@@ -62,6 +62,7 @@ cc_library(name = 'interpreter',
                'built_in/arithmetic.cc',
                'built_in/assert.cc',
                'built_in/comparison.cc',
+               'built_in/control_flow.cc',
                'built_in/io.cc',
                'built_in/logic.cc',
                'callable.cc',
@@ -73,6 +74,7 @@ cc_library(name = 'interpreter',
                'built_in/arithmetic.h',
                'built_in/assert.h',
                'built_in/comparison.h',
+               'built_in/control_flow.h',
                'built_in/io.h',
                'built_in/logic.h',
                'callable.h',

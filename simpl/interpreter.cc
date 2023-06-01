@@ -10,6 +10,7 @@
 #include "simpl/built_in/arithmetic.h"
 #include "simpl/built_in/assert.h"
 #include "simpl/built_in/comparison.h"
+#include "simpl/built_in/control_flow.h"
 #include "simpl/built_in/io.h"
 #include "simpl/built_in/logic.h"
 #include "simpl/config.h"
@@ -33,6 +34,9 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("print", std::make_shared<built_in::Print>());
   env_->Define("println", std::make_shared<built_in::Println>());
   env_->Define("assert", std::make_shared<built_in::Assert>());
+  env_->Define("if", std::make_shared<built_in::If>());
+  env_->Define("and", std::make_shared<built_in::And>());
+  env_->Define("or", std::make_shared<built_in::Or>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
@@ -109,6 +113,46 @@ void Interpreter::Visit(const Expr::Atom& atom) {
   }
 }
 
+namespace {
+
+class QuoteVisitor : public Expr::Visitor {
+ public:
+  void Visit(const Expr::Atom&) override {
+    throw std::runtime_error("not implemented");
+  };
+  void Visit(const Expr::Def&) override {
+    throw std::runtime_error("not implemented");
+  };
+  void Visit(const Expr::Do&) override {
+    throw std::runtime_error("not implemented");
+  };
+  void Visit(const Expr::Fn&) override {
+    throw std::runtime_error("not implemented");
+  };
+  void Visit(const Expr::Let&) override {
+    throw std::runtime_error("not implemented");
+  };
+  void Visit(const Expr::List& list) override {
+    value_ = std::make_shared<Expr::List>(list);
+  };
+  void Visit(const Expr::Quoted&) override {
+    throw std::runtime_error("not implemented");
+  };
+
+  const Expr::Atom::value_type& value() const { return value_; }
+
+ private:
+  Expr::Atom::value_type value_;
+};
+
+}  // anonymous namespace
+
+void Interpreter::Visit(const Expr::Quoted& Quoted) {
+  QuoteVisitor visitor;
+  Quoted.expr().Accept(&visitor);
+  last_atom_result_ = visitor.value();
+}
+
 void Interpreter::Visit(const Expr::List& list) {
   if (list.exprs().empty()) {
     last_atom_result_ = nullptr;
@@ -140,34 +184,8 @@ void Interpreter::Visit(const Expr::Let& let) {
   Evaluate(body, env);
 }
 
-void Interpreter::Visit(const Expr::If& if_expr) {
-  if (IsTruthy(Evaluate(if_expr.cond()))) {
-    Evaluate(if_expr.then());
-  } else {
-    Evaluate(if_expr.otherwise());
-  }
-}
-
 void Interpreter::Visit(const Expr::Fn& fn) {
   last_atom_result_ = std::make_shared<UserFn>(fn, env_);
-}
-
-void Interpreter::Visit(const Expr::Or& logic_or) {
-  for (const auto& term : logic_or.terms()) {
-    Evaluate(*term);
-    if (IsTruthy(last_atom_result_)) {
-      return;
-    }
-  }
-}
-
-void Interpreter::Visit(const Expr::And& logic_and) {
-  for (const auto& term : logic_and.terms()) {
-    Evaluate(*term);
-    if (!IsTruthy(last_atom_result_)) {
-      return;
-    }
-  }
 }
 
 void Interpreter::Visit(const Expr::Do& do_form) {

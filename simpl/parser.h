@@ -31,17 +31,14 @@ class Parser {
 
  private:
   ParseError Error(const Token& token, const std::string& msg);
-  expr_ptr_t ParseAnd();
   expr_ptr_t ParseAtom();
   expr_ptr_t ParseDef();
   expr_ptr_t ParseDefn();
   expr_ptr_t ParseDo();
   expr_ptr_t ParseExpr();
   expr_ptr_t ParseFn();
-  expr_ptr_t ParseIf();
   expr_ptr_t ParseLet();
   expr_ptr_t ParseList();
-  expr_ptr_t ParseOr();
   Expr::Fn::param_list_t ParseParamList();
   Expr::Let::binding_list_t ParseBindings();
   Expr::Let::binding_t ParseBinding();

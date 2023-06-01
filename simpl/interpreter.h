@@ -61,21 +61,21 @@ class Interpreter : public Expr::Visitor {
 
   Interpreter();
   virtual ~Interpreter() {}
-  void Visit(const Expr::And& expr) override;
   void Visit(const Expr::Atom& atom) override;
   void Visit(const Expr::Def& expr) override;
   void Visit(const Expr::Do& expr) override;
   void Visit(const Expr::Fn& expr) override;
-  void Visit(const Expr::If& expr) override;
   void Visit(const Expr::Let& expr) override;
   void Visit(const Expr::List& list) override;
-  void Visit(const Expr::Or& expr) override;
+  void Visit(const Expr::Quoted& expr) override;
   atom_value_type Evaluate(const Expr& expr);
   atom_value_type Evaluate(const expr_list_t& expr,
                            std::shared_ptr<Environment> env = nullptr);
   static std::string StringifyValue(const atom_value_type& value);
 
   std::shared_ptr<Environment> env() const { return env_; }
+
+  const atom_value_type& last_value() const { return last_atom_result_; }
 
  private:
   template <typename T>
