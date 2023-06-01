@@ -135,6 +135,9 @@ class QuoteVisitor : public Expr::Visitor {
   void Visit(const Expr::List& list) override {
     value_ = std::make_shared<Expr::List>(list);
   };
+  void Visit(const Expr::Vector&) override {
+    throw std::runtime_error("not implemented");
+  };
   void Visit(const Expr::Quoted&) override {
     throw std::runtime_error("not implemented");
   };
@@ -168,6 +171,10 @@ void Interpreter::Visit(const Expr::List& list) {
   } else {
     throw std::runtime_error("Cannot apply a non-callable");
   }
+}
+
+void Interpreter::Visit(const Expr::Vector&) {
+  throw std::runtime_error("not implemented");
 }
 
 void Interpreter::Visit(const Expr::Def& def) {

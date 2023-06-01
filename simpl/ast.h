@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <variant>
+#include <vector>
 
 #include "simpl/config.h"
 
@@ -21,6 +22,7 @@ class Expr {
   class Fn;
   class Let;
   class List;
+  class Vector;
   class Quoted;
   class Visitor;
 
@@ -49,6 +51,18 @@ class Expr::List : public Expr {
 
  private:
   const expr_list_t exprs_;
+};
+
+class Expr::Vector : public Expr {
+ public:
+  using vector_impl_t = std::vector<expr_ptr_t>;
+  explicit Vector(const expr_list_t& l) : exprs_(l.begin(), l.end()) {}
+  virtual ~Vector() = default;
+  void Accept(Expr::Visitor* visitor) const override;
+  const vector_impl_t& exprs() const { return exprs_; }
+
+ private:
+  const std::vector<expr_ptr_t> exprs_;
 };
 
 class Expr::Atom : public Expr {
@@ -150,6 +164,7 @@ class Expr::Visitor {
   virtual void Visit(const Expr::Let& expr) = 0;
   virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Quoted& expr) = 0;
+  virtual void Visit(const Expr::Vector& expr) = 0;
   virtual ~Visitor() {}
 };
 
