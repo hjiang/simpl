@@ -63,7 +63,6 @@ class Interpreter : public Expr::Visitor {
   virtual ~Interpreter() {}
   void Visit(const Expr::Atom& atom) override;
   void Visit(const Expr::Def& expr) override;
-  void Visit(const Expr::Fn& expr) override;
   void Visit(const Expr::Let& expr) override;
   void Visit(const Expr::List& list) override;
   void Visit(const Expr::Quoted& expr) override;

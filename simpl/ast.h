@@ -18,7 +18,6 @@ class Expr {
  public:
   class Atom;
   class Def;
-  class Fn;
   class Let;
   class List;
   class Vector;
@@ -127,27 +126,10 @@ class Expr::Let : public Expr {
   const expr_list_t body_;
 };
 
-class Expr::Fn : public Expr {
- public:
-  using param_list_t = std::list<std::string>;
-  using body_t = expr_list_t;
-  Fn(param_list_t&& params, body_t&& body)
-      : params_(std::move(params)), body_(std::move(body)) {}
-  virtual ~Fn() = default;
-  void Accept(Expr::Visitor* visitor) const override;
-  const param_list_t& params() const { return params_; }
-  const body_t& body() const { return body_; }
-
- private:
-  const param_list_t params_;
-  const body_t body_;
-};
-
 class Expr::Visitor {
  public:
   virtual void Visit(const Expr::Atom& expr) = 0;
   virtual void Visit(const Expr::Def& expr) = 0;
-  virtual void Visit(const Expr::Fn& expr) = 0;
   virtual void Visit(const Expr::Let& expr) = 0;
   virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Quoted& expr) = 0;

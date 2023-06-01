@@ -51,7 +51,6 @@ class Token {
     kDefClass,
     kDefn,
     kFalse,
-    kFn,
     kFor,
     kLet,
     kPrint,

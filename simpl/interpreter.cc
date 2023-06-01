@@ -11,6 +11,7 @@
 #include "simpl/built_in/assert.h"
 #include "simpl/built_in/comparison.h"
 #include "simpl/built_in/control_flow.h"
+#include "simpl/built_in/fn.h"
 #include "simpl/built_in/io.h"
 #include "simpl/built_in/logic.h"
 #include "simpl/config.h"
@@ -38,6 +39,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("and", std::make_shared<built_in::And>());
   env_->Define("or", std::make_shared<built_in::Or>());
   env_->Define("do", std::make_shared<built_in::Do>());
+  env_->Define("fn", std::make_shared<built_in::Fn>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
@@ -124,9 +126,6 @@ class QuoteVisitor : public Expr::Visitor {
   void Visit(const Expr::Def&) override {
     throw std::runtime_error("not implemented");
   };
-  void Visit(const Expr::Fn&) override {
-    throw std::runtime_error("not implemented");
-  };
   void Visit(const Expr::Let&) override {
     throw std::runtime_error("not implemented");
   };
@@ -187,10 +186,6 @@ void Interpreter::Visit(const Expr::Let& let) {
     env->Bind(binding.first, Evaluate(*binding.second));
   }
   Evaluate(body, env);
-}
-
-void Interpreter::Visit(const Expr::Fn& fn) {
-  last_atom_result_ = std::make_shared<UserFn>(fn, env_);
 }
 
 void Interpreter::DefVar(std::string name, atom_value_type value) {

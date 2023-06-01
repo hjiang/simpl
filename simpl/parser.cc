@@ -90,9 +90,6 @@ expr_ptr_t Parser::ParseExpr() {
     if (Match(Token::Type::kLet)) {
       return ParseLet();
     }
-    if (Match(Token::Type::kFn)) {
-      return ParseFn();
-    }
     if (Match(Token::Type::kDefn)) {
       return ParseDefn();
     }
@@ -113,27 +110,6 @@ expr_ptr_t Parser::ParseVector() {
   return std::make_unique<Expr::Vector>(std::move(args));
 }
 
-Expr::Fn::param_list_t Parser::ParseParamList() {
-  Expr::Fn::param_list_t args;
-  Consume(Token::Type::kLeftBracket, "Expect '[' before parameters.");
-  while (!Check(Token::Type::kRightBracket) && !AtEnd()) {
-    auto token = Advance();
-    if (token.type != Token::Type::kSymbol) {
-      throw Error(token, "Expected symbol as parameter name");
-    }
-    args.push_back(token.lexeme);
-  }
-  Consume(Token::Type::kRightBracket, "Expect ']' after parameters.");
-  return args;
-}
-
-expr_ptr_t Parser::ParseFn() {
-  auto params = ParseParamList();
-  auto body = ParseExprs();
-  Consume(Token::Type::kRightParen, "Expect ')' after function.");
-  return std::make_unique<Expr::Fn>(std::move(params), std::move(body));
-}
-
 expr_ptr_t Parser::ParseDef() {
   auto token = Advance();
   if (token.type != Token::Type::kSymbol) {
@@ -150,7 +126,12 @@ expr_ptr_t Parser::ParseDefn() {
   if (token.type != Token::Type::kSymbol) {
     throw Error(token, "Expected symbol after defn");
   }
-  return std::make_unique<const Expr::Def>(std::move(token.lexeme), ParseFn());
+
+  auto exprs = ParseExprs();
+  exprs.push_front(std::make_unique<Expr::Atom>(Expr::Symbol{"fn"}));
+  Consume(Token::Type::kRightParen, "Expect ')' after definition.");
+  return std::make_unique<const Expr::Def>(
+      std::move(token.lexeme), std::make_unique<Expr::List>(std::move(exprs)));
 }
 
 Expr::Let::binding_t Parser::ParseBinding() {
