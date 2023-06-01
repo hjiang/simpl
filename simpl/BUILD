@@ -37,7 +37,7 @@ cc_test(
     size = "small")
 
 cc_library(name ="ast",
-           srcs = [],
+           srcs = ['ast.cc'],
            hdrs = ['ast.h'],
            deps = ['config'])
 

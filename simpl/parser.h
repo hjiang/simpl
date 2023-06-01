@@ -40,7 +40,6 @@ class Parser {
   expr_ptr_t ParseFn();
   expr_ptr_t ParseLet();
   expr_ptr_t ParseList();
-  expr_ptr_t ParseOr();
   Expr::Fn::param_list_t ParseParamList();
   Expr::Let::binding_list_t ParseBindings();
   Expr::Let::binding_t ParseBinding();

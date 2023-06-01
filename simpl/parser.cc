@@ -29,15 +29,6 @@ const Token& Parser::Consume(Token::Type type, const std::string& message) {
   throw Error(Peek(), message);
 }
 
-void Expr::And::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Def::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Do::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Fn::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Let::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Or::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-
 expr_list_t Parser::Parse() {
   expr_list_t exprs;
   while (!AtEnd()) {
@@ -77,7 +68,6 @@ expr_ptr_t Parser::ParseAtom() {
     case Token::Type::kLess:
     case Token::Type::kLessEqual:
     case Token::Type::kAnd:
-    case Token::Type::kOr:
     case Token::Type::kPrint:
     case Token::Type::kVar:
     case Token::Type::kWhile:
@@ -105,9 +95,6 @@ expr_ptr_t Parser::ParseExpr() {
     }
     if (Match(Token::Type::kDefn)) {
       return ParseDefn();
-    }
-    if (Match(Token::Type::kOr)) {
-      return ParseOr();
     }
     if (Match(Token::Type::kAnd)) {
       return ParseAnd();
@@ -199,12 +186,6 @@ expr_ptr_t Parser::ParseDo() {
   auto terms = ParseExprs();
   Consume(Token::Type::kRightParen, "Expect ')' at end of 'do' form.");
   return std::make_unique<Expr::Do>(std::move(terms));
-}
-
-expr_ptr_t Parser::ParseOr() {
-  auto terms = ParseExprs();
-  Consume(Token::Type::kRightParen, "Expect ')' at end of 'or' form.");
-  return std::make_unique<Expr::Or>(std::move(terms));
 }
 
 expr_ptr_t Parser::ParseAnd() {
