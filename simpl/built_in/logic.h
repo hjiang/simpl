@@ -27,6 +27,13 @@ class Or : public Callable {
                               const expr_list_t& exprs) override;
 };
 
+class And : public Callable {
+ public:
+  virtual ~And() = default;
+  Expr::Atom::value_type Call(Interpreter* interpreter,
+                              const expr_list_t& exprs) override;
+};
+
 }  // namespace built_in
 
 }  // namespace simpl

@@ -46,7 +46,6 @@ class Token {
     kNil,
 
     // Keywords.
-    kAnd,
     kClass,
     kDef,
     kDefClass,

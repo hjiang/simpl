@@ -14,7 +14,6 @@ namespace simpl {
 
 class Expr {
  public:
-  class And;
   class Atom;
   class Def;
   class Do;
@@ -141,20 +140,8 @@ class Expr::Fn : public Expr {
   const body_t body_;
 };
 
-class Expr::And : public Expr {
- public:
-  explicit And(expr_list_t&& terms) : terms_(std::move(terms)) {}
-  virtual ~And() = default;
-  void Accept(Expr::Visitor* visitor) const override;
-  const expr_list_t& terms() const { return terms_; }
-
- private:
-  const expr_list_t terms_;
-};
-
 class Expr::Visitor {
  public:
-  virtual void Visit(const Expr::And& expr) = 0;
   virtual void Visit(const Expr::Atom& expr) = 0;
   virtual void Visit(const Expr::Def& expr) = 0;
   virtual void Visit(const Expr::Do& expr) = 0;

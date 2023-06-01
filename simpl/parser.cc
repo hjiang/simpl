@@ -67,7 +67,6 @@ expr_ptr_t Parser::ParseAtom() {
     case Token::Type::kGreaterEqual:
     case Token::Type::kLess:
     case Token::Type::kLessEqual:
-    case Token::Type::kAnd:
     case Token::Type::kPrint:
     case Token::Type::kVar:
     case Token::Type::kWhile:
@@ -95,9 +94,6 @@ expr_ptr_t Parser::ParseExpr() {
     }
     if (Match(Token::Type::kDefn)) {
       return ParseDefn();
-    }
-    if (Match(Token::Type::kAnd)) {
-      return ParseAnd();
     }
     if (Match(Token::Type::kDo)) {
       return ParseDo();
@@ -186,12 +182,6 @@ expr_ptr_t Parser::ParseDo() {
   auto terms = ParseExprs();
   Consume(Token::Type::kRightParen, "Expect ')' at end of 'do' form.");
   return std::make_unique<Expr::Do>(std::move(terms));
-}
-
-expr_ptr_t Parser::ParseAnd() {
-  auto terms = ParseExprs();
-  Consume(Token::Type::kRightParen, "Expect ')' at end of 'and' form.");
-  return std::make_unique<Expr::And>(std::move(terms));
 }
 
 expr_ptr_t Parser::ParseList() {

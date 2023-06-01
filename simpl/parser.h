@@ -31,7 +31,6 @@ class Parser {
 
  private:
   ParseError Error(const Token& token, const std::string& msg);
-  expr_ptr_t ParseAnd();
   expr_ptr_t ParseAtom();
   expr_ptr_t ParseDef();
   expr_ptr_t ParseDefn();

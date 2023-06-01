@@ -35,6 +35,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("println", std::make_shared<built_in::Println>());
   env_->Define("assert", std::make_shared<built_in::Assert>());
   env_->Define("if", std::make_shared<built_in::If>());
+  env_->Define("and", std::make_shared<built_in::And>());
   env_->Define("or", std::make_shared<built_in::Or>());
 }
 
@@ -116,9 +117,6 @@ namespace {
 
 class QuoteVisitor : public Expr::Visitor {
  public:
-  void Visit(const Expr::And&) override {
-    throw std::runtime_error("not implemented");
-  };
   void Visit(const Expr::Atom&) override {
     throw std::runtime_error("not implemented");
   };
@@ -188,15 +186,6 @@ void Interpreter::Visit(const Expr::Let& let) {
 
 void Interpreter::Visit(const Expr::Fn& fn) {
   last_atom_result_ = std::make_shared<UserFn>(fn, env_);
-}
-
-void Interpreter::Visit(const Expr::And& logic_and) {
-  for (const auto& term : logic_and.terms()) {
-    Evaluate(*term);
-    if (!IsTruthy(last_atom_result_)) {
-      return;
-    }
-  }
 }
 
 void Interpreter::Visit(const Expr::Do& do_form) {

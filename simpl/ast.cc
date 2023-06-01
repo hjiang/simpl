@@ -4,7 +4,6 @@
 
 namespace simpl {
 
-void Expr::And::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Def::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
 void Expr::Do::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
