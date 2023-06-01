@@ -91,6 +91,18 @@ TEST(Parser, Def) {
   EXPECT_EQ("foo", def->name());
 }
 
+TEST(Parser, Vector) {
+  Lexer lexer("[1 2 3]");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(6, tokens.size());
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  EXPECT_EQ(1, exprs.size());
+  auto vec = dynamic_cast<Expr::Vector const *>(exprs.front().get());
+  EXPECT_TRUE(nullptr != vec);
+  EXPECT_EQ(3, vec->exprs().size());
+}
+
 TEST(Parser, Let) {
   Lexer lexer("(let [a 2] a)");
   auto tokens = lexer.scan();

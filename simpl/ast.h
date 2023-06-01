@@ -55,7 +55,7 @@ class Expr::List : public Expr {
 class Expr::Vector : public Expr {
  public:
   using vector_impl_t = std::vector<expr_ptr_t>;
-  explicit Vector(const expr_list_t& l) : exprs_(l.begin(), l.end()) {}
+  explicit Vector(vector_impl_t&& l) : exprs_(std::move(l)) {}
   virtual ~Vector() = default;
   void Accept(Expr::Visitor* visitor) const override;
   const vector_impl_t& exprs() const { return exprs_; }

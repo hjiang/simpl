@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 
+#include "simpl/ast.h"
 #include "simpl/config.h"
 #include "simpl/error.h"
 
@@ -96,9 +97,20 @@ expr_ptr_t Parser::ParseExpr() {
       return ParseDefn();
     }
     return ParseList();
+  } else if (Match(Token::Type::kLeftBracket)) {
+    return ParseVector();
   } else {
     return ParseAtom();
   }
+}
+
+expr_ptr_t Parser::ParseVector() {
+  Expr::Vector::vector_impl_t args;
+  while (!Check(Token::Type::kRightBracket) && !AtEnd()) {
+    args.push_back(ParseExpr());
+  }
+  Consume(Token::Type::kRightBracket, "Expect ']' at the end of vector.");
+  return std::make_unique<Expr::Vector>(std::move(args));
 }
 
 Expr::Fn::param_list_t Parser::ParseParamList() {
