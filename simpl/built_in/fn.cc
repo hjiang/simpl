@@ -2,7 +2,6 @@
 
 #include "simpl/built_in/fn.h"
 
-#include <iostream>
 #include <memory>
 #include <utility>
 
@@ -24,7 +23,6 @@ Expr::Atom::value_type Fn::Call(Interpreter* interpreter,
   for (const auto& param : params->exprs()) {
     auto atom = dynamic_pointer_cast<const Expr::Atom>(param);
     param_list.push_back(atom->value<Expr::Symbol>().name);
-    std::cerr << "arg " << atom->value<Expr::Symbol>().name << std::endl;
   }
   FnDef::body_t body(i, exprs.end());
   return std::make_unique<UserFn>(FnDef(std::move(param_list), std::move(body)),
