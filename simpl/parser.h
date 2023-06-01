@@ -34,7 +34,6 @@ class Parser {
   expr_ptr_t ParseAtom();
   expr_ptr_t ParseDef();
   expr_ptr_t ParseDefn();
-  expr_ptr_t ParseDo();
   expr_ptr_t ParseExpr();
   expr_ptr_t ParseFn();
   expr_ptr_t ParseLet();

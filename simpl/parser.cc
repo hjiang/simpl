@@ -95,9 +95,6 @@ expr_ptr_t Parser::ParseExpr() {
     if (Match(Token::Type::kDefn)) {
       return ParseDefn();
     }
-    if (Match(Token::Type::kDo)) {
-      return ParseDo();
-    }
     return ParseList();
   } else {
     return ParseAtom();
@@ -176,12 +173,6 @@ expr_list_t Parser::ParseExprs() {
     exprs.push_back(ParseExpr());
   }
   return exprs;
-}
-
-expr_ptr_t Parser::ParseDo() {
-  auto terms = ParseExprs();
-  Consume(Token::Type::kRightParen, "Expect ')' at end of 'do' form.");
-  return std::make_unique<Expr::Do>(std::move(terms));
 }
 
 expr_ptr_t Parser::ParseList() {

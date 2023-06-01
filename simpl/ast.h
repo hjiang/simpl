@@ -18,7 +18,6 @@ class Expr {
  public:
   class Atom;
   class Def;
-  class Do;
   class Fn;
   class Let;
   class List;
@@ -98,17 +97,6 @@ class Expr::Quoted : public Expr {
   const expr_ptr_t expr_;
 };
 
-class Expr::Do : public Expr {
- public:
-  explicit Do(expr_list_t&& exprs) : exprs_(std::move(exprs)) {}
-  virtual ~Do() = default;
-  void Accept(Expr::Visitor* visitor) const override;
-  const expr_list_t& exprs() const { return exprs_; }
-
- private:
-  const expr_list_t exprs_;
-};
-
 class Expr::Def : public Expr {
  public:
   Def(std::string name, expr_ptr_t expr)
@@ -159,7 +147,6 @@ class Expr::Visitor {
  public:
   virtual void Visit(const Expr::Atom& expr) = 0;
   virtual void Visit(const Expr::Def& expr) = 0;
-  virtual void Visit(const Expr::Do& expr) = 0;
   virtual void Visit(const Expr::Fn& expr) = 0;
   virtual void Visit(const Expr::Let& expr) = 0;
   virtual void Visit(const Expr::List& expr) = 0;

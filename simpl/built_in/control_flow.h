@@ -12,9 +12,19 @@ namespace built_in {
 
 class If : public Callable {
  public:
-  virtual ~If() {}
+  virtual ~If() = default;
   Expr::Atom::value_type Call(Interpreter* interpreter,
                               const expr_list_t& exprs) override;
+};
+
+class Do : public Function {
+ public:
+  virtual ~Do() = default;
+
+ private:
+  Expr::Atom::value_type FnCall(Interpreter*, const args_type& args) override {
+    return args.back();
+  };
 };
 
 }  // namespace built_in

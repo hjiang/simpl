@@ -50,7 +50,6 @@ class Token {
     kDef,
     kDefClass,
     kDefn,
-    kDo,
     kFalse,
     kFn,
     kFor,

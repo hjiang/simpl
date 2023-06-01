@@ -37,6 +37,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("if", std::make_shared<built_in::If>());
   env_->Define("and", std::make_shared<built_in::And>());
   env_->Define("or", std::make_shared<built_in::Or>());
+  env_->Define("do", std::make_shared<built_in::Do>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
@@ -123,9 +124,6 @@ class QuoteVisitor : public Expr::Visitor {
   void Visit(const Expr::Def&) override {
     throw std::runtime_error("not implemented");
   };
-  void Visit(const Expr::Do&) override {
-    throw std::runtime_error("not implemented");
-  };
   void Visit(const Expr::Fn&) override {
     throw std::runtime_error("not implemented");
   };
@@ -193,12 +191,6 @@ void Interpreter::Visit(const Expr::Let& let) {
 
 void Interpreter::Visit(const Expr::Fn& fn) {
   last_atom_result_ = std::make_shared<UserFn>(fn, env_);
-}
-
-void Interpreter::Visit(const Expr::Do& do_form) {
-  for (const auto& term : do_form.exprs()) {
-    Evaluate(*term);
-  }
 }
 
 void Interpreter::DefVar(std::string name, atom_value_type value) {

@@ -29,7 +29,7 @@ static const std::unordered_map<std::string, Token::Type> kKeywords{
     {"true", Token::kTrue},
     {"var", Token::kVar},
     {"while", Token::kWhile},
-    {"do", Token::kDo}};
+};
 
 static bool CanStartSymbol(char c) {
   return isalpha(c) || '_' == c || '-' == c;
