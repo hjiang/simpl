@@ -81,9 +81,6 @@ expr_ptr_t Parser::ParseAtom() {
 
 expr_ptr_t Parser::ParseExpr() {
   if (Match(Token::Type::kLeftParen)) {
-    if (Match(Token::Type::kLet)) {
-      return ParseLet();
-    }
     return ParseList();
   } else if (Match(Token::Type::kLeftBracket)) {
     return ParseVector();
@@ -99,32 +96,6 @@ expr_ptr_t Parser::ParseVector() {
   }
   Consume(Token::Type::kRightBracket, "Expect ']' at the end of vector.");
   return std::make_unique<Expr::Vector>(std::move(args));
-}
-
-Expr::Let::binding_t Parser::ParseBinding() {
-  auto token = Advance();
-  if (token.type != Token::Type::kSymbol) {
-    throw Error(token, "Expected symbol as binding target");
-  }
-  return std::make_pair(std::move(token.lexeme), ParseExpr());
-}
-
-Expr::Let::binding_list_t Parser::ParseBindings() {
-  Expr::Let::binding_list_t bindings;
-  Consume(Token::Type::kLeftBracket, "Expect '[' before bindings.");
-  while (!Check(Token::Type::kRightBracket) && !AtEnd()) {
-    bindings.push_back(ParseBinding());
-  }
-  Consume(Token::Type::kRightBracket, "Expect ']' after bindings.");
-  return bindings;
-}
-
-expr_ptr_t Parser::ParseLet() {
-  Expr::Let::binding_list_t bindings(ParseBindings());
-  expr_list_t body(ParseExprs());
-  Consume(Token::Type::kRightParen, "Expect ')' at end of LET form.");
-  return std::make_unique<const Expr::Let>(std::move(bindings),
-                                           std::move(body));
 }
 
 expr_list_t Parser::ParseExprs() {

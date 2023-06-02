@@ -35,11 +35,8 @@ class Parser {
   expr_ptr_t ParseDef();
   expr_ptr_t ParseDefn();
   expr_ptr_t ParseExpr();
-  expr_ptr_t ParseLet();
   expr_ptr_t ParseList();
   expr_ptr_t ParseVector();
-  Expr::Let::binding_list_t ParseBindings();
-  Expr::Let::binding_t ParseBinding();
   expr_list_t ParseExprs();
   bool Match(Token::Type type);
   bool Check(Token::Type type) const;

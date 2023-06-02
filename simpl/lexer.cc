@@ -15,7 +15,6 @@ namespace simpl {
 
 static const std::unordered_map<std::string, Token::Type> kKeywords{
     {"false", Token::kFalse},
-    {"let", Token::kLet},
     {"nil", Token::kNil},
     {"true", Token::kTrue},
 };

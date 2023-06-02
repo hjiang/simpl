@@ -27,6 +27,13 @@ class Do : public Function {
   };
 };
 
+class Let : public Callable {
+ public:
+  virtual ~Let() = default;
+  Expr::Atom::value_type Call(Interpreter* interpreter,
+                              const expr_list_t& exprs) override;
+};
+
 }  // namespace built_in
 
 }  // namespace simpl

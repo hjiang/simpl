@@ -43,6 +43,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("fn", std::make_shared<built_in::Fn>());
   env_->Define("def", std::make_shared<built_in::Def>());
   env_->Define("defn", std::make_shared<built_in::Defn>());
+  env_->Define("let", std::make_shared<built_in::Let>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
@@ -126,9 +127,6 @@ class QuoteVisitor : public Expr::Visitor {
   void Visit(const Expr::Atom&) override {
     throw std::runtime_error("not implemented");
   };
-  void Visit(const Expr::Let&) override {
-    throw std::runtime_error("not implemented");
-  };
   void Visit(const Expr::List& list) override {
     value_ = std::make_shared<Expr::List>(list);
   };
@@ -172,16 +170,6 @@ void Interpreter::Visit(const Expr::List& list) {
 
 void Interpreter::Visit(const Expr::Vector& vec) {
   last_atom_result_ = std::make_unique<Expr::Vector>(vec);
-}
-
-void Interpreter::Visit(const Expr::Let& let) {
-  const auto& bindings = let.bindings();
-  const auto& body = let.body();
-  auto env = std::make_shared<Environment>(env_);
-  for (const auto& binding : bindings) {
-    env->Bind(binding.first, Evaluate(*binding.second));
-  }
-  Evaluate(body, env);
 }
 
 }  // namespace simpl

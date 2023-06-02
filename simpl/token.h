@@ -47,7 +47,6 @@ class Token {
 
     // Keywords.
     kFalse,
-    kLet,
     kTrue,
 
     kEof

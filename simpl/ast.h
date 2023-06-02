@@ -17,7 +17,6 @@ namespace simpl {
 class Expr {
  public:
   class Atom;
-  class Let;
   class List;
   class Vector;
   class Quoted;
@@ -96,26 +95,9 @@ class Expr::Quoted : public Expr {
   const expr_ptr_t expr_;
 };
 
-class Expr::Let : public Expr {
- public:
-  using binding_t = std::pair<std::string, expr_ptr_t>;
-  using binding_list_t = std::list<binding_t>;
-  Let(binding_list_t&& bindings, expr_list_t&& body)
-      : bindings_(std::move(bindings)), body_(std::move(body)) {}
-  virtual ~Let() = default;
-  void Accept(Expr::Visitor* visitor) const override;
-  const binding_list_t& bindings() const { return bindings_; }
-  const expr_list_t& body() const { return body_; }
-
- private:
-  const binding_list_t bindings_;
-  const expr_list_t body_;
-};
-
 class Expr::Visitor {
  public:
   virtual void Visit(const Expr::Atom& expr) = 0;
-  virtual void Visit(const Expr::Let& expr) = 0;
   virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Quoted& expr) = 0;
   virtual void Visit(const Expr::Vector& expr) = 0;
