@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <utility>
 #include <variant>
 
 #include "simpl/ast.h"
