@@ -81,14 +81,8 @@ expr_ptr_t Parser::ParseAtom() {
 
 expr_ptr_t Parser::ParseExpr() {
   if (Match(Token::Type::kLeftParen)) {
-    if (Match(Token::Type::kDef)) {
-      return ParseDef();
-    }
     if (Match(Token::Type::kLet)) {
       return ParseLet();
-    }
-    if (Match(Token::Type::kDefn)) {
-      return ParseDefn();
     }
     return ParseList();
   } else if (Match(Token::Type::kLeftBracket)) {
@@ -105,30 +99,6 @@ expr_ptr_t Parser::ParseVector() {
   }
   Consume(Token::Type::kRightBracket, "Expect ']' at the end of vector.");
   return std::make_unique<Expr::Vector>(std::move(args));
-}
-
-expr_ptr_t Parser::ParseDef() {
-  auto token = Advance();
-  if (token.type != Token::Type::kSymbol) {
-    throw Error(token, "Expected symbol after def");
-  }
-  auto name = token.lexeme;
-  auto expr = ParseExpr();
-  Consume(Token::Type::kRightParen, "Expect ')' after definition.");
-  return std::make_unique<const Expr::Def>(std::move(name), std::move(expr));
-}
-
-expr_ptr_t Parser::ParseDefn() {
-  auto token = Advance();
-  if (token.type != Token::Type::kSymbol) {
-    throw Error(token, "Expected symbol after defn");
-  }
-
-  auto exprs = ParseExprs();
-  exprs.push_front(std::make_unique<Expr::Atom>(Expr::Symbol{"fn"}));
-  Consume(Token::Type::kRightParen, "Expect ')' after definition.");
-  return std::make_unique<const Expr::Def>(
-      std::move(token.lexeme), std::make_unique<Expr::List>(std::move(exprs)));
 }
 
 Expr::Let::binding_t Parser::ParseBinding() {

@@ -11,6 +11,7 @@
 #include "simpl/built_in/assert.h"
 #include "simpl/built_in/comparison.h"
 #include "simpl/built_in/control_flow.h"
+#include "simpl/built_in/def.h"
 #include "simpl/built_in/fn.h"
 #include "simpl/built_in/io.h"
 #include "simpl/built_in/logic.h"
@@ -40,6 +41,8 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("or", std::make_shared<built_in::Or>());
   env_->Define("do", std::make_shared<built_in::Do>());
   env_->Define("fn", std::make_shared<built_in::Fn>());
+  env_->Define("def", std::make_shared<built_in::Def>());
+  env_->Define("defn", std::make_shared<built_in::Defn>());
 }
 
 Interpreter::atom_value_type Interpreter::Evaluate(const Expr& expr) {
@@ -123,9 +126,6 @@ class QuoteVisitor : public Expr::Visitor {
   void Visit(const Expr::Atom&) override {
     throw std::runtime_error("not implemented");
   };
-  void Visit(const Expr::Def&) override {
-    throw std::runtime_error("not implemented");
-  };
   void Visit(const Expr::Let&) override {
     throw std::runtime_error("not implemented");
   };
@@ -164,18 +164,14 @@ void Interpreter::Visit(const Expr::List& list) {
     auto it = list.exprs().begin();
     ++it;
     expr_list_t args(it, list.exprs().end());
-    last_atom_result_ = callable->Call(this, args);
+    last_atom_result_ = callable->Call(this, std::move(args));
   } else {
     throw std::runtime_error("Cannot apply a non-callable");
   }
 }
 
-void Interpreter::Visit(const Expr::Vector&) {
-  throw std::runtime_error("not implemented");
-}
-
-void Interpreter::Visit(const Expr::Def& def) {
-  DefVar(def.name(), Evaluate(def.expr()));
+void Interpreter::Visit(const Expr::Vector& vec) {
+  last_atom_result_ = std::make_unique<Expr::Vector>(vec);
 }
 
 void Interpreter::Visit(const Expr::Let& let) {
@@ -186,10 +182,6 @@ void Interpreter::Visit(const Expr::Let& let) {
     env->Bind(binding.first, Evaluate(*binding.second));
   }
   Evaluate(body, env);
-}
-
-void Interpreter::DefVar(std::string name, atom_value_type value) {
-  env_->Define(std::move(name), std::move(value));
 }
 
 }  // namespace simpl

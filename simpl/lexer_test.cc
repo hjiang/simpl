@@ -106,7 +106,7 @@ TEST(Lexer, Def) {
   Lexer lexer("def");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.size(), 2);
-  EXPECT_EQ(tokens.front().type, Token::kDef);
+  EXPECT_EQ(tokens.front().type, Token::kSymbol);
   EXPECT_FALSE(simpl::HadError());
 }
 

@@ -17,7 +17,6 @@ namespace simpl {
 class Expr {
  public:
   class Atom;
-  class Def;
   class Let;
   class List;
   class Vector;
@@ -67,7 +66,8 @@ class Expr::Atom : public Expr {
  public:
   using value_type =
       std::variant<int_type, float_type, bool, std::string, Symbol,
-                   std::nullptr_t, callable_ptr_t, std::shared_ptr<List>>;
+                   std::nullptr_t, callable_ptr_t, std::shared_ptr<List>,
+                   std::shared_ptr<Vector>>;
 
   explicit Atom(value_type v) : value_(v) {}
   virtual ~Atom() {}
@@ -96,20 +96,6 @@ class Expr::Quoted : public Expr {
   const expr_ptr_t expr_;
 };
 
-class Expr::Def : public Expr {
- public:
-  Def(std::string name, expr_ptr_t expr)
-      : name_(std::move(name)), expr_(std::move(expr)) {}
-  virtual ~Def() {}
-  void Accept(Expr::Visitor* visitor) const override;
-  const std::string& name() const { return name_; }
-  const Expr& expr() const { return *expr_; }
-
- private:
-  const std::string name_;
-  const expr_ptr_t expr_;
-};
-
 class Expr::Let : public Expr {
  public:
   using binding_t = std::pair<std::string, expr_ptr_t>;
@@ -129,7 +115,6 @@ class Expr::Let : public Expr {
 class Expr::Visitor {
  public:
   virtual void Visit(const Expr::Atom& expr) = 0;
-  virtual void Visit(const Expr::Def& expr) = 0;
   virtual void Visit(const Expr::Let& expr) = 0;
   virtual void Visit(const Expr::List& expr) = 0;
   virtual void Visit(const Expr::Quoted& expr) = 0;

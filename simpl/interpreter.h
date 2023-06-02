@@ -62,7 +62,6 @@ class Interpreter : public Expr::Visitor {
   Interpreter();
   virtual ~Interpreter() {}
   void Visit(const Expr::Atom& atom) override;
-  void Visit(const Expr::Def& expr) override;
   void Visit(const Expr::Let& expr) override;
   void Visit(const Expr::List& list) override;
   void Visit(const Expr::Quoted& expr) override;
@@ -79,7 +78,6 @@ class Interpreter : public Expr::Visitor {
  private:
   template <typename T>
   bool MaybeSetAtomResult(const Expr::Atom& atom);
-  void DefVar(std::string name, atom_value_type value);
 
   atom_value_type last_atom_result_;
   std::shared_ptr<Environment> env_;

@@ -72,13 +72,6 @@ TEST(Parser, List) {
   EXPECT_EQ(atom->value<int_type>(), 2);
 }
 
-TEST(Parser, DefConstructor) {
-  std::unique_ptr<Expr> def =
-      std::make_unique<Expr::Def>("foo", std::make_unique<Expr::Atom>(42));
-  auto defptr = dynamic_cast<Expr::Def const *>(def.get());
-  EXPECT_EQ("foo", defptr->name());
-}
-
 TEST(Parser, Def) {
   Lexer lexer("(def foo 42)");
   auto tokens = lexer.scan();
@@ -86,9 +79,6 @@ TEST(Parser, Def) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   EXPECT_EQ(1, exprs.size());
-  auto def = dynamic_cast<Expr::Def const *>(exprs.front().get());
-  EXPECT_TRUE(nullptr != def);
-  EXPECT_EQ("foo", def->name());
 }
 
 TEST(Parser, Vector) {
