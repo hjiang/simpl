@@ -12,8 +12,7 @@ namespace simpl {
 
 namespace built_in {
 
-Expr::Atom::value_type If::Call(Interpreter* interpreter,
-                                const expr_list_t& exprs) {
+Atom::value_type If::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   if (exprs.size() != 3) {
     throw std::runtime_error("'if' expects three arguments");
   }
@@ -30,19 +29,17 @@ Expr::Atom::value_type If::Call(Interpreter* interpreter,
   }
 }
 
-Expr::Atom::value_type Let::Call(Interpreter* interpreter,
-                                 const expr_list_t& exprs) {
+Atom::value_type Let::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   auto i = exprs.begin();
-  auto bindings = std::dynamic_pointer_cast<const Expr::Vector>(*i++)->exprs();
+  auto bindings = std::dynamic_pointer_cast<const Vector>(*i++)->exprs();
   if (bindings.size() % 2 != 0) {
     throw std::runtime_error(
         "The number of expressions in the binding list must be even.");
   }
   auto env = std::make_shared<Interpreter::Environment>(interpreter->env());
   for (auto j = bindings.begin(); j != bindings.end();) {
-    auto name = std::dynamic_pointer_cast<const Expr::Atom>(*j++)
-                    ->value<Expr::Symbol>()
-                    .name;
+    auto name =
+        std::dynamic_pointer_cast<const Atom>(*j++)->value<Symbol>().name;
     auto value = interpreter->Evaluate(**j++);
     env->Bind(name, value);
   }

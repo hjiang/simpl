@@ -14,21 +14,19 @@
 
 namespace simpl {
 
+class Atom;
+class List;
+class Vector;
+class Quoted;
+struct Symbol;
+class ExprVisitor;
 class Expr {
  public:
-  class Atom;
-  class List;
-  class Vector;
-  class Quoted;
-  class Visitor;
-
-  struct Symbol;
-
-  virtual void Accept(Visitor* visitor) const = 0;
+  virtual void Accept(ExprVisitor* visitor) const = 0;
   virtual ~Expr() {}
 };
 
-struct Expr::Symbol {
+struct Symbol {
   std::string name;
 };
 
@@ -38,30 +36,30 @@ using expr_ptr_t = std::shared_ptr<const Expr>;
 using expr_list_t = std::list<expr_ptr_t>;
 using callable_ptr_t = std::shared_ptr<Callable>;
 
-class Expr::List : public Expr {
+class List : public Expr {
  public:
   explicit List(expr_list_t&& l) : exprs_(std::move(l)) {}
   virtual ~List() {}
-  void Accept(Expr::Visitor* visitor) const override;
+  void Accept(ExprVisitor* visitor) const override;
   const expr_list_t& exprs() const { return exprs_; }
 
  private:
   const expr_list_t exprs_;
 };
 
-class Expr::Vector : public Expr {
+class Vector : public Expr {
  public:
   using vector_impl_t = std::vector<expr_ptr_t>;
   explicit Vector(vector_impl_t&& l) : exprs_(std::move(l)) {}
   virtual ~Vector() = default;
-  void Accept(Expr::Visitor* visitor) const override;
+  void Accept(ExprVisitor* visitor) const override;
   const vector_impl_t& exprs() const { return exprs_; }
 
  private:
   const std::vector<expr_ptr_t> exprs_;
 };
 
-class Expr::Atom : public Expr {
+class Atom : public Expr {
  public:
   using value_type =
       std::variant<int_type, float_type, bool, std::string, Symbol,
@@ -78,30 +76,30 @@ class Expr::Atom : public Expr {
   bool has_value() const {
     return std::holds_alternative<T>(value_);
   }
-  void Accept(Expr::Visitor* visitor) const override;
+  void Accept(ExprVisitor* visitor) const override;
 
  private:
   value_type value_;
 };
 
-class Expr::Quoted : public Expr {
+class Quoted : public Expr {
  public:
   explicit Quoted(expr_ptr_t expr) : expr_(expr) {}
   virtual ~Quoted() = default;
-  void Accept(Expr::Visitor* visitor) const override;
+  void Accept(ExprVisitor* visitor) const override;
   const Expr& expr() const { return *expr_; }
 
  private:
   const expr_ptr_t expr_;
 };
 
-class Expr::Visitor {
+class ExprVisitor {
  public:
-  virtual void Visit(const Expr::Atom& expr) = 0;
-  virtual void Visit(const Expr::List& expr) = 0;
-  virtual void Visit(const Expr::Quoted& expr) = 0;
-  virtual void Visit(const Expr::Vector& expr) = 0;
-  virtual ~Visitor() {}
+  virtual void Visit(const Atom& expr) = 0;
+  virtual void Visit(const List& expr) = 0;
+  virtual void Visit(const Quoted& expr) = 0;
+  virtual void Visit(const Vector& expr) = 0;
+  virtual ~ExprVisitor() {}
 };
 
 }  // namespace simpl

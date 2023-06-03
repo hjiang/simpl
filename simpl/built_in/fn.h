@@ -12,8 +12,8 @@ namespace built_in {
 class Fn : public Callable {
  public:
   virtual ~Fn() = default;
-  Expr::Atom::value_type Call(Interpreter* interpreter,
-                              const expr_list_t& exprs) override;
+  Atom::value_type Call(Interpreter* interpreter,
+                        const expr_list_t& exprs) override;
 };
 
 }  // namespace built_in

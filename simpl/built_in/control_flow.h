@@ -13,8 +13,8 @@ namespace built_in {
 class If : public Callable {
  public:
   virtual ~If() = default;
-  Expr::Atom::value_type Call(Interpreter* interpreter,
-                              const expr_list_t& exprs) override;
+  Atom::value_type Call(Interpreter* interpreter,
+                        const expr_list_t& exprs) override;
 };
 
 class Do : public Function {
@@ -22,7 +22,7 @@ class Do : public Function {
   virtual ~Do() = default;
 
  private:
-  Expr::Atom::value_type FnCall(Interpreter*, const args_type& args) override {
+  Atom::value_type FnCall(Interpreter*, const args_type& args) override {
     return args.back();
   };
 };
@@ -30,8 +30,8 @@ class Do : public Function {
 class Let : public Callable {
  public:
   virtual ~Let() = default;
-  Expr::Atom::value_type Call(Interpreter* interpreter,
-                              const expr_list_t& exprs) override;
+  Atom::value_type Call(Interpreter* interpreter,
+                        const expr_list_t& exprs) override;
 };
 
 }  // namespace built_in

@@ -4,13 +4,9 @@
 
 namespace simpl {
 
-void Expr::Atom::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::List::Accept(Expr::Visitor* visitor) const { visitor->Visit(*this); }
-void Expr::Vector::Accept(Expr::Visitor* visitor) const {
-  visitor->Visit(*this);
-}
-void Expr::Quoted::Accept(Expr::Visitor* visitor) const {
-  visitor->Visit(*this);
-}
+void Atom::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
+void List::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
+void Vector::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
+void Quoted::Accept(ExprVisitor* visitor) const { visitor->Visit(*this); }
 
 }  // namespace simpl

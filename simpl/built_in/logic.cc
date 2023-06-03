@@ -5,7 +5,7 @@
 namespace simpl {
 namespace built_in {
 
-Expr::Atom::value_type Or::Call(Interpreter* interpreter,
+Atom::value_type Or::Call(Interpreter* interpreter,
                                 const expr_list_t& exprs) {
   if (exprs.empty()) {
     throw std::runtime_error("`or` expects at least one argument");
@@ -19,7 +19,7 @@ Expr::Atom::value_type Or::Call(Interpreter* interpreter,
   return interpreter->last_value();
 }
 
-Expr::Atom::value_type And::Call(Interpreter* interpreter,
+Atom::value_type And::Call(Interpreter* interpreter,
                                  const expr_list_t& exprs) {
   if (exprs.empty()) {
     throw std::runtime_error("`and` expects at least one argument");

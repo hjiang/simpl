@@ -19,7 +19,7 @@ class Callable {
 
 class Function : public Callable {
  public:
-  using args_type = std::list<Expr::Atom::value_type>;
+  using args_type = std::list<Atom::value_type>;
   Interpreter::atom_value_type Call(Interpreter*,
                                     const expr_list_t& exprs) override;
 

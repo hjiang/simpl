@@ -79,8 +79,8 @@ std::string Interpreter::StringifyValue(const Interpreter::atom_value_type& v) {
   if (holds<std::string>(v)) {
     return std::get<std::string>(v);
   }
-  if (holds<Expr::Symbol>(v)) {
-    return "<symbol: " + std::get<Expr::Symbol>(v).name + ">";
+  if (holds<Symbol>(v)) {
+    return "<symbol: " + std::get<Symbol>(v).name + ">";
   }
   if (holds<nullptr_t>(v)) {
     return "nil";
@@ -92,7 +92,7 @@ std::string Interpreter::StringifyValue(const Interpreter::atom_value_type& v) {
 }
 
 template <typename T>
-bool Interpreter::MaybeSetAtomResult(const Expr::Atom& atom) {
+bool Interpreter::MaybeSetAtomResult(const Atom& atom) {
   if (atom.has_value<T>()) {
     last_atom_result_ = atom.value<T>();
     return true;
@@ -101,20 +101,20 @@ bool Interpreter::MaybeSetAtomResult(const Expr::Atom& atom) {
 }
 
 template <>
-bool Interpreter::MaybeSetAtomResult<Expr::Symbol>(const Expr::Atom& atom) {
-  if (atom.has_value<Expr::Symbol>()) {
-    last_atom_result_ = env_->Get(atom.value<Expr::Symbol>().name);
+bool Interpreter::MaybeSetAtomResult<Symbol>(const Atom& atom) {
+  if (atom.has_value<Symbol>()) {
+    last_atom_result_ = env_->Get(atom.value<Symbol>().name);
     return true;
   }
   return false;
 }
 
-void Interpreter::Visit(const Expr::Atom& atom) {
+void Interpreter::Visit(const Atom& atom) {
   if (!(MaybeSetAtomResult<int_type>(atom) ||
         MaybeSetAtomResult<float_type>(atom) ||
         MaybeSetAtomResult<bool>(atom) ||
         MaybeSetAtomResult<std::string>(atom) ||
-        MaybeSetAtomResult<Expr::Symbol>(atom) ||
+        MaybeSetAtomResult<Symbol>(atom) ||
         MaybeSetAtomResult<std::nullptr_t>(atom))) {
     throw std::runtime_error("Unknown atom type");  // FIXME: error handling
   }
@@ -122,36 +122,36 @@ void Interpreter::Visit(const Expr::Atom& atom) {
 
 namespace {
 
-class QuoteVisitor : public Expr::Visitor {
+class QuoteVisitor : public ExprVisitor {
  public:
-  void Visit(const Expr::Atom&) override {
+  void Visit(const Atom&) override {
     throw std::runtime_error("not implemented");
   };
-  void Visit(const Expr::List& list) override {
-    value_ = std::make_shared<Expr::List>(list);
+  void Visit(const List& list) override {
+    value_ = std::make_shared<List>(list);
   };
-  void Visit(const Expr::Vector&) override {
+  void Visit(const Vector&) override {
     throw std::runtime_error("not implemented");
   };
-  void Visit(const Expr::Quoted&) override {
+  void Visit(const Quoted&) override {
     throw std::runtime_error("not implemented");
   };
 
-  const Expr::Atom::value_type& value() const { return value_; }
+  const Atom::value_type& value() const { return value_; }
 
  private:
-  Expr::Atom::value_type value_;
+  Atom::value_type value_;
 };
 
 }  // anonymous namespace
 
-void Interpreter::Visit(const Expr::Quoted& Quoted) {
+void Interpreter::Visit(const Quoted& Quoted) {
   QuoteVisitor visitor;
   Quoted.expr().Accept(&visitor);
   last_atom_result_ = visitor.value();
 }
 
-void Interpreter::Visit(const Expr::List& list) {
+void Interpreter::Visit(const List& list) {
   if (list.exprs().empty()) {
     last_atom_result_ = nullptr;
     return;
@@ -168,8 +168,8 @@ void Interpreter::Visit(const Expr::List& list) {
   }
 }
 
-void Interpreter::Visit(const Expr::Vector& vec) {
-  last_atom_result_ = std::make_unique<Expr::Vector>(vec);
+void Interpreter::Visit(const Vector& vec) {
+  last_atom_result_ = std::make_unique<Vector>(vec);
 }
 
 }  // namespace simpl

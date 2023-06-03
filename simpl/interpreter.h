@@ -18,10 +18,10 @@ namespace simpl {
 
 class Callable;
 
-class Interpreter : public Expr::Visitor {
+class Interpreter : public ExprVisitor {
  public:
   using callable_ptr = std::shared_ptr<Callable>;
-  using atom_value_type = Expr::Atom::value_type;
+  using atom_value_type = Atom::value_type;
 
   class Environment {
    public:
@@ -61,10 +61,10 @@ class Interpreter : public Expr::Visitor {
 
   Interpreter();
   virtual ~Interpreter() {}
-  void Visit(const Expr::Atom& atom) override;
-  void Visit(const Expr::List& list) override;
-  void Visit(const Expr::Quoted& expr) override;
-  void Visit(const Expr::Vector& expr) override;
+  void Visit(const Atom& atom) override;
+  void Visit(const List& list) override;
+  void Visit(const Quoted& expr) override;
+  void Visit(const Vector& expr) override;
   atom_value_type Evaluate(const Expr& expr);
   atom_value_type Evaluate(const expr_list_t& expr,
                            std::shared_ptr<Environment> env = nullptr);
@@ -76,7 +76,7 @@ class Interpreter : public Expr::Visitor {
 
  private:
   template <typename T>
-  bool MaybeSetAtomResult(const Expr::Atom& atom);
+  bool MaybeSetAtomResult(const Atom& atom);
 
   atom_value_type last_atom_result_;
   std::shared_ptr<Environment> env_;

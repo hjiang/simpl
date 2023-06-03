@@ -32,8 +32,8 @@ inline std::string TypeStr<float_type>() {
 }
 
 template <>
-inline std::string TypeStr<Expr::Symbol>() {
-  return "Expr::Symbol";
+inline std::string TypeStr<Symbol>() {
+  return "Symbol";
 }
 
 template <>
