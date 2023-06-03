@@ -5,7 +5,10 @@
 #include <gtest/gtest.h>
 
 #include <memory>
+#include <variant>
 
+#include "simpl/ast.h"
+#include "simpl/config.h"
 #include "simpl/lexer.h"
 
 namespace simpl {
@@ -17,8 +20,8 @@ TEST(Parser, Integer) {
   EXPECT_EQ(std::get<int_type>(tokens.front().literal), 1);
   Parser parser(tokens);
   auto exprs = parser.Parse();
-  auto atom = dynamic_cast<Atom const *>(exprs.front().get());
-  EXPECT_EQ(atom->value<int_type>(), 1);
+  auto atom = dynamic_cast<Expr const *>(exprs.front().get());
+  EXPECT_EQ(std::get<int_type>(*atom), 1);
 }
 
 TEST(Parser, String) {
@@ -27,8 +30,8 @@ TEST(Parser, String) {
   EXPECT_EQ(tokens.front().type, Token::kString);
   Parser parser(tokens);
   auto exprs = parser.Parse();
-  auto atom = dynamic_cast<Atom const *>(exprs.front().get());
-  EXPECT_EQ(atom->value<std::string>(), "hello");
+  auto atom = dynamic_cast<Expr const *>(exprs.front().get());
+  EXPECT_EQ(std::get<std::string>(*atom), "hello");
 }
 
 TEST(Parser, Bool) {
@@ -37,8 +40,8 @@ TEST(Parser, Bool) {
   EXPECT_EQ(tokens.front().type, Token::kFalse);
   Parser parser(tokens);
   auto exprs = parser.Parse();
-  auto atom = dynamic_cast<Atom const *>(exprs.front().get());
-  EXPECT_EQ(atom->value<bool>(), false);
+  auto atom = dynamic_cast<Expr const *>(exprs.front().get());
+  EXPECT_EQ(std::get<bool>(*atom), false);
 }
 
 TEST(Parser, Symbol) {
@@ -47,8 +50,8 @@ TEST(Parser, Symbol) {
   EXPECT_EQ(tokens.front().type, Token::kSymbol);
   Parser parser(tokens);
   auto exprs = parser.Parse();
-  auto atom = dynamic_cast<Atom const *>(exprs.front().get());
-  EXPECT_EQ(atom->value<Symbol>().name, "foo");
+  auto atom = dynamic_cast<Expr const *>(exprs.front().get());
+  EXPECT_EQ(std::get<Symbol>(*atom).name, "foo");
 }
 
 TEST(Parser, List) {
@@ -57,18 +60,18 @@ TEST(Parser, List) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   EXPECT_TRUE(nullptr != exprs.front());
-  List const *list = dynamic_cast<List const *>(exprs.front().get());
+  auto list = std::get<std::shared_ptr<List>>(*exprs.front());
   EXPECT_TRUE(nullptr != list);
   EXPECT_EQ(list->exprs().size(), 3);
   auto i = list->exprs().begin();
-  auto atom = dynamic_cast<Atom const *>(i->get());
-  EXPECT_EQ(atom->value<Symbol>().name, "+");
+  auto atom = dynamic_cast<Expr const *>(i->get());
+  EXPECT_EQ(std::get<Symbol>(*atom).name, "+");
   i++;
-  atom = dynamic_cast<Atom const *>(i->get());
-  EXPECT_EQ(atom->value<int_type>(), 1);
+  atom = dynamic_cast<Expr const *>(i->get());
+  EXPECT_EQ(std::get<int_type>(*atom), 1);
   i++;
-  atom = dynamic_cast<Atom const *>(i->get());
-  EXPECT_EQ(atom->value<int_type>(), 2);
+  atom = dynamic_cast<Expr const *>(i->get());
+  EXPECT_EQ(std::get<int_type>(*atom), 2);
 }
 
 TEST(Parser, Def) {
@@ -87,7 +90,7 @@ TEST(Parser, Vector) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   EXPECT_EQ(1, exprs.size());
-  auto vec = dynamic_cast<Vector const *>(exprs.front().get());
+  auto vec = std::get<std::shared_ptr<Vector>>(*exprs.front());
   EXPECT_TRUE(nullptr != vec);
   EXPECT_EQ(3, vec->exprs().size());
 }
@@ -116,8 +119,8 @@ TEST(Parser, Nil) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   EXPECT_EQ(1, exprs.size());
-  auto atom = dynamic_cast<Atom const *>(exprs.front().get());
-  EXPECT_EQ(atom->value<std::nullptr_t>(), nullptr);
+  auto atom = dynamic_cast<Expr const *>(exprs.front().get());
+  EXPECT_EQ(std::get<std::nullptr_t>(*atom), nullptr);
 }
 
 TEST(Parser, Fn) {

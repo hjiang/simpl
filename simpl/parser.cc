@@ -38,23 +38,23 @@ expr_list_t Parser::Parse() {
   return exprs;
 }
 
-expr_ptr_t Parser::ParseAtom() {
-  auto atom = Advance();
-  switch (atom.type) {
+expr_ptr_t Parser::ParseSimpleExpr() {
+  auto token = Advance();
+  switch (token.type) {
     case Token::Type::kInteger:
-      return std::make_unique<Atom>(std::get<int_type>(atom.literal));
+      return std::make_unique<Expr>(std::get<int_type>(token.literal));
       break;
     case Token::Type::kString:
-      return std::make_unique<Atom>(std::get<std::string>(atom.literal));
+      return std::make_unique<Expr>(std::get<std::string>(token.literal));
       break;
     case Token::Type::kFloat:
-      return std::make_unique<Atom>(std::get<float_type>(atom.literal));
+      return std::make_unique<Expr>(std::get<float_type>(token.literal));
       break;
     case Token::Type::kFalse:
-      return std::make_unique<Atom>(false);
+      return std::make_unique<Expr>(false);
       break;
     case Token::Type::kTrue:
-      return std::make_unique<Atom>(true);
+      return std::make_unique<Expr>(true);
       break;
     case Token::Type::kMinus:
     case Token::Type::kPlus:
@@ -69,13 +69,13 @@ expr_ptr_t Parser::ParseAtom() {
     case Token::Type::kLess:
     case Token::Type::kLessEqual:
     case Token::Type::kSymbol:
-      return std::make_unique<Atom>(Symbol{atom.lexeme});
+      return std::make_unique<Expr>(Symbol{token.lexeme});
       break;
     case Token::Type::kNil:
-      return std::make_unique<Atom>(nullptr);
+      return std::make_unique<Expr>(nullptr);
       break;
     default:
-      throw Error(atom, "Unexpected token");
+      throw Error(token, "Unexpected token");
   }
 }
 
@@ -85,7 +85,7 @@ expr_ptr_t Parser::ParseExpr() {
   } else if (Match(Token::Type::kLeftBracket)) {
     return ParseVector();
   } else {
-    return ParseAtom();
+    return ParseSimpleExpr();
   }
 }
 
@@ -95,7 +95,7 @@ expr_ptr_t Parser::ParseVector() {
     args.push_back(ParseExpr());
   }
   Consume(Token::Type::kRightBracket, "Expect ']' at the end of vector.");
-  return std::make_unique<Vector>(std::move(args));
+  return std::make_unique<Expr>(std::make_unique<Vector>(std::move(args)));
 }
 
 expr_list_t Parser::ParseExprs() {
@@ -112,7 +112,7 @@ expr_ptr_t Parser::ParseList() {
     exprs.push_back(ParseExpr());
   }
   Consume(Token::Type::kRightParen, "Expect ')' after list.");
-  return std::make_unique<List>(std::move(exprs));
+  return std::make_unique<Expr>(std::make_unique<List>(std::move(exprs)));
 }
 
 bool Parser::Match(Token::Type type) {
