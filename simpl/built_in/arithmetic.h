@@ -3,7 +3,7 @@
 #ifndef SIMPL_BUILT_IN_ARITHMETIC_H_
 #define SIMPL_BUILT_IN_ARITHMETIC_H_
 
-#include "simpl/callable.h"
+#include "simpl/function.h"
 #include "simpl/interpreter.h"
 
 namespace simpl {

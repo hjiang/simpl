@@ -4,6 +4,7 @@
 #define SIMPL_BUILT_IN_LOGIC_H_
 
 #include "simpl/callable.h"
+#include "simpl/function.h"
 #include "simpl/interpreter.h"
 #include "simpl/interpreter_util.h"
 

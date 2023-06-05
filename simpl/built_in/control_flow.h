@@ -5,6 +5,7 @@
 
 #include "simpl/ast.h"
 #include "simpl/callable.h"
+#include "simpl/function.h"
 
 namespace simpl {
 

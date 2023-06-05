@@ -7,9 +7,10 @@
 #include <ostream>
 
 #include "simpl/ast.h"
-#include "simpl/interpreter.h"
 
 namespace simpl {
+
+class Interpreter;
 
 class Callable {
  public:
@@ -18,15 +19,6 @@ class Callable {
 };
 
 std::ostream& operator<<(std::ostream& os, const Callable&);
-
-class Function : public Callable {
- public:
-  using args_type = std::list<Expr>;
-  Expr Call(Interpreter*, const expr_list_t& exprs) override;
-
- private:
-  virtual Expr FnCall(Interpreter*, const args_type& args) = 0;
-};
 
 }  // namespace simpl
 

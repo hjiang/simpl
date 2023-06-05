@@ -37,8 +37,8 @@ cc_test(
     size = "small")
 
 cc_library(name ="ast",
-           srcs = ['ast.cc'],
-           hdrs = ['ast.h'],
+           srcs = ['ast.cc', 'callable.cc'],
+           hdrs = ['ast.h', 'callable.h'],
            deps = ['config'])
 
 cc_library(name = 'parser',
@@ -50,6 +50,7 @@ cc_test(
     name = "parser_test",
     srcs = ["parser_test.cc"],
     deps = [
+        "ast",
         "lexer",
         "parser",
         "token",
@@ -67,7 +68,7 @@ cc_library(name = 'interpreter',
                'built_in/fn.cc',
                'built_in/io.cc',
                'built_in/logic.cc',
-               'callable.cc',
+               'function.cc',
                'interpreter.cc',
                'interpreter_util.cc',
                'user_fn.cc',
@@ -81,7 +82,7 @@ cc_library(name = 'interpreter',
                'built_in/fn.h',
                'built_in/io.h',
                'built_in/logic.h',
-               'callable.h',
+               'function.h',
                'interpreter.h',
                'interpreter_util.h',
                'user_fn.h',

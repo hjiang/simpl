@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "simpl/callable.h"
+#include "simpl/function.h"
 #include "simpl/interpreter.h"
 #include "simpl/interpreter_util.h"
 
