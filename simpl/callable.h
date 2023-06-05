@@ -3,7 +3,6 @@
 #ifndef SIMPL_CALLABLE_H_
 #define SIMPL_CALLABLE_H_
 
-#include <list>
 #include <ostream>
 
 #include "simpl/ast.h"
