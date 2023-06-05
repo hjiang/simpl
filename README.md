@@ -1,7 +1,7 @@
 # Simpl
 
-![Tests](https://github.com/hjiang/simpl/actions/workflows/run-tests.yml/badge.svg?branch=master)
-![Lint](https://github.com/hjiang/simpl/actions/workflows/lint.yml/badge.svg?branch=master)
+[![Tests](https://github.com/hjiang/simpl/actions/workflows/run-tests.yml/badge.svg?branch=master)](https://github.com/hjiang/simpl/actions/workflows/run-tests.yml)
+[![Lint](https://github.com/hjiang/simpl/actions/workflows/lint.yml/badge.svg?branch=master)](https://github.com/hjiang/simpl/actions/workflows/lint.yml)
 [![codecov](https://codecov.io/gh/hjiang/simpl/branch/master/graph/badge.svg?token=9JRBMMPRZV)](https://codecov.io/gh/hjiang/simpl)
 
 ## Introduction
