@@ -20,8 +20,7 @@ inline void PrintValues(const Function::args_type& values) {
 
 class Print : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override {
+  Expr FnCall(Interpreter*, const args_type& args) override {
     PrintValues(args);
     return nullptr;
   }
@@ -29,8 +28,7 @@ class Print : public Function {
 
 class Println : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override {
+  Expr FnCall(Interpreter*, const args_type& args) override {
     PrintValues(args);
     std::cout << std::endl;
     return nullptr;

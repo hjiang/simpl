@@ -36,8 +36,7 @@ class UserFn : public Function {
       : definition_(definition), closure_(closure) {}
 
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override;
+  Expr FnCall(Interpreter*, const args_type& args) override;
   FnDef definition_;
   std::shared_ptr<Interpreter::Environment> closure_;
 };

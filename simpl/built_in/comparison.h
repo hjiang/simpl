@@ -14,32 +14,27 @@ namespace built_in {
 
 class Equals : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override;
+  Expr FnCall(Interpreter*, const args_type& args) override;
 };
 
 class GreaterThan : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override;
+  Expr FnCall(Interpreter*, const args_type& args) override;
 };
 
 class GreaterThanOrEqualTo : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override;
+  Expr FnCall(Interpreter*, const args_type& args) override;
 };
 
 class LessThan : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override;
+  Expr FnCall(Interpreter*, const args_type& args) override;
 };
 
 class LessThanOrEqualTo : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override;
+  Expr FnCall(Interpreter*, const args_type& args) override;
 };
 
 }  // namespace built_in

@@ -4,6 +4,7 @@
 #define SIMPL_CALLABLE_H_
 
 #include <list>
+#include <ostream>
 
 #include "simpl/ast.h"
 #include "simpl/interpreter.h"
@@ -13,19 +14,18 @@ namespace simpl {
 class Callable {
  public:
   virtual ~Callable() {}
-  virtual Interpreter::atom_value_type Call(Interpreter*,
-                                            const expr_list_t& exprs) = 0;
+  virtual Expr Call(Interpreter*, const expr_list_t& exprs) = 0;
 };
+
+std::ostream& operator<<(std::ostream& os, const Callable&);
 
 class Function : public Callable {
  public:
-  using args_type = std::list<Atom::value_type>;
-  Interpreter::atom_value_type Call(Interpreter*,
-                                    const expr_list_t& exprs) override;
+  using args_type = std::list<Expr>;
+  Expr Call(Interpreter*, const expr_list_t& exprs) override;
 
  private:
-  virtual Interpreter::atom_value_type FnCall(Interpreter*,
-                                              const args_type& args) = 0;
+  virtual Expr FnCall(Interpreter*, const args_type& args) = 0;
 };
 
 }  // namespace simpl

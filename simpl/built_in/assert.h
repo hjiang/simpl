@@ -16,8 +16,7 @@ namespace built_in {
 
 class Assert : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override {
+  Expr FnCall(Interpreter*, const args_type& args) override {
     if (!IsTruthy(args.front())) {
       throw std::runtime_error(std::get<std::string>(args.back()));
     }

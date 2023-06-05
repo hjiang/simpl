@@ -13,25 +13,21 @@ namespace built_in {
 
 class Not : public Function {
  private:
-  Interpreter::atom_value_type FnCall(Interpreter*,
-                                      const args_type& args) override {
-    return Interpreter::atom_value_type(
-        static_cast<bool>(!IsTruthy(args.front())));
+  Expr FnCall(Interpreter*, const args_type& args) override {
+    return Expr(static_cast<bool>(!IsTruthy(args.front())));
   }
 };
 
 class Or : public Callable {
  public:
   virtual ~Or() = default;
-  Atom::value_type Call(Interpreter* interpreter,
-                              const expr_list_t& exprs) override;
+  Expr Call(Interpreter* interpreter, const expr_list_t& exprs) override;
 };
 
 class And : public Callable {
  public:
   virtual ~And() = default;
-  Atom::value_type Call(Interpreter* interpreter,
-                              const expr_list_t& exprs) override;
+  Expr Call(Interpreter* interpreter, const expr_list_t& exprs) override;
 };
 
 }  // namespace built_in

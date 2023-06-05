@@ -13,26 +13,24 @@
 namespace simpl {
 namespace built_in {
 
-Atom::value_type Def::Call(Interpreter* interpreter, const expr_list_t& exprs) {
+Expr Def::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   if (exprs.size() != 2) {
     throw std::runtime_error("`def` expects 2 arguments.");
   }
-  auto atom = std::dynamic_pointer_cast<const Atom>(exprs.front());
-  interpreter->env()->Define(atom->value<Symbol>().name,
+  interpreter->env()->Define(std::get<Symbol>(*exprs.front()).name,
                              interpreter->Evaluate(*exprs.back()));
   return interpreter->last_value();
 }
 
-Atom::value_type Defn::Call(Interpreter* interpreter,
-                            const expr_list_t& exprs) {
+Expr Defn::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   if (exprs.size() < 2) {
     throw std::runtime_error("`defn` expects at least 2 arguments.");
   }
-  auto atom = std::dynamic_pointer_cast<const Atom>(exprs.front());
+  auto name = std::get<Symbol>(*exprs.front()).name;
   expr_list_t fn_body(++exprs.begin(), exprs.end());
-  fn_body.push_front(std::make_unique<Atom>(Symbol{"fn"}));
-  interpreter->env()->Define(atom->value<Symbol>().name,
-                             interpreter->Evaluate(List(std::move(fn_body))));
+  fn_body.push_front(std::make_unique<Expr>(Symbol{"fn"}));
+  interpreter->env()->Define(
+      name, interpreter->Evaluate(make_unique<List>(std::move(fn_body))));
   return interpreter->last_value();
 }
 

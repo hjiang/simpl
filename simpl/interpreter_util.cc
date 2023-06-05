@@ -4,7 +4,7 @@
 
 namespace simpl {
 
-bool IsTruthy(const Interpreter::atom_value_type& v) {
+bool IsTruthy(const Expr& v) {
   if (holds<bool>(v)) {
     return std::get<bool>(v);
   } else if (holds<std::nullptr_t>(v)) {

@@ -12,11 +12,11 @@
 namespace simpl {
 
 template <typename T>
-bool holds(Interpreter::atom_value_type value) {
+bool holds(Expr value) {
   return std::holds_alternative<T>(value);
 }
 
-bool IsTruthy(const Interpreter::atom_value_type& v);
+bool IsTruthy(const Expr& v);
 
 template <typename T>
 std::string TypeStr();

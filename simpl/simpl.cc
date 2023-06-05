@@ -20,7 +20,7 @@
 
 namespace simpl {
 
-static Interpreter::atom_value_type run(const std::string &source) {
+static Expr run(const std::string &source) {
   Lexer lexer(source);
   std::list<Token> tokens = lexer.scan();
   if (HadError()) {

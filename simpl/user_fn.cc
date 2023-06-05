@@ -8,8 +8,7 @@
 
 namespace simpl {
 
-Interpreter::atom_value_type UserFn::FnCall(Interpreter* interpreter,
-                                            const Function::args_type& args) {
+Expr UserFn::FnCall(Interpreter* interpreter, const Function::args_type& args) {
   auto env = make_shared<Interpreter::Environment>(closure_);
   auto arg = args.begin();
   for (const auto& param : definition_.params()) {

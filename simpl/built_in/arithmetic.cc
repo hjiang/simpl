@@ -11,9 +11,7 @@ namespace simpl {
 
 namespace built_in {
 
-static Interpreter::atom_value_type operator+(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
+static Expr operator+(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
     return std::get<int_type>(lhs) + std::get<int_type>(rhs);
   }
@@ -33,9 +31,7 @@ static Interpreter::atom_value_type operator+(
       "Invalid types for operator +");  // FIXME: error handling
 }
 
-static Interpreter::atom_value_type operator-(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
+static Expr operator-(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
     return std::get<int_type>(lhs) - std::get<int_type>(rhs);
   }
@@ -52,9 +48,7 @@ static Interpreter::atom_value_type operator-(
       "Invalid types for operator -");  // FIXME: error handling
 }
 
-static Interpreter::atom_value_type operator*(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
+static Expr operator*(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
     return std::get<int_type>(lhs) * std::get<int_type>(rhs);
   }
@@ -71,9 +65,7 @@ static Interpreter::atom_value_type operator*(
       "Invalid types for operator *");  // FIXME: error handling
 }
 
-static Interpreter::atom_value_type operator/(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
+static Expr operator/(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
     return std::get<int_type>(lhs) / std::get<int_type>(rhs);
   }
@@ -90,9 +82,7 @@ static Interpreter::atom_value_type operator/(
       "Invalid types for operator /");  // FIXME: error handling
 }
 
-static Interpreter::atom_value_type operator%(
-    const Interpreter::atom_value_type& lhs,
-    const Interpreter::atom_value_type& rhs) {
+static Expr operator%(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
     return std::get<int_type>(lhs) % std::get<int_type>(rhs);
   }
@@ -100,9 +90,8 @@ static Interpreter::atom_value_type operator%(
       "Invalid types for operator %");  // FIXME: error handling
 }
 
-Interpreter::atom_value_type Sum::FnCall(Interpreter*,
-                                             const args_type& args) {
-  Interpreter::atom_value_type result = args.front();
+Expr Sum::FnCall(Interpreter*, const args_type& args) {
+  Expr result = args.front();
   auto i = args.begin();
   ++i;
   for (; i != args.end(); ++i) {
@@ -111,36 +100,32 @@ Interpreter::atom_value_type Sum::FnCall(Interpreter*,
   return result;
 }
 
-Interpreter::atom_value_type Substract::FnCall(Interpreter*,
-                                                   const args_type& args) {
+Expr Substract::FnCall(Interpreter*, const args_type& args) {
   auto i = args.begin();
-  Interpreter::atom_value_type result = *i++;
+  Expr result = *i++;
   for (; i != args.end(); ++i) {
     result = result - *i;
   }
   return args.size() > 1 ? result : 0 - result;
 }
-Interpreter::atom_value_type Multiply::FnCall(Interpreter*,
-                                                  const args_type& args) {
-  Interpreter::atom_value_type result = 1;
+Expr Multiply::FnCall(Interpreter*, const args_type& args) {
+  Expr result = 1;
   for (auto arg : args) {
     result = result * arg;
   }
   return result;
 }
-Interpreter::atom_value_type Divide::FnCall(Interpreter*,
-                                                const args_type& args) {
+Expr Divide::FnCall(Interpreter*, const args_type& args) {
   auto i = args.begin();
-  Interpreter::atom_value_type result = *i++;
+  Expr result = *i++;
   for (; i != args.end(); ++i) {
     result = result / *i;
   }
   return result;
 }
-Interpreter::atom_value_type Modulo::FnCall(Interpreter*,
-                                                const args_type& args) {
+Expr Modulo::FnCall(Interpreter*, const args_type& args) {
   auto i = args.begin();
-  Interpreter::atom_value_type result = *i++;
+  Expr result = *i++;
   for (; i != args.end(); ++i) {
     result = result % *i;
   }

@@ -29,7 +29,7 @@ int OrderingToInt(std::partial_ordering ordering) {
   throw std::runtime_error("Invalid ordering");
 }
 
-int Compare(const std::list<Interpreter::atom_value_type>& args) {
+int Compare(const std::list<Expr>& args) {
   if (args.size() != 2) {
     throw std::runtime_error("comparison requires 2 arguments");
   }
@@ -55,28 +55,23 @@ int Compare(const std::list<Interpreter::atom_value_type>& args) {
 
 }  // namespace
 
-Interpreter::atom_value_type Equals::FnCall(Interpreter*,
-                                                const args_type& args) {
+Expr Equals::FnCall(Interpreter*, const args_type& args) {
   return Compare(args) == 0;
 }
 
-Interpreter::atom_value_type GreaterThan::FnCall(Interpreter*,
-                                                     const args_type& args) {
+Expr GreaterThan::FnCall(Interpreter*, const args_type& args) {
   return Compare(args) > 0;
 }
 
-Interpreter::atom_value_type GreaterThanOrEqualTo::FnCall(
-    Interpreter*, const args_type& args) {
+Expr GreaterThanOrEqualTo::FnCall(Interpreter*, const args_type& args) {
   return Compare(args) >= 0;
 }
 
-Interpreter::atom_value_type LessThan::FnCall(Interpreter*,
-                                                  const args_type& args) {
+Expr LessThan::FnCall(Interpreter*, const args_type& args) {
   return Compare(args) < 0;
 }
 
-Interpreter::atom_value_type LessThanOrEqualTo::FnCall(
-    Interpreter*, const args_type& args) {
+Expr LessThanOrEqualTo::FnCall(Interpreter*, const args_type& args) {
   return Compare(args) <= 0;
 }
 

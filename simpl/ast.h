@@ -5,6 +5,7 @@
 
 #include <list>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <utility>
 #include <variant>
@@ -14,7 +15,6 @@
 
 namespace simpl {
 
-class Atom;
 class List;
 class Vector;
 class Quoted;
@@ -25,11 +25,15 @@ using callable_ptr_t = std::shared_ptr<Callable>;
 
 using Expr = std::variant<int_type, float_type, bool, std::string, Symbol,
                           std::nullptr_t, callable_ptr_t, std::shared_ptr<List>,
-                          std::shared_ptr<Vector>>;
+                          std::shared_ptr<Vector>, std::shared_ptr<Quoted>>;
+
+std::ostream& operator<<(std::ostream& os, const Expr& e);
 
 struct Symbol {
   std::string name;
 };
+
+std::ostream& operator<<(std::ostream& os, const Symbol& s);
 
 using expr_ptr_t = std::shared_ptr<const Expr>;
 using expr_list_t = std::list<expr_ptr_t>;
@@ -44,6 +48,8 @@ class List {
   const expr_list_t exprs_;
 };
 
+std::ostream& operator<<(std::ostream& os, const List& l);
+
 class Vector {
  public:
   using vector_impl_t = std::vector<expr_ptr_t>;
@@ -55,6 +61,8 @@ class Vector {
   const std::vector<expr_ptr_t> exprs_;
 };
 
+std::ostream& operator<<(std::ostream& os, const Vector& vec);
+
 class Quoted {
  public:
   explicit Quoted(expr_ptr_t expr) : expr_(expr) {}
@@ -64,6 +72,8 @@ class Quoted {
  private:
   const expr_ptr_t expr_;
 };
+
+std::ostream& operator<<(std::ostream& os, const Quoted& qt);
 
 }  // namespace simpl
 
