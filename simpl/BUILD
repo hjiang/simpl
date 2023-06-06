@@ -4,7 +4,7 @@ cc_library(name= 'config',
 cc_binary(name = 'simpl',
           srcs = ['main.cc'],
           deps = ['simpl-imp'],
-          visibility = ["//visibility:public"])
+          visibility = ['//visibility:public'])
 
 cc_library(name = 'simpl-imp',
            srcs = ['simpl.cc'],
@@ -28,18 +28,28 @@ cc_library(name = 'lexer',
            deps = [ 'token', 'error', 'config' ])
 
 cc_test(
-    name = "lexer_test",
-    srcs = ["lexer_test.cc"],
+    name = 'lexer_test',
+    srcs = ['lexer_test.cc'],
     deps = [
-        "lexer",
-        "@gtest//:gtest_main"
+        'lexer',
+        '@gtest//:gtest_main'
     ],
-    size = "small")
+    size = 'small')
 
-cc_library(name ="ast",
+cc_library(name ='ast',
            srcs = ['ast.cc', 'callable.cc'],
            hdrs = ['ast.h', 'callable.h'],
            deps = ['config'])
+
+cc_test(name='ast_test',
+        srcs=['ast_test.cc'],
+        deps=[
+            '@gtest//:gtest_main',
+            'ast',
+            'lexer',
+            'parser',
+        ],
+        size='small')
 
 cc_library(name = 'parser',
            srcs = ['parser.cc'],
@@ -47,16 +57,16 @@ cc_library(name = 'parser',
            deps = ['ast', 'token', 'error', 'config'])
 
 cc_test(
-    name = "parser_test",
-    srcs = ["parser_test.cc"],
+    name = 'parser_test',
+    srcs = ['parser_test.cc'],
     deps = [
-        "ast",
-        "lexer",
-        "parser",
-        "token",
-        "@gtest//:gtest_main"
+        'ast',
+        'lexer',
+        'parser',
+        'token',
+        '@gtest//:gtest_main'
     ],
-    size = "small")
+    size = 'small')
 
 cc_library(name = 'interpreter',
            srcs = [
@@ -92,7 +102,7 @@ cc_library(name = 'interpreter',
 cc_test(name = 'interpreter_test',
         srcs = ['interpreter_test.cc'],
         deps = ['interpreter', 'parser', 'token', 'lexer', '@gtest//:gtest_main'],
-        size="small")
+        size='small')
 
 cc_library(name = 'error',
            srcs = ['error.cc'],

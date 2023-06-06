@@ -2,18 +2,22 @@
 
 #include "simpl/ast.h"
 
+#include <iterator>
 #include <ostream>
 
 namespace simpl {
 
 std::ostream& operator<<(std::ostream& os, const Symbol& s) {
-  return os << s.name;
+  return os << "<symbol: " << s.name << ">";
 }
 
 std::ostream& operator<<(std::ostream& os, const List& l) {
   os << '(';
   for (auto& e : l.exprs()) {
-    os << e << ' ';
+    os << *e;
+    if (e != l.exprs().back()) {
+      os << ' ';
+    }
   }
   return os << ')';
 }
@@ -21,7 +25,10 @@ std::ostream& operator<<(std::ostream& os, const List& l) {
 std::ostream& operator<<(std::ostream& os, const Vector& vec) {
   os << '[';
   for (auto& e : vec.exprs()) {
-    os << e << ' ';
+    os << *e;
+    if (e != vec.exprs().back()) {
+      os << ' ';
+    }
   }
   return os << ']';
 }
@@ -38,10 +45,14 @@ struct ExprPrinter {
   void operator()(const Symbol& s) { os << s; }
   void operator()(nullptr_t) { os << "nil"; }
   void operator()(const std::string& s) { os << "\"" << s << "\""; }
-  void operator()(bool b) { os << b; }
+  void operator()(bool b) { os << (b ? "true" : "false"); }
   template <typename T>
   void operator()(std::shared_ptr<T> ep) {
     os << *ep;
+  }
+  template <typename T>
+  void operator()(T b) {
+    os << b;
   }
 };
 
