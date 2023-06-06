@@ -56,6 +56,8 @@ expr_ptr_t Parser::ParseSimpleExpr() {
     case Token::Type::kTrue:
       return std::make_unique<Expr>(true);
       break;
+    case Token::Type::kQuote:
+      return std::make_unique<Expr>(make_unique<Quoted>(ParseExpr()));
     case Token::Type::kMinus:
     case Token::Type::kPlus:
     case Token::Type::kSlash:
