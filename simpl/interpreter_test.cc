@@ -7,6 +7,7 @@
 #include <memory>
 #include <stdexcept>
 
+#include "simpl/interpreter_util.h"
 #include "simpl/lexer.h"
 #include "simpl/parser.h"
 
@@ -38,6 +39,17 @@ TEST(Interpreter, Plus) {
   EXPECT_EQ(exprs.size(), 1);
   Interpreter interpreter;
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(*exprs.front())), 3);
+}
+
+TEST(Interpreter, Quoted) {
+  Lexer lexer("'(+ 1 2)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  EXPECT_EQ(exprs.size(), 1);
+  Interpreter interpreter;
+  EXPECT_TRUE(
+      holds<std::shared_ptr<List>>(interpreter.Evaluate(*exprs.front())));
 }
 
 TEST(Interpreter, NestedSum) {
