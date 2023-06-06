@@ -58,9 +58,9 @@ class Interpreter {
 
   Interpreter();
   virtual ~Interpreter() {}
-  Expr Evaluate(const Expr& expr);
-  Expr Evaluate(const expr_list_t& expr,
-                std::shared_ptr<Environment> env = nullptr);
+  const Expr& Evaluate(const Expr& expr);
+  const Expr& Evaluate(const expr_list_t& expr,
+                       std::shared_ptr<Environment> env = nullptr);
   static std::string StringifyValue(const Expr& value);
 
   std::shared_ptr<Environment> env() const { return env_; }

@@ -81,14 +81,14 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("let", std::make_shared<built_in::Let>());
 }
 
-Expr Interpreter::Evaluate(const Expr& expr) {
+const Expr& Interpreter::Evaluate(const Expr& expr) {
   EvalVisitor visitor{this};
   std::visit(visitor, expr);
   return last_value_;
 }
 
-Expr Interpreter::Evaluate(const expr_list_t& exprs,
-                           std::shared_ptr<Environment> env) {
+const Expr& Interpreter::Evaluate(const expr_list_t& exprs,
+                                  std::shared_ptr<Environment> env) {
   auto old_env = env_;
   if (env) {
     env_ = env;
