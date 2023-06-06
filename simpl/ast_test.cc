@@ -36,7 +36,7 @@ TEST(AST, VectorOutput) {
   auto expr = parser.Parse();
   std::ostringstream oss;
   oss << *expr.front();
-  EXPECT_EQ(oss.str(), "[42 true <symbol: good> 3.14]");
+  EXPECT_EQ(oss.str(), "[42 true good 3.14]");
 }
 
 TEST(AST, QuoteOutput) {

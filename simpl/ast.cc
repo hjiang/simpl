@@ -8,7 +8,7 @@
 namespace simpl {
 
 std::ostream& operator<<(std::ostream& os, const Symbol& s) {
-  return os << "<symbol: " << s.name << ">";
+  return os << s.name;
 }
 
 std::ostream& operator<<(std::ostream& os, const List& l) {
