@@ -64,6 +64,16 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 (plus 2)  ; => 7
 ```
 
+### List
+
+``` clojure
+(cons 1 nil)  ; => '(1)
+(cons 1 '(2 3 4))  ; => '(1 2 3 4)
+
+(head '(1 2 3 4))  ; => 1
+(tail '(1 2 3 4))  ; => '(2 3 4)
+```
+
 ### Lambda function as first-class value
 
 ``` clojure
@@ -92,8 +102,8 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 - More control flow options
 - `loop`, `recur` and tail-call optimization
 - Macros
-- A standard library (include the battery)
-- Standard data structures: `list`, `vector`, `map`, `set`
+- A standard library
+- Standard data structures: `vector`, `map`, `set`
 
 ## Longer-term road map
 
