@@ -22,10 +22,13 @@ struct Symbol;
 class ExprVisitor;
 class Callable;
 using callable_ptr_t = std::shared_ptr<Callable>;
+using list_ptr_t = std::shared_ptr<List>;
+using vector_ptr_t = std::shared_ptr<Vector>;
+using quoted_ptr_t = std::shared_ptr<Quoted>;
 
 using Expr = std::variant<int_type, float_type, bool, std::string, Symbol,
-                          std::nullptr_t, callable_ptr_t, std::shared_ptr<List>,
-                          std::shared_ptr<Vector>, std::shared_ptr<Quoted>>;
+                          std::nullptr_t, callable_ptr_t, list_ptr_t,
+                          vector_ptr_t, quoted_ptr_t>;
 
 std::ostream& operator<<(std::ostream& os, const Expr& e);
 
@@ -40,8 +43,10 @@ using expr_list_t = std::list<expr_ptr_t>;
 
 class List {
  public:
-  explicit List(expr_list_t&& l) : exprs_(std::move(l)) {}
+  template <typename T>
+  explicit List(T&& l) : exprs_(std::forward<T>(l)) {}
   virtual ~List() {}
+  Expr Cons(const Expr& expr) const;
   const expr_list_t& exprs() const { return exprs_; }
 
  private:

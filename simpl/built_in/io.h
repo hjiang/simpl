@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include "simpl/function.h"
-#include "simpl/interpreter.h"
 
 namespace simpl {
 
@@ -14,7 +13,7 @@ namespace built_in {
 
 inline void PrintValues(const Function::args_type& values) {
   for (const auto& value : values) {
-    std::cout << Interpreter::StringifyValue(value) << " ";
+    std::cout << value << " ";
   }
 }
 

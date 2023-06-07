@@ -20,7 +20,7 @@
 
 namespace simpl {
 
-static Expr run(const std::string &source) {
+Expr run(const std::string &source) {
   Lexer lexer(source);
   std::list<Token> tokens = lexer.scan();
   if (HadError()) {
@@ -71,7 +71,7 @@ void RunREPL() {
       continue;
     }
     try {
-      std::cout << Interpreter::StringifyValue(run(line)) << std::endl;
+      std::cout << run(line) << std::endl;
     } catch (const std::runtime_error &e) {
       std::cerr << e.what() << std::endl;
       ClearError();

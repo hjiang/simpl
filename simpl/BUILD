@@ -17,6 +17,17 @@ cc_library(name = 'simpl-imp',
                'token',
            ])
 
+cc_test(name = 'simpl_test',
+        srcs = ['simpl_test.cc'],
+        deps = [
+            '@gtest//:gtest_main',
+            'ast',
+            'config',
+            'interpreter',
+            'simpl-imp',
+        ],
+        size = 'small')
+
 cc_library(name = 'token',
            srcs = ['token.cc'],
            hdrs = ['token.h'],
@@ -68,6 +79,9 @@ cc_test(
     ],
     size = 'small')
 
+cc_library(name='built_in_util',
+           hdrs = ['built_in/util.h'])
+
 cc_library(name = 'interpreter',
            srcs = [
                'built_in/arithmetic.cc',
@@ -78,6 +92,7 @@ cc_library(name = 'interpreter',
                'built_in/fn.cc',
                'built_in/io.cc',
                'built_in/logic.cc',
+               'built_in/sequence.cc',
                'function.cc',
                'interpreter.cc',
                'interpreter_util.cc',
@@ -92,12 +107,13 @@ cc_library(name = 'interpreter',
                'built_in/fn.h',
                'built_in/io.h',
                'built_in/logic.h',
+               'built_in/sequence.h',
                'function.h',
                'interpreter.h',
                'interpreter_util.h',
                'user_fn.h',
            ],
-           deps = ['ast', 'error', 'config'])
+           deps = ['ast', 'built_in_util', 'error', 'config'])
 
 cc_test(name = 'interpreter_test',
         srcs = ['interpreter_test.cc'],

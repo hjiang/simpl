@@ -62,4 +62,11 @@ std::ostream& operator<<(std::ostream& os, const Expr& e) {
   return os;
 }
 
+Expr List::Cons(const Expr& expr) const {
+  expr_list_t exprs(exprs_);
+  exprs.push_front(make_shared<Expr>(expr));
+  auto lst = std::make_unique<List>(exprs);
+  return lst;
+}
+
 }  // namespace simpl

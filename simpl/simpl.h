@@ -5,10 +5,12 @@
 
 #include <string>
 
+#include "simpl/ast.h"
+
 namespace simpl {
 
+Expr run(const std::string &source);
 void RunREPL();
-
 void RunFile(const std::string &path);
 
 }  // namespace simpl

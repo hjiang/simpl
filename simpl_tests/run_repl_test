@@ -17,9 +17,9 @@ expect {
     timeout { exit 1 }
 }
 # Test error recovery
-send -- "(* 2 3.0)\n"
+send -- "(* 2 3.1)\n"
 expect {
-    "6." {}
+    "6.2" {}
     timeout { exit 1 }
 }
 close
