@@ -20,8 +20,6 @@ class Token {
     kRightBracket,
     kLeftBrace,
     kRightBrace,
-    kComma,
-    kDot,
     kMinus,
     kPlus,
     kSlash,

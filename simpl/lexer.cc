@@ -60,12 +60,6 @@ void Lexer::ScanToken() {
     case '}':
       AddToken(Token::kRightBrace);
       break;
-    case ',':
-      AddToken(Token::kComma);
-      break;
-    case '.':
-      AddToken(Token::kDot);
-      break;
     case ';':
       while (Peek() != '\n' && !AtEnd()) Advance();
       break;
@@ -99,6 +93,7 @@ void Lexer::ScanToken() {
     case ' ':
     case '\r':
     case '\t':
+    case ',':  // treat comma as whitespace
       break;
     case '\n':
       line_++;
