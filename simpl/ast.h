@@ -47,6 +47,8 @@ class List {
   explicit List(T&& l) : exprs_(std::forward<T>(l)) {}
   virtual ~List() {}
   Expr Cons(const Expr& expr) const;
+  const Expr& Head() const;
+  Expr Tail() const;
   const expr_list_t& exprs() const { return exprs_; }
 
  private:

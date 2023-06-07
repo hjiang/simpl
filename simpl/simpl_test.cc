@@ -93,4 +93,16 @@ TEST_F(SimplTest, ConsList) {
   EXPECT_TRUE(holds<list_ptr_t>(e));
 }
 
+TEST_F(SimplTest, ListHead) {
+  auto e = run("(head '(1 2 3))");
+  EXPECT_TRUE(holds<int_type>(e));
+  EXPECT_EQ(std::get<int_type>(e), 1);
+}
+
+TEST_F(SimplTest, ListTail) {
+  auto e = run("(= (tail '(1 2 3)) '(2 3))");
+  EXPECT_TRUE(holds<bool>(e));
+  EXPECT_TRUE(std::get<bool>(e));
+}
+
 }  // namespace simpl

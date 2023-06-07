@@ -69,4 +69,13 @@ Expr List::Cons(const Expr& expr) const {
   return lst;
 }
 
+const Expr& List::Head() const { return *exprs_.front(); }
+
+Expr List::Tail() const {
+  expr_list_t exprs(exprs_);
+  exprs.pop_front();
+  auto lst = std::make_unique<List>(exprs);
+  return lst;
+}
+
 }  // namespace simpl

@@ -81,6 +81,8 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("defn", std::make_shared<built_in::Defn>());
   env_->Define("let", std::make_shared<built_in::Let>());
   env_->Define("cons", std::make_shared<built_in::Cons>());
+  env_->Define("head", std::make_shared<built_in::Head>());
+  env_->Define("tail", std::make_shared<built_in::Tail>());
 }
 
 const Expr& Interpreter::Evaluate(const Expr& expr) {

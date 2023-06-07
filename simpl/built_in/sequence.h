@@ -13,6 +13,16 @@ class Cons : public Function {
   Expr FnCall(Interpreter*, const args_type& args) override;
 };
 
+class Head : public Function {
+ private:
+  Expr FnCall(Interpreter*, const args_type& args) override;
+};
+
+class Tail : public Function {
+ private:
+  Expr FnCall(Interpreter*, const args_type& args) override;
+};
+
 }  // namespace built_in
 }  // namespace simpl
 

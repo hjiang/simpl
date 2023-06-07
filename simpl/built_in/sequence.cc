@@ -33,5 +33,39 @@ Expr Cons::FnCall(Interpreter*, const args_type& args) {
   return std::visit(ConsVisitor(), args.front(), args.back());
 }
 
+struct HeadVisitor {
+  template <typename T>
+  Expr operator()(T) const {
+    throw std::runtime_error("head: invalid argument type");
+  }
+
+  template <>
+  Expr operator()(list_ptr_t list) const {
+    return list->Head();
+  }
+};
+
+Expr Head::FnCall(Interpreter*, const args_type& args) {
+  CheckArity("head", args, 1);
+  return std::visit(HeadVisitor(), args.front());
+}
+
+struct TailVisitor {
+  template <typename T>
+  Expr operator()(T) const {
+    throw std::runtime_error("head: invalid argument type");
+  }
+
+  template <>
+  Expr operator()(list_ptr_t list) const {
+    return list->Tail();
+  }
+};
+
+Expr Tail::FnCall(Interpreter*, const args_type& args) {
+  CheckArity("head", args, 1);
+  return std::visit(TailVisitor(), args.front());
+}
+
 }  // namespace built_in
 }  // namespace simpl
