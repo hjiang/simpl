@@ -35,7 +35,6 @@ class Parser {
   expr_ptr_t ParseExpr();
   expr_ptr_t ParseList();
   expr_ptr_t ParseVector();
-  expr_list_t ParseExprs();
   bool Match(Token::Type type);
   bool Check(Token::Type type) const;
   const Token& Consume(Token::Type type, const std::string& msg);

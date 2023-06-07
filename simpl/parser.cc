@@ -100,14 +100,6 @@ expr_ptr_t Parser::ParseVector() {
   return std::make_unique<Expr>(std::make_unique<Vector>(std::move(args)));
 }
 
-expr_list_t Parser::ParseExprs() {
-  expr_list_t exprs;
-  while (!Check(Token::Type::kRightParen) && !AtEnd()) {
-    exprs.push_back(ParseExpr());
-  }
-  return exprs;
-}
-
 expr_ptr_t Parser::ParseList() {
   expr_list_t exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
