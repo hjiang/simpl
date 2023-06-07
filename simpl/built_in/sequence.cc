@@ -38,12 +38,12 @@ struct HeadVisitor {
   Expr operator()(T) const {
     throw std::runtime_error("head: invalid argument type");
   }
-
-  template <>
-  Expr operator()(list_ptr_t list) const {
-    return list->Head();
-  }
 };
+
+template <>
+Expr HeadVisitor::operator()(list_ptr_t list) const {
+  return list->Head();
+}
 
 Expr Head::FnCall(Interpreter*, const args_type& args) {
   CheckArity("head", args, 1);
@@ -55,12 +55,12 @@ struct TailVisitor {
   Expr operator()(T) const {
     throw std::runtime_error("head: invalid argument type");
   }
-
-  template <>
-  Expr operator()(list_ptr_t list) const {
-    return list->Tail();
-  }
 };
+
+template <>
+Expr TailVisitor::operator()(list_ptr_t list) const {
+  return list->Tail();
+}
 
 Expr Tail::FnCall(Interpreter*, const args_type& args) {
   CheckArity("head", args, 1);
