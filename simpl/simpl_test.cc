@@ -83,6 +83,14 @@ TEST_F(SimplTest, Cons) {
   EXPECT_TRUE(holds<list_ptr_t>(e));
 }
 
+TEST_F(SimplTest, ConsWrongArgCount) {
+  EXPECT_THROW(run("(cons 2 3 4)"), std::runtime_error);
+}
+
+TEST_F(SimplTest, ConsWrongArg) {
+  EXPECT_THROW(run("(cons 2 3)"), std::runtime_error);
+}
+
 TEST_F(SimplTest, ConsEmpty) {
   auto e = run("(cons 2 '())");
   EXPECT_TRUE(holds<list_ptr_t>(e));
