@@ -27,6 +27,18 @@ TEST_F(SimplTest, SimpleExpression) {
   EXPECT_EQ(std::get<int_type>(e), 5);
 }
 
+TEST_F(SimplTest, ExplicitPositiveNumber) {
+  auto e = run("(+ +2 3)");
+  EXPECT_TRUE(holds<int_type>(e));
+  EXPECT_EQ(std::get<int_type>(e), 5);
+}
+
+TEST_F(SimplTest, NegativeNumber) {
+  auto e = run("(+ -2 3)");
+  EXPECT_TRUE(holds<int_type>(e));
+  EXPECT_EQ(std::get<int_type>(e), 1);
+}
+
 TEST_F(SimplTest, IncompleteExpression) {
   EXPECT_THROW(run("(+ 2 3"), std::runtime_error);
 }
@@ -37,6 +49,14 @@ TEST_F(SimplTest, ExtraToken) {
 
 TEST_F(SimplTest, InvalidToken) {
   EXPECT_THROW(run("(+ 2 3#)"), std::runtime_error);
+}
+
+TEST_F(SimplTest, UnterminatedString) {
+  EXPECT_THROW(run("(+ \"foo\" \"ba)"), std::runtime_error);
+}
+
+TEST_F(SimplTest, InvalidArgument) {
+  EXPECT_THROW(run("(+ \"foo\" 32)"), std::runtime_error);
 }
 
 TEST_F(SimplTest, AndExpectsArguments) {
