@@ -139,6 +139,10 @@ TEST_F(SimplTest, CompareIntAndString) {
   EXPECT_THROW(run("(< 3 \"3\")"), std::runtime_error);
 }
 
+TEST_F(SimplTest, CannotCompare3things) {
+  EXPECT_THROW(run("(< 3 4 5)"), std::runtime_error);
+}
+
 TEST_F(SimplTest, InvalidIf) {
   EXPECT_THROW(run("(if true 1 2 3)"), std::runtime_error);
 }
