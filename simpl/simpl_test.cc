@@ -164,4 +164,9 @@ TEST_F(SimplTest, UndefinedFn) {
   EXPECT_THROW(run("(foo 1 2 3)"), std::runtime_error);
 }
 
+TEST_F(SimplTest, InvalidDef) {
+  EXPECT_THROW(run("(def a 1 2)"), std::runtime_error);
+  EXPECT_THROW(run("(defn foo)"), std::runtime_error);
+}
+
 }  // namespace simpl
