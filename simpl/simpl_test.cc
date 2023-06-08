@@ -139,4 +139,11 @@ TEST_F(SimplTest, CompareIntAndString) {
   EXPECT_THROW(run("(< 3 \"3\")"), std::runtime_error);
 }
 
+TEST_F(SimplTest, InvalidIf) {
+  EXPECT_THROW(run("(if true 1 2 3)"), std::runtime_error);
+}
+
+TEST_F(SimplTest, InvalidLet) {
+  EXPECT_THROW(run("(let [a 1 b] a)"), std::runtime_error);
+}
 }  // namespace simpl
