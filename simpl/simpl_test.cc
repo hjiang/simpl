@@ -57,6 +57,10 @@ TEST_F(SimplTest, UnterminatedString) {
 
 TEST_F(SimplTest, InvalidArgument) {
   EXPECT_THROW(run("(+ \"foo\" 32)"), std::runtime_error);
+  EXPECT_THROW(run("(- \"foo\" 32)"), std::runtime_error);
+  EXPECT_THROW(run("(* \"foo\" 32)"), std::runtime_error);
+  EXPECT_THROW(run("(/ \"foo\" 32)"), std::runtime_error);
+  EXPECT_THROW(run("(% \"foo\" 32)"), std::runtime_error);
 }
 
 TEST_F(SimplTest, AndExpectsArguments) {
