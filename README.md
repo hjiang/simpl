@@ -77,7 +77,7 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 ### Lambda function as first-class value
 
 ``` clojure
-(defn cons [h t]
+(defn cons [h t]  ;; cons is a built-in function but can be overridden.
   (fn [f] (f h t)))
 
 (defn car [l]
