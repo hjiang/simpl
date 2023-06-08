@@ -146,4 +146,13 @@ TEST_F(SimplTest, InvalidIf) {
 TEST_F(SimplTest, InvalidLet) {
   EXPECT_THROW(run("(let [a 1 b] a)"), std::runtime_error);
 }
+
+TEST_F(SimplTest, InvalidFn) { EXPECT_THROW(run("(fn)"), std::runtime_error); }
+
+TEST_F(SimplTest, InvalidOr) { EXPECT_THROW(run("(or)"), std::runtime_error); }
+
+TEST_F(SimplTest, InvalidSequenceOp) {
+  EXPECT_THROW(run("(head 123)"), std::runtime_error);
+  EXPECT_THROW(run("(tail 123)"), std::runtime_error);
+}
 }  // namespace simpl
