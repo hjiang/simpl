@@ -155,4 +155,13 @@ TEST_F(SimplTest, InvalidSequenceOp) {
   EXPECT_THROW(run("(head 123)"), std::runtime_error);
   EXPECT_THROW(run("(tail 123)"), std::runtime_error);
 }
+
+TEST_F(SimplTest, UndefinedVar) {
+  EXPECT_THROW(run("(cons a '(2 3))"), std::runtime_error);
+}
+
+TEST_F(SimplTest, UndefinedFn) {
+  EXPECT_THROW(run("(foo 1 2 3)"), std::runtime_error);
+}
+
 }  // namespace simpl
