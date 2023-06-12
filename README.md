@@ -49,10 +49,10 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 ```
 
 ``` clojure
-(defn fab [n]
+(defn fib [n]
   (if (or (= n 0) (= n 1))
     1
-    (+ (fab (- n 1)) (fab (- n 2)))))
+    (+ (fib (- n 1)) (fib (- n 2)))))
 ```
 
 ### Local binding (and closure)
