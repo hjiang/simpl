@@ -123,6 +123,12 @@ TEST_F(SimplTest, VectorHead) {
   EXPECT_EQ(std::get<int_type>(e), 1);
 }
 
+TEST_F(SimplTest, VectorTail) {
+  auto e = run("(tail [1 2 3])");
+  EXPECT_TRUE(holds<list_ptr_t>(e));
+  EXPECT_EQ(std::get<int_type>(std::get<list_ptr_t>(e)->Head()), 2);
+}
+
 TEST_F(SimplTest, ShorterListIsSmaller) {
   auto e = run("(> '(1 2 3) '(1 2))");
   EXPECT_TRUE(holds<bool>(e));

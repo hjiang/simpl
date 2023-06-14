@@ -67,8 +67,13 @@ Expr TailVisitor::operator()(list_ptr_t list) const {
   return list->Tail();
 }
 
+template <>
+Expr TailVisitor::operator()(vector_ptr_t vec) const {
+  return vec->Tail();
+}
+
 Expr Tail::FnCall(Interpreter*, const args_type& args) {
-  CheckArity("head", args, 1);
+  CheckArity("tail", args, 1);
   return std::visit(TailVisitor(), args.front());
 }
 

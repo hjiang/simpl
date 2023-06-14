@@ -74,10 +74,15 @@ const Expr& List::Head() const { return *exprs_.front(); }
 Expr List::Tail() const {
   expr_list_t exprs(exprs_);
   exprs.pop_front();
-  auto lst = std::make_unique<List>(exprs);
-  return lst;
+  return std::make_unique<List>(exprs);
 }
 
 const Expr& Vector::Head() const { return *exprs_.front(); }
+
+Expr Vector::Tail() const {
+  auto begin = exprs_.begin();
+  expr_list_t exprs(++begin, exprs_.end());
+  return std::make_unique<List>(exprs);
+}
 
 }  // namespace simpl
