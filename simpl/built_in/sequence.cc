@@ -45,6 +45,11 @@ Expr HeadVisitor::operator()(list_ptr_t list) const {
   return list->Head();
 }
 
+template <>
+Expr HeadVisitor::operator()(vector_ptr_t vec) const {
+  return vec->Head();
+}
+
 Expr Head::FnCall(Interpreter*, const args_type& args) {
   CheckArity("head", args, 1);
   return std::visit(HeadVisitor(), args.front());

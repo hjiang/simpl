@@ -49,7 +49,7 @@ struct Interpreter::EvalVisitor {
   }
 
   void operator()(std::shared_ptr<Vector> vec) {
-    std::vector<expr_ptr_t> result(vec->exprs().size());
+    std::vector<expr_ptr_t> result;
     for (const auto& e : vec->exprs()) {
       result.push_back(make_unique<Expr>(interpreter->Evaluate(*e)));
     }

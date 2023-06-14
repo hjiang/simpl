@@ -78,4 +78,6 @@ Expr List::Tail() const {
   return lst;
 }
 
+const Expr& Vector::Head() const { return *exprs_.front(); }
+
 }  // namespace simpl

@@ -93,6 +93,7 @@ TEST(Parser, Vector) {
   auto vec = std::get<std::shared_ptr<Vector>>(*exprs.front());
   EXPECT_TRUE(nullptr != vec);
   EXPECT_EQ(3, vec->exprs().size());
+  EXPECT_EQ(1, std::get<int_type>(vec->Head()));
 }
 
 TEST(Parser, Let) {

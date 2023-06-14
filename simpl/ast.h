@@ -63,6 +63,7 @@ class Vector {
   explicit Vector(vector_impl_t&& l) : exprs_(std::move(l)) {}
   virtual ~Vector() = default;
   const vector_impl_t& exprs() const { return exprs_; }
+  const Expr& Head() const;
 
  private:
   const std::vector<expr_ptr_t> exprs_;

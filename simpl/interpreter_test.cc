@@ -7,6 +7,7 @@
 #include <memory>
 #include <stdexcept>
 
+#include "simpl/ast.h"
 #include "simpl/interpreter_util.h"
 #include "simpl/lexer.h"
 #include "simpl/parser.h"
@@ -315,6 +316,16 @@ TEST(Interpreter, EmptyListIsNil) {
   auto expr = parser.Parse();
   Interpreter interpreter;
   EXPECT_TRUE(nullptr == std::get<nullptr_t>(interpreter.Evaluate(expr)));
+}
+
+TEST(Interpreter, Vector) {
+  Lexer lexer("[1 2 3]");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  auto vec = std::get<vector_ptr_t>(interpreter.Evaluate(expr));
+  EXPECT_EQ(1, std::get<int_type>(vec->Head()));
 }
 
 TEST(Interpreter, Do) {
