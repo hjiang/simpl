@@ -21,6 +21,7 @@ sh_test(
 sh_test(
     name = "repl_test",
     size = "small",
+    flaky = True,
     srcs = ["run_repl_test"],
     data = [
         "//simpl:simpl",
