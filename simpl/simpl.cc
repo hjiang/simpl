@@ -58,7 +58,7 @@ void RunFile(const std::string &path) {
 }
 
 void RunREPL() {
-  std::cout << "SimpL " << kVersion << std::endl;
+  std::cout << "Simpl " << kVersion << std::endl;
   while (true) {
     ClearError();
     std::cout << "> ";
