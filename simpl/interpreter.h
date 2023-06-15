@@ -48,9 +48,6 @@ class Interpreter {
       throw std::runtime_error("Undefined variable '" + name + "'");
     }
 
-    void set_parent(std::shared_ptr<Environment>&& parent) { parent_ = parent; }
-    std::shared_ptr<Environment> parent() const { return parent_; }
-
    private:
     std::unordered_map<std::string, Expr> values_;
     std::shared_ptr<Environment> parent_;
