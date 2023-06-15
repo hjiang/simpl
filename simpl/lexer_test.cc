@@ -101,6 +101,13 @@ TEST(Lexer, NegativeInteger) {
   EXPECT_FALSE(simpl::HadError());
 }
 
+TEST(Lexer, InvalidToken) {
+  simpl::ClearError();
+  Lexer lexer("12p");
+  lexer.scan();
+  EXPECT_TRUE(simpl::HadError());
+}
+
 TEST(Lexer, Def) {
   simpl::ClearError();
   Lexer lexer("def");

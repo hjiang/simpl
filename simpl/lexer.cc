@@ -13,18 +13,25 @@
 
 namespace simpl {
 
-static const std::unordered_map<std::string, Token::Type> kKeywords{
+namespace {
+
+const std::unordered_map<std::string, Token::Type> kKeywords{
     {"false", Token::kFalse},
     {"nil", Token::kNil},
     {"true", Token::kTrue},
 };
 
-static bool CanStartSymbol(char c) {
-  return isalpha(c) || '_' == c || '-' == c;
-}
-static bool CanBeInSymbol(char c) {
+bool CanStartSymbol(char c) { return isalpha(c) || '_' == c || '-' == c; }
+
+bool CanBeInSymbol(char c) {
   return isalnum(c) || '_' == c || '-' == c || '!' == c || '/' == c;
 }
+
+bool CanEndNumber(char c) {
+  return isspace(c) || c == ')' || c == ']' || c == '}' || c == ',';
+}
+
+}  // namespace
 
 Lexer::Lexer(const std::string &source) : source_(source), tokens_() {}
 
@@ -163,6 +170,12 @@ void Lexer::Number() {
     Advance();
     while (isdigit(Peek())) Advance();
   }
+
+  if (!CanEndNumber(Peek()) && !AtEnd()) {
+    Error(line_, "Invalid number.");
+    return;
+  }
+
   try {
     if (is_float) {
       AddToken(Token::kFloat,
