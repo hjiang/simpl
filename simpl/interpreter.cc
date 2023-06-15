@@ -58,7 +58,7 @@ struct Interpreter::EvalVisitor {
   }
 };
 
-Interpreter::Interpreter() : env_(new Environment()) {
+Interpreter::Interpreter() : last_value_(nullptr), env_(new Environment()) {
   env_->Define("=", std::make_shared<built_in::Equals>());
   env_->Define(">", std::make_shared<built_in::GreaterThan>());
   env_->Define(">=", std::make_shared<built_in::GreaterThanOrEqualTo>());

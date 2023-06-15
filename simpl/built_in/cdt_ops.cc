@@ -16,12 +16,12 @@ struct GetVisitor {
   Expr operator()(T, U) const {
     throw std::runtime_error("get: invalid argument types");
   }
-
-  template <>
-  Expr operator()(vector_ptr_t v, int_type i) const {
-    return v->Get(i);
-  }
 };
+
+template <>
+Expr GetVisitor::operator()(vector_ptr_t v, int_type i) const {
+  return v->Get(i);
+}
 
 Expr Get::FnCall(Interpreter*, const args_type& args) {
   CheckArity("get", args, 2);
