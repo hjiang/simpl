@@ -135,6 +135,10 @@ TEST_F(SimplTest, VectorGet) {
   EXPECT_EQ(std::get<int_type>(e), 3);
 }
 
+TEST_F(SimplTest, ListCannotGet) {
+  EXPECT_THROW(run("(get '(1 2 3) 2)"), std::runtime_error);
+}
+
 TEST_F(SimplTest, ShorterListIsSmaller) {
   auto e = run("(> '(1 2 3) '(1 2))");
   EXPECT_TRUE(holds<bool>(e));
