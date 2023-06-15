@@ -67,11 +67,21 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 ### List
 
 ``` clojure
-(cons 1 nil)  ; => '(1)
-(cons 1 '(2 3 4))  ; => '(1 2 3 4)
+(cons 1 nil)  ; => (1)
+(cons 1 '(2 3 4))  ; => (1 2 3 4)
 
 (head '(1 2 3 4))  ; => 1
-(tail '(1 2 3 4))  ; => '(2 3 4)
+(tail '(1 2 3 4))  ; => (2 3 4)
+```
+
+### Vector
+
+``` clojure
+(def a [1 2 3 4])
+
+(head a)   ; => 1
+(tail a)   ; => (2 3 4)
+(get a 2)  ; => 3
 ```
 
 ### Lambda function as first-class value
@@ -97,19 +107,18 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 (printl lst)  ;; prints `1 2 3`
 ```
 
-## What's coming soon
+## Coming soon
 
 - More control flow options
+- Standard data structures: `map`, `set`
 - `loop`, `recur` and tail-call optimization
 - Macros
-- A standard library
-- Standard data structures: `vector`, `map`, `set`
+- Richer standard library
 
 ## Longer-term road map
 
 - Coroutines
 - Threading
-- A virtual machine (maybe)
 
 ## Contributing
 
