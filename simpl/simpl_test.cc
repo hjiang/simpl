@@ -143,9 +143,15 @@ TEST_F(SimplTest, ShorterListIsSmaller) {
   auto e = run("(> '(1 2 3) '(1 2))");
   EXPECT_TRUE(holds<bool>(e));
   EXPECT_TRUE(std::get<bool>(e));
-  auto f = run("(>= '(1 2 3) '(1 2))");
-  EXPECT_TRUE(holds<bool>(f));
-  EXPECT_TRUE(std::get<bool>(f));
+  e = run("(>= '(1 2 3) '(1 2))");
+  EXPECT_TRUE(holds<bool>(e));
+  EXPECT_TRUE(std::get<bool>(e));
+  e = run("(< '(1 2 ) '(1 2 3))");
+  EXPECT_TRUE(holds<bool>(e));
+  EXPECT_TRUE(std::get<bool>(e));
+  e = run("(<= '(1 2 ) '(1 2 3))");
+  EXPECT_TRUE(holds<bool>(e));
+  EXPECT_TRUE(std::get<bool>(e));
 }
 
 TEST_F(SimplTest, ListCompare) {
