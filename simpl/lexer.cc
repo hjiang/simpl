@@ -61,12 +61,6 @@ void Lexer::ScanToken() {
     case ']':
       AddToken(Token::kRightBracket);
       break;
-    case '{':
-      AddToken(Token::kLeftBrace);
-      break;
-    case '}':
-      AddToken(Token::kRightBrace);
-      break;
     case ';':
       while (Peek() != '\n' && !AtEnd()) Advance();
       break;
