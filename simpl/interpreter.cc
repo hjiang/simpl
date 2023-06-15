@@ -9,6 +9,7 @@
 #include "simpl/ast.h"
 #include "simpl/built_in/arithmetic.h"
 #include "simpl/built_in/assert.h"
+#include "simpl/built_in/cdt_ops.h"
 #include "simpl/built_in/comparison.h"
 #include "simpl/built_in/control_flow.h"
 #include "simpl/built_in/def.h"
@@ -83,6 +84,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("cons", std::make_shared<built_in::Cons>());
   env_->Define("head", std::make_shared<built_in::Head>());
   env_->Define("tail", std::make_shared<built_in::Tail>());
+  env_->Define("get", std::make_shared<built_in::Get>());
 }
 
 const Expr& Interpreter::Evaluate(const Expr& expr) {

@@ -85,4 +85,8 @@ Expr Vector::Tail() const {
   return std::make_unique<List>(exprs);
 }
 
+const Expr& Vector::Get(int_type idx) const {
+  return *exprs_[static_cast<size_t>(idx)];
+}
+
 }  // namespace simpl

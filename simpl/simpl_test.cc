@@ -129,6 +129,12 @@ TEST_F(SimplTest, VectorTail) {
   EXPECT_EQ(std::get<int_type>(std::get<list_ptr_t>(e)->Head()), 2);
 }
 
+TEST_F(SimplTest, VectorGet) {
+  auto e = run("(get [1 2 3] 2)");
+  EXPECT_TRUE(holds<int_type>(e));
+  EXPECT_EQ(std::get<int_type>(e), 3);
+}
+
 TEST_F(SimplTest, ShorterListIsSmaller) {
   auto e = run("(> '(1 2 3) '(1 2))");
   EXPECT_TRUE(holds<bool>(e));

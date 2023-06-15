@@ -65,6 +65,7 @@ class Vector {
   const vector_impl_t& exprs() const { return exprs_; }
   const Expr& Head() const;
   Expr Tail() const;
+  const Expr& Get(int_type idx) const;
 
  private:
   const std::vector<expr_ptr_t> exprs_;
