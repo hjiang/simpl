@@ -37,9 +37,11 @@ Integer, floating-point number, string, boolean, and `nil`
 
 The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and`, `or`.
 
+Comparisons: `=`, `>`, `>=`, `<`, `<=`.
+
 ### Control flow
 
-`if`, `do`, and recursion
+`if`, `do`, and recursion.
 
 ### Var and function Definitions
 
@@ -123,4 +125,5 @@ The usual built-in operators and functions: `+`, `-`, `*`, `/`, `%`, `not`, `and
 ## Contributing
 
 - Bug reports and pull requests are welcome
+  - Make sure new code is covered and all tests pass
 - More guidelines coming soon
