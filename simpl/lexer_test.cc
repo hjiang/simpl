@@ -174,6 +174,14 @@ TEST(Lexer, QuotedList) {
   EXPECT_EQ(tokens.size(), 6);
 }
 
+TEST(Lexer, Map) {
+  simpl::ClearError();
+  Lexer lexer("{\"a\" 2}");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 5);
+  EXPECT_FALSE(simpl::HadError());
+}
+
 }  // namespace simpl
 
 // Local Variables:
