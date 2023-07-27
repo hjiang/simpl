@@ -36,12 +36,12 @@ struct Symbol {
 
 class Quoted {
  public:
-  explicit Quoted(expr_ptr_t expr) : expr_(expr) {}
+  explicit Quoted(const Expr& expr);
   virtual ~Quoted() = default;
   const Expr& expr() const { return *expr_; }
 
  private:
-  const expr_ptr_t expr_;
+  const expr_ptr_t expr_;  // TODO(hjiang): change to unique_ptr
 };
 
 class List {

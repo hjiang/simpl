@@ -38,26 +38,26 @@ expr_list_t Parser::Parse() {
   return exprs;
 }
 
-expr_ptr_t Parser::ParseSimpleExpr() {
+Expr Parser::ParseSimpleExpr() {
   auto token = Advance();
   switch (token.type) {
     case Token::Type::kInteger:
-      return std::make_unique<Expr>(std::get<int_type>(token.literal));
+      return Expr{std::get<int_type>(token.literal)};
       break;
     case Token::Type::kString:
-      return std::make_unique<Expr>(std::get<std::string>(token.literal));
+      return Expr{std::get<std::string>(token.literal)};
       break;
     case Token::Type::kFloat:
-      return std::make_unique<Expr>(std::get<float_type>(token.literal));
+      return Expr{std::get<float_type>(token.literal)};
       break;
     case Token::Type::kFalse:
-      return std::make_unique<Expr>(false);
+      return Expr{false};
       break;
     case Token::Type::kTrue:
-      return std::make_unique<Expr>(true);
+      return Expr{true};
       break;
     case Token::Type::kQuote:
-      return std::make_unique<Expr>(make_unique<Quoted>(ParseExpr()));
+      return Expr{Quoted(ParseExpr())};
     case Token::Type::kMinus:
     case Token::Type::kPlus:
     case Token::Type::kSlash:
@@ -71,17 +71,17 @@ expr_ptr_t Parser::ParseSimpleExpr() {
     case Token::Type::kLess:
     case Token::Type::kLessEqual:
     case Token::Type::kSymbol:
-      return std::make_unique<Expr>(Symbol{token.lexeme});
+      return Expr{Symbol{token.lexeme}};
       break;
     case Token::Type::kNil:
-      return std::make_unique<Expr>(nullptr);
+      return Expr{nullptr};
       break;
     default:
       throw Error(token, "Unexpected token");
   }
 }
 
-expr_ptr_t Parser::ParseExpr() {
+Expr Parser::ParseExpr() {
   if (Match(Token::Type::kLeftParen)) {
     return ParseList();
   } else if (Match(Token::Type::kLeftBracket)) {
@@ -91,22 +91,22 @@ expr_ptr_t Parser::ParseExpr() {
   }
 }
 
-expr_ptr_t Parser::ParseVector() {
+Expr Parser::ParseVector() {
   Vector::vector_impl_t args;
   while (!Check(Token::Type::kRightBracket) && !AtEnd()) {
     args.push_back(ParseExpr());
   }
   Consume(Token::Type::kRightBracket, "Expect ']' at the end of vector.");
-  return std::make_unique<Expr>(std::make_unique<Vector>(std::move(args)));
+  return Expr{Vector(std::move(args))};
 }
 
-expr_ptr_t Parser::ParseList() {
+Expr Parser::ParseList() {
   expr_list_t exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
     exprs.push_back(ParseExpr());
   }
   Consume(Token::Type::kRightParen, "Expect ')' after list.");
-  return std::make_unique<Expr>(std::make_unique<List>(std::move(exprs)));
+  return Expr{List(std::move(exprs))};
 }
 
 bool Parser::Match(Token::Type type) {

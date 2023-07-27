@@ -10,6 +10,8 @@ namespace simpl {
 
 namespace rv = std::views;
 
+Quoted::Quoted(const Expr& expr) : expr_(std::make_unique<Expr>(expr)) {}
+
 List::List(std::list<Expr>&& l) : exprs_(std::move(l)) {}
 
 List::List(const std::list<Expr>& l) : exprs_(l) {}
