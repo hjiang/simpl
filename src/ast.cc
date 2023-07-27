@@ -4,8 +4,15 @@
 
 #include <iterator>
 #include <ostream>
+#include <ranges>
 
 namespace simpl {
+
+namespace rv = std::views;
+
+List::List(std::list<Expr>&& l) : exprs_(std::move(l)) {}
+
+List::List(const std::list<Expr>& l) : exprs_(l) {}
 
 std::ostream& operator<<(std::ostream& os, const Symbol& s) {
   return os << s.name;
@@ -13,24 +20,20 @@ std::ostream& operator<<(std::ostream& os, const Symbol& s) {
 
 std::ostream& operator<<(std::ostream& os, const List& l) {
   os << '(';
-  for (auto& e : l.exprs()) {
-    os << *e;
-    if (e != l.exprs().back()) {
-      os << ' ';
-    }
+  for (auto& e : rv::take(l.exprs(), l.exprs().size() - 1)) {
+    os << e;
+    os << ' ';
   }
-  return os << ')';
+  return os << l.exprs().back() << ')';
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector& vec) {
   os << '[';
-  for (auto& e : vec.exprs()) {
-    os << *e;
-    if (e != vec.exprs().back()) {
-      os << ' ';
-    }
+  for (auto& e : rv::take(vec.exprs(), vec.exprs().size() - 1)) {
+    os << e;
+    os << ' ';
   }
-  return os << ']';
+  return os << vec.exprs().back() << ']';
 }
 
 std::ostream& operator<<(std::ostream& os, const Quoted& qt) {
@@ -63,30 +66,31 @@ std::ostream& operator<<(std::ostream& os, const Expr& e) {
 }
 
 Expr List::Cons(const Expr& expr) const {
-  expr_list_t exprs(exprs_);
-  exprs.push_front(make_shared<Expr>(expr));
-  auto lst = std::make_unique<List>(exprs);
-  return lst;
+  std::list<Expr> exprs(exprs_);
+  exprs.push_front(expr);
+  return Expr{List(exprs)};
 }
 
-const Expr& List::Head() const { return *exprs_.front(); }
+const Expr& List::Head() const { return exprs_.front(); }
 
 Expr List::Tail() const {
-  expr_list_t exprs(exprs_);
+  std::list<Expr> exprs(exprs_);
   exprs.pop_front();
-  return std::make_unique<List>(exprs);
+  return Expr{List(exprs)};
 }
 
-const Expr& Vector::Head() const { return *exprs_.front(); }
+Vector::Vector(vector_impl_t&& l) : exprs_(std::move(l)) {}
+
+const Expr& Vector::Head() const { return exprs_.front(); }
 
 Expr Vector::Tail() const {
   auto begin = exprs_.begin();
-  expr_list_t exprs(++begin, exprs_.end());
-  return std::make_unique<List>(exprs);
+  std::list<Expr> exprs(++begin, exprs_.end());
+  return Expr{List(exprs)};
 }
 
 const Expr& Vector::Get(int_type idx) const {
-  return *exprs_[static_cast<size_t>(idx)];
+  return exprs_[static_cast<size_t>(idx)];
 }
 
 }  // namespace simpl
