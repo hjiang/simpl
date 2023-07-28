@@ -3,3 +3,4 @@ bazel-out
 bazel-simpl
 bazel-testlogs
 genhtml
+build/*
