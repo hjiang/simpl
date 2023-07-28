@@ -10,7 +10,7 @@ Expr Or::Call(Interpreter* interpreter, const expr_list_t& exprs) {
     throw std::runtime_error("`or` expects at least one argument");
   }
   for (const auto& expr : exprs) {
-    decltype(auto) r = interpreter->Evaluate(*expr);
+    decltype(auto) r = interpreter->Evaluate(expr);
     if (IsTruthy(r)) {
       return r;
     }
@@ -23,7 +23,7 @@ Expr And::Call(Interpreter* interpreter, const expr_list_t& exprs) {
     throw std::runtime_error("`and` expects at least one argument");
   }
   for (const auto& expr : exprs) {
-    decltype(auto) r = interpreter->Evaluate(*expr);
+    decltype(auto) r = interpreter->Evaluate(expr);
     if (!IsTruthy(r)) {
       return r;
     }

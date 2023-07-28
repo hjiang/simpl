@@ -18,9 +18,9 @@ Expr If::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   }
 
   auto i = exprs.begin();
-  auto cond = interpreter->Evaluate(**i++);
-  auto then = *i++;
-  auto otherwise = *i++;
+  auto cond = interpreter->Evaluate(*i++);
+  auto then = i++;
+  auto otherwise = i++;
 
   if (IsTruthy(cond)) {
     return interpreter->Evaluate(*then);
@@ -31,16 +31,15 @@ Expr If::Call(Interpreter* interpreter, const expr_list_t& exprs) {
 
 Expr Let::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   auto i = exprs.begin();
-  auto bindings = std::get<std::shared_ptr<Vector>>(**i++)->exprs();
+  auto bindings = std::get<Vector>(*i++).exprs();
   if (bindings.size() % 2 != 0) {
     throw std::runtime_error(
         "The number of expressions in the binding list must be even.");
   }
   auto env = std::make_shared<Interpreter::Environment>(interpreter->env());
   for (auto j = bindings.begin(); j != bindings.end();) {
-    auto name =
-        std::get<Symbol>(*std::dynamic_pointer_cast<const Expr>(*j++)).name;
-    auto value = interpreter->Evaluate(**j++);
+    auto name = std::get<Symbol>(*j++).name;
+    auto value = interpreter->Evaluate(*j++);
     env->Bind(name, value);
   }
   return interpreter->Evaluate(expr_list_t(i, exprs.end()), env);

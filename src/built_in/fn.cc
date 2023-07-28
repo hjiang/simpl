@@ -16,12 +16,11 @@ Expr Fn::Call(Interpreter* interpreter, const expr_list_t& exprs) {
     throw std::runtime_error("fn: missing arguments");
   }
   auto i = exprs.begin();
-  auto params = std::get<std::shared_ptr<Vector>>(**i++);
+  auto params = std::get<Vector>(*i++);
   FnDef::param_list_t param_list;
 
-  for (const auto& param : params->exprs()) {
-    auto expr = dynamic_pointer_cast<const Expr>(param);
-    param_list.push_back(std::get<Symbol>(*expr).name);
+  for (const auto& param : params.exprs()) {
+    param_list.push_back(std::get<Symbol>(param).name);
   }
   FnDef::body_t body(i, exprs.end());
   return std::make_unique<UserFn>(FnDef(std::move(param_list), std::move(body)),

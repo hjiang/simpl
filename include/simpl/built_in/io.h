@@ -21,7 +21,7 @@ class Print : public Function {
  private:
   Expr FnCall(Interpreter*, const args_type& args) override {
     PrintValues(args);
-    return nullptr;
+    return Expr{nullptr};
   }
 };
 
@@ -30,7 +30,7 @@ class Println : public Function {
   Expr FnCall(Interpreter*, const args_type& args) override {
     PrintValues(args);
     std::cout << std::endl;
-    return nullptr;
+    return Expr{nullptr};
   }
 };
 

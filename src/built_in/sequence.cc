@@ -24,7 +24,7 @@ struct ConsVisitor {
 
   template <typename T>
   Expr operator()(T car, nullptr_t) const {
-    return std::make_unique<List>(expr_list_t{std::make_unique<Expr>(car)});
+    return List(expr_list_t{car});
   }
 };
 

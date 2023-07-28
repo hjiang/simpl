@@ -17,7 +17,14 @@ target_link_libraries(parser ast error)
 
 add_library(interpreter
   built_in/arithmetic.cc
+  built_in/cdt_ops.cc
   built_in/comparison.cc
+  built_in/control_flow.cc
+  built_in/def.cc
+  built_in/fn.cc
+  built_in/logic.cc
+  built_in/io.cc
+  built_in/sequence.cc
   function.cc
   interpreter.cc
   interpreter_util.cc

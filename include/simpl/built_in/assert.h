@@ -20,7 +20,7 @@ class Assert : public Function {
     if (!IsTruthy(args.front())) {
       throw std::runtime_error(std::get<std::string>(args.back()));
     }
-    return nullptr;
+    return Expr{nullptr};
   }
 };
 
