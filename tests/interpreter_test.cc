@@ -39,7 +39,7 @@ TEST(Interpreter, Plus) {
   auto exprs = parser.Parse();
   EXPECT_EQ(exprs.size(), 1);
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(*exprs.front())), 3);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(exprs.front())), 3);
 }
 
 TEST(Interpreter, Quoted) {
@@ -49,8 +49,7 @@ TEST(Interpreter, Quoted) {
   auto exprs = parser.Parse();
   EXPECT_EQ(exprs.size(), 1);
   Interpreter interpreter;
-  EXPECT_TRUE(
-      holds<std::shared_ptr<List>>(interpreter.Evaluate(*exprs.front())));
+  EXPECT_TRUE(holds<List>(interpreter.Evaluate(exprs.front())));
 }
 
 TEST(Interpreter, NestedSum) {
@@ -324,8 +323,8 @@ TEST(Interpreter, Vector) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  auto vec = std::get<vector_ptr_t>(interpreter.Evaluate(expr));
-  EXPECT_EQ(1, std::get<int_type>(vec->Head()));
+  auto vec = std::get<Vector>(interpreter.Evaluate(expr));
+  EXPECT_EQ(1, std::get<int_type>(vec.Head()));
 }
 
 TEST(Interpreter, Do) {

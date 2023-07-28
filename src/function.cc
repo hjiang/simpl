@@ -10,7 +10,7 @@ namespace simpl {
 Expr Function::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   args_type args;
   for (auto& expr : exprs) {
-    args.push_back(interpreter->Evaluate(*expr));
+    args.push_back(interpreter->Evaluate(expr));
   }
   return FnCall(interpreter, args);
 }

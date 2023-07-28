@@ -34,3 +34,18 @@ target_link_libraries(
   GTest::gtest_main
 )
 gtest_discover_tests(parser_test)
+
+add_executable(
+  interpreter_test
+  interpreter_test.cc
+)
+set_default_properties(interpreter_test)
+target_link_libraries(
+  interpreter_test
+  parser
+  token
+  lexer
+  interpreter
+  GTest::gtest_main
+)
+gtest_discover_tests(interpreter_test)
