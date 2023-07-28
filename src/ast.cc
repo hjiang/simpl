@@ -16,6 +16,21 @@ List::List(std::list<Expr>&& l) : exprs_(std::move(l)) {}
 
 List::List(const std::list<Expr>& l) : exprs_(l) {}
 
+Quoted::Quoted(const Quoted& other)
+    : expr_(std::make_unique<Expr>(*other.expr_)) {}
+
+Quoted::Quoted(Quoted&& other) noexcept : expr_(std::move(other.expr_)) {}
+
+Quoted& Quoted::operator=(const Quoted& other) {
+  *expr_ = *(other.expr_);
+  return *this;
+}
+
+Quoted& Quoted::operator=(Quoted&& other) noexcept {
+  expr_ = std::move(other.expr_);
+  return *this;
+}
+
 std::ostream& operator<<(std::ostream& os, const Symbol& s) {
   return os << s.name;
 }

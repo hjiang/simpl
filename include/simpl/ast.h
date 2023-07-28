@@ -27,7 +27,7 @@ using vector_ptr_t = std::shared_ptr<Vector>;
 using quoted_ptr_t = std::shared_ptr<Quoted>;
 class Expr;
 
-using expr_ptr_t = std::shared_ptr<const Expr>;
+using expr_ptr_t = std::shared_ptr<Expr>;
 using expr_list_t = std::list<Expr>;
 
 struct Symbol {
@@ -36,19 +36,21 @@ struct Symbol {
 
 class Quoted {
  public:
+  Quoted(const Quoted& other);
+  Quoted(Quoted&& other) noexcept;
   explicit Quoted(const Expr& expr);
-  virtual ~Quoted() = default;
   const Expr& expr() const { return *expr_; }
+  Quoted& operator=(const Quoted& other);
+  Quoted& operator=(Quoted&& other) noexcept;
 
  private:
-  const expr_ptr_t expr_;  // TODO(hjiang): change to unique_ptr
+  std::unique_ptr<Expr> expr_;  // TODO(hjiang): change to unique_ptr
 };
 
 class List {
  public:
   explicit List(std::list<Expr>&& l);
   explicit List(const std::list<Expr>& l);
-  virtual ~List() {}
   Expr Cons(const Expr& expr) const;
   const Expr& Head() const;
   Expr Tail() const;
@@ -62,7 +64,6 @@ class Vector {
  public:
   using vector_impl_t = std::vector<Expr>;
   explicit Vector(vector_impl_t&& l);
-  virtual ~Vector() = default;
   const vector_impl_t& exprs() const { return exprs_; }
   const Expr& Head() const;
   Expr Tail() const;
@@ -72,9 +73,17 @@ class Vector {
   vector_impl_t exprs_;
 };
 
-class Expr : public std::variant<int_type, float_type, bool, std::string,
-                                 Symbol, std::nullptr_t, callable_ptr_t, List,
-                                 Vector, Quoted> {};
+using ExprBase = std::variant<int_type, float_type, bool, std::string, Symbol,
+                              nullptr_t, callable_ptr_t, List, Vector, Quoted>;
+
+class Expr : public ExprBase {
+ public:
+  Expr() = default;
+  template <typename T>
+  Expr(T&& t) : ExprBase(std::forward<T>(t)) {}
+
+  // TODO(hjiang): Do I need to define assignment to enable move?
+};
 
 std::ostream& operator<<(std::ostream& os, const Expr& e);
 std::ostream& operator<<(std::ostream& os, const List& l);
