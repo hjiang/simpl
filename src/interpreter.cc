@@ -10,7 +10,7 @@
 #include "simpl/built_in/arithmetic.h"
 // #include "simpl/built_in/assert.h"
 // #include "simpl/built_in/cdt_ops.h"
-// #include "simpl/built_in/comparison.h"
+#include "simpl/built_in/comparison.h"
 // #include "simpl/built_in/control_flow.h"
 // #include "simpl/built_in/def.h"
 // #include "simpl/built_in/fn.h"
@@ -59,11 +59,11 @@ struct Interpreter::EvalVisitor {
 };
 
 Interpreter::Interpreter() : last_value_(nullptr), env_(new Environment()) {
-  //  env_->Define("=", std::make_shared<built_in::Equals>());
-  //  env_->Define(">", std::make_shared<built_in::GreaterThan>());
-  //  env_->Define(">=", std::make_shared<built_in::GreaterThanOrEqualTo>());
-  //  env_->Define("<", std::make_shared<built_in::LessThan>());
-  //  env_->Define("<=", std::make_shared<built_in::LessThanOrEqualTo>());
+  env_->Define("=", std::make_shared<built_in::Equals>());
+  env_->Define(">", std::make_shared<built_in::GreaterThan>());
+  env_->Define(">=", std::make_shared<built_in::GreaterThanOrEqualTo>());
+  env_->Define("<", std::make_shared<built_in::LessThan>());
+  env_->Define("<=", std::make_shared<built_in::LessThanOrEqualTo>());
   env_->Define("+", std::make_shared<built_in::Sum>());
   env_->Define("-", std::make_shared<built_in::Substract>());
   env_->Define("*", std::make_shared<built_in::Multiply>());

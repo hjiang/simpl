@@ -35,7 +35,7 @@ int CompareList(const List& lhs, const List& rhs) {
   auto lhs_it = lhs.exprs().begin();
   auto rhs_it = rhs.exprs().begin();
   while (lhs_it != lhs.exprs().end() && rhs_it != rhs.exprs().end()) {
-    auto cmp = Compare(**lhs_it, **rhs_it);
+    auto cmp = Compare(*lhs_it, *rhs_it);
     if (cmp != 0) {
       return cmp;
     }
@@ -67,8 +67,8 @@ int Compare(const Expr& lhs, const Expr& rhs) {
   if (holds<std::string>(lhs) && holds<std::string>(rhs)) {
     return std::get<std::string>(lhs).compare(std::get<std::string>(rhs));
   }
-  if (holds<list_ptr_t>(lhs) && holds<list_ptr_t>(rhs)) {
-    return CompareList(*std::get<list_ptr_t>(lhs), *std::get<list_ptr_t>(rhs));
+  if (holds<List>(lhs) && holds<List>(rhs)) {
+    return CompareList(std::get<List>(lhs), std::get<List>(rhs));
   }
   throw std::runtime_error("Incomparable types");  // FIXME: error handling
 }

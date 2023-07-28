@@ -17,6 +17,7 @@ target_link_libraries(parser ast error)
 
 add_library(interpreter
   built_in/arithmetic.cc
+  built_in/comparison.cc
   function.cc
   interpreter.cc
   interpreter_util.cc
