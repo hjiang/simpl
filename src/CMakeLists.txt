@@ -15,6 +15,12 @@ add_library(parser parser.cc)
 set_default_properties(parser)
 target_link_libraries(parser ast error)
 
-add_library(interpreter interpreter.cc function.cc interpreter_util.cc user_fn.cc)
+add_library(interpreter
+  built_in/arithmetic.cc
+  function.cc
+  interpreter.cc
+  interpreter_util.cc
+  user_fn.cc
+)
 set_default_properties(interpreter)
 target_link_libraries(interpreter ast error)

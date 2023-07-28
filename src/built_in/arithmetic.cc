@@ -13,19 +13,19 @@ namespace built_in {
 
 static Expr operator+(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<int_type>(lhs) + std::get<int_type>(rhs);
+    return Expr{std::get<int_type>(lhs) + std::get<int_type>(rhs)};
   }
   if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<int_type>(lhs) + std::get<float_type>(rhs);
+    return Expr{std::get<int_type>(lhs) + std::get<float_type>(rhs)};
   }
   if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<float_type>(lhs) + std::get<int_type>(rhs);
+    return Expr{std::get<float_type>(lhs) + std::get<int_type>(rhs)};
   }
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<float_type>(lhs) + std::get<float_type>(rhs);
+    return Expr{std::get<float_type>(lhs) + std::get<float_type>(rhs)};
   }
   if (holds<std::string>(lhs) && holds<std::string>(rhs)) {
-    return std::get<std::string>(lhs) + std::get<std::string>(rhs);
+    return Expr{std::get<std::string>(lhs) + std::get<std::string>(rhs)};
   }
   throw std::runtime_error(
       "Invalid types for operator +");  // FIXME: error handling
@@ -33,16 +33,16 @@ static Expr operator+(const Expr& lhs, const Expr& rhs) {
 
 static Expr operator-(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<int_type>(lhs) - std::get<int_type>(rhs);
+    return Expr{std::get<int_type>(lhs) - std::get<int_type>(rhs)};
   }
   if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<int_type>(lhs) - std::get<float_type>(rhs);
+    return Expr{std::get<int_type>(lhs) - std::get<float_type>(rhs)};
   }
   if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<float_type>(lhs) - std::get<int_type>(rhs);
+    return Expr{std::get<float_type>(lhs) - std::get<int_type>(rhs)};
   }
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<float_type>(lhs) - std::get<float_type>(rhs);
+    return Expr{std::get<float_type>(lhs) - std::get<float_type>(rhs)};
   }
   throw std::runtime_error(
       "Invalid types for operator -");  // FIXME: error handling
@@ -50,16 +50,16 @@ static Expr operator-(const Expr& lhs, const Expr& rhs) {
 
 static Expr operator*(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<int_type>(lhs) * std::get<int_type>(rhs);
+    return Expr{std::get<int_type>(lhs) * std::get<int_type>(rhs)};
   }
   if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<int_type>(lhs) * std::get<float_type>(rhs);
+    return Expr{std::get<int_type>(lhs) * std::get<float_type>(rhs)};
   }
   if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<float_type>(lhs) * std::get<int_type>(rhs);
+    return Expr{std::get<float_type>(lhs) * std::get<int_type>(rhs)};
   }
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<float_type>(lhs) * std::get<float_type>(rhs);
+    return Expr{std::get<float_type>(lhs) * std::get<float_type>(rhs)};
   }
   throw std::runtime_error(
       "Invalid types for operator *");  // FIXME: error handling
@@ -67,16 +67,16 @@ static Expr operator*(const Expr& lhs, const Expr& rhs) {
 
 static Expr operator/(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<int_type>(lhs) / std::get<int_type>(rhs);
+    return Expr{std::get<int_type>(lhs) / std::get<int_type>(rhs)};
   }
   if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<int_type>(lhs) / std::get<float_type>(rhs);
+    return Expr{std::get<int_type>(lhs) / std::get<float_type>(rhs)};
   }
   if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<float_type>(lhs) / std::get<int_type>(rhs);
+    return Expr{std::get<float_type>(lhs) / std::get<int_type>(rhs)};
   }
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return std::get<float_type>(lhs) / std::get<float_type>(rhs);
+    return Expr{std::get<float_type>(lhs) / std::get<float_type>(rhs)};
   }
   throw std::runtime_error(
       "Invalid types for operator /");  // FIXME: error handling
@@ -84,7 +84,7 @@ static Expr operator/(const Expr& lhs, const Expr& rhs) {
 
 static Expr operator%(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return std::get<int_type>(lhs) % std::get<int_type>(rhs);
+    return Expr{std::get<int_type>(lhs) % std::get<int_type>(rhs)};
   }
   throw std::runtime_error(
       "Invalid types for operator %");  // FIXME: error handling
@@ -106,10 +106,11 @@ Expr Substract::FnCall(Interpreter*, const args_type& args) {
   for (; i != args.end(); ++i) {
     result = result - *i;
   }
-  return args.size() > 1 ? result : 0 - result;
+  return args.size() > 1 ? result : Expr{0} - result;
 }
+
 Expr Multiply::FnCall(Interpreter*, const args_type& args) {
-  Expr result = 1;
+  Expr result{1};
   for (auto arg : args) {
     result = result * arg;
   }
