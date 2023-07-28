@@ -26,8 +26,8 @@ namespace simpl {
 struct Interpreter::EvalVisitor {
   Interpreter* interpreter;
   void operator()(const auto& expr) { interpreter->last_value_ = expr; }
-  void operator()(std::shared_ptr<Quoted> expr) {
-    interpreter->last_value_ = expr->expr();
+  void operator()(const Quoted& expr) {
+    interpreter->last_value_ = expr.expr();
   }
   void operator()(const Symbol& expr) {
     interpreter->last_value_ = interpreter->env_->Get(expr.name);
@@ -47,14 +47,6 @@ struct Interpreter::EvalVisitor {
     } else {
       throw std::runtime_error("Cannot apply a non-callable");
     }
-  }
-
-  void operator()(std::shared_ptr<Vector> vec) {
-    std::vector<Expr> result;
-    for (const auto& e : vec->exprs()) {
-      result.push_back(interpreter->Evaluate(e));
-    }
-    interpreter->last_value_ = Vector(std::move(result));
   }
 };
 

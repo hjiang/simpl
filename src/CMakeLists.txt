@@ -32,3 +32,11 @@ add_library(interpreter
 )
 set_default_properties(interpreter)
 target_link_libraries(interpreter ast error)
+
+add_library(simpl simpl.cc)
+set_default_properties(simpl)
+target_link_libraries(simpl error interpreter lexer parser token)
+
+add_executable(simpli simpli.cc)
+set_default_properties(simpli)
+target_link_libraries(simpli simpl)
