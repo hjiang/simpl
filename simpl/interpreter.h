@@ -25,16 +25,16 @@ class Interpreter {
     explicit Environment(std::shared_ptr<Environment> parent = nullptr)
         : values_(), parent_(parent) {}
 
-    void Define(std::string name, Expr value) {
+    void Define(const std::string& name, auto&& value) {
       if (parent_) {
-        return parent_->Define(std::move(name), std::move(value));
+        return parent_->Define(name, std::forward<decltype(value)>(value));
       } else {
-        values_[std::move(name)] = std::move(value);
+        values_[name] = std::forward<value>(value);
       }
     }
 
-    void Bind(std::string name, Expr value) {
-      values_[std::move(name)] = std::move(value);
+    void Bind(const std::string& name, auto&& value) {
+      values_[name] = std::forward<value>(value);
     }
 
     const Expr& Get(const std::string& name) const {
