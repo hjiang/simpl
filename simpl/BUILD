@@ -1,12 +1,12 @@
 cc_library(name= 'config',
            hdrs = ['config.h'])
 
-cc_binary(name = 'simpl',
-          srcs = ['main.cc'],
-          deps = ['simpl-imp'],
+cc_binary(name = 'simpli',
+          srcs = ['simpli.cc'],
+          deps = ['simpl'],
           visibility = ['//visibility:public'])
 
-cc_library(name = 'simpl-imp',
+cc_library(name = 'simpl',
            srcs = ['simpl.cc'],
            hdrs = ['simpl.h'],
            deps = [
@@ -24,7 +24,7 @@ cc_test(name = 'simpl_test',
             'ast',
             'config',
             'interpreter',
-            'simpl-imp',
+            'simpl',
         ],
         size = 'small')
 

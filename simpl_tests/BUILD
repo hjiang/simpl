@@ -3,7 +3,7 @@ sh_test(
     size = "small",
     srcs = ["run_simpl_tests"],
     data = [
-        "//simpl:simpl",
+        "//simpl:simpli",
         "simpl_progs/arithmetic.simpl",
     ]
 )
@@ -13,7 +13,7 @@ sh_test(
     size = "small",
     srcs = ["run_simpl_tests"],
     data = [
-        "//simpl:simpl",
+        "//simpl:simpli",
         "simpl_progs/printing.simpl",
     ]
 )
@@ -24,6 +24,6 @@ sh_test(
     flaky = True,
     srcs = ["run_repl_test"],
     data = [
-        "//simpl:simpl",
+        "//simpl:simpli",
     ]
 )
