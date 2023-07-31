@@ -125,5 +125,10 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
 ## Contributing
 
 - Bug reports and pull requests are welcome
-  - Make sure new code is covered and all tests pass
-- More guidelines coming soon
+- Before submitting a pull request:
+  - Make sure new code is covered by tests
+  - Make sure `scripts/check` passes with no error
+    - Install the newest version of `cpplint` to support C++20:
+      ```shell
+      pip install git+https://github.com/cpplint/cpplint.git
+      ```

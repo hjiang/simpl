@@ -106,7 +106,7 @@ Expr Substract::FnCall(Interpreter*, const args_type& args) {
   for (; i != args.end(); ++i) {
     result = result - *i;
   }
-  return args.size() > 1 ? result : Expr{0} - result;
+  return args.size() > 1 ? result : Expr(0) - result;
 }
 
 Expr Multiply::FnCall(Interpreter*, const args_type& args) {

@@ -80,7 +80,8 @@ class Expr : public ExprBase {
  public:
   Expr() = default;
   template <typename T>
-  Expr(T&& t) : ExprBase(std::forward<T>(t)) {}
+  // implicit conversion by design
+  Expr(T&& t) : ExprBase(std::forward<T>(t)) {}  // NOLINT
 
   // TODO(hjiang): Do I need to define assignment to enable move?
 };
