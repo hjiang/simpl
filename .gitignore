@@ -4,3 +4,5 @@ bazel-simpl
 bazel-testlogs
 genhtml
 build/*
+.DS_Store
+.cache/
