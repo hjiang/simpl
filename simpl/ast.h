@@ -19,12 +19,8 @@ class List;
 class Vector;
 class Quoted;
 struct Symbol;
-class ExprVisitor;
 class Callable;
 using callable_ptr_t = std::shared_ptr<Callable>;
-using list_ptr_t = std::shared_ptr<List>;
-using vector_ptr_t = std::shared_ptr<Vector>;
-using quoted_ptr_t = std::shared_ptr<Quoted>;
 class Expr;
 
 using expr_ptr_t = std::shared_ptr<Expr>;
