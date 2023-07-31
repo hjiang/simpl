@@ -23,7 +23,6 @@ class Callable;
 using callable_ptr_t = std::shared_ptr<Callable>;
 class Expr;
 
-using expr_ptr_t = std::shared_ptr<Expr>;
 using expr_list_t = std::list<Expr>;
 
 struct Symbol {
