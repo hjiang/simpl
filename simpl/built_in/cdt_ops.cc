@@ -13,14 +13,14 @@ namespace built_in {
 
 struct GetVisitor {
   template <typename T, typename U>
-  Expr operator()(T, U) const {
+  Expr operator()(const T&, U) const {
     throw std::runtime_error("get: invalid argument types");
   }
 };
 
 template <>
-Expr GetVisitor::operator()(vector_ptr_t v, int_type i) const {
-  return v->Get(i);
+Expr GetVisitor::operator()(const Vector& v, int_type i) const {
+  return v.Get(i);
 }
 
 Expr Get::FnCall(Interpreter*, const args_type& args) {

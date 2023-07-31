@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <utility>
 #include <variant>
 
 #include "simpl/built_in/util.h"
@@ -13,18 +14,18 @@ namespace built_in {
 
 struct ConsVisitor {
   template <typename T, typename U>
-  Expr operator()(T, U) const {
+  Expr operator()(T&&, const U&) const {
     throw std::runtime_error("cons: invalid argument type");
   }
 
   template <typename T>
-  Expr operator()(T car, list_ptr_t cdr) const {
-    return cdr->Cons(car);
+  Expr operator()(T&& car, const List& cdr) const {
+    return cdr.Cons(std::forward<T>(car));
   }
 
   template <typename T>
-  Expr operator()(T car, nullptr_t) const {
-    return List(expr_list_t{car});
+  Expr operator()(T&& car, nullptr_t) const {
+    return List(expr_list_t{std::forward<T>(car)});
   }
 };
 
@@ -35,19 +36,19 @@ Expr Cons::FnCall(Interpreter*, const args_type& args) {
 
 struct HeadVisitor {
   template <typename T>
-  Expr operator()(T) const {
+  Expr operator()(const T&) const {
     throw std::runtime_error("head: invalid argument type");
   }
 };
 
 template <>
-Expr HeadVisitor::operator()(list_ptr_t list) const {
-  return list->Head();
+Expr HeadVisitor::operator()(const List& list) const {
+  return list.Head();
 }
 
 template <>
-Expr HeadVisitor::operator()(vector_ptr_t vec) const {
-  return vec->Head();
+Expr HeadVisitor::operator()(const Vector& vec) const {
+  return vec.Head();
 }
 
 Expr Head::FnCall(Interpreter*, const args_type& args) {
@@ -57,19 +58,19 @@ Expr Head::FnCall(Interpreter*, const args_type& args) {
 
 struct TailVisitor {
   template <typename T>
-  Expr operator()(T) const {
+  Expr operator()(const T&) const {
     throw std::runtime_error("head: invalid argument type");
   }
 };
 
 template <>
-Expr TailVisitor::operator()(list_ptr_t list) const {
-  return list->Tail();
+Expr TailVisitor::operator()(const List& list) const {
+  return list.Tail();
 }
 
 template <>
-Expr TailVisitor::operator()(vector_ptr_t vec) const {
-  return vec->Tail();
+Expr TailVisitor::operator()(const Vector& vec) const {
+  return vec.Tail();
 }
 
 Expr Tail::FnCall(Interpreter*, const args_type& args) {

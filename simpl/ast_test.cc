@@ -15,7 +15,7 @@ TEST(AST, IntegerOutput) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   std::ostringstream oss;
-  oss << *expr.front();
+  oss << expr.front();
   EXPECT_EQ(oss.str(), "42");
 }
 
@@ -25,7 +25,7 @@ TEST(AST, ListOutput) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   std::ostringstream oss;
-  oss << *expr.front();
+  oss << expr.front();
   EXPECT_EQ(oss.str(), "(42 true \"hello\" 3.14)");
 }
 
@@ -35,7 +35,7 @@ TEST(AST, VectorOutput) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   std::ostringstream oss;
-  oss << *expr.front();
+  oss << expr.front();
   EXPECT_EQ(oss.str(), "[42 true good 3.14]");
 }
 
@@ -45,7 +45,7 @@ TEST(AST, QuoteOutput) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   std::ostringstream oss;
-  oss << *expr.front();
+  oss << expr.front();
   EXPECT_EQ(oss.str(), "'(+ 1 2)");
 }
 

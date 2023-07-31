@@ -84,7 +84,7 @@ TEST_F(SimplTest, AndReturnsLastTrueArgument) {
 
 TEST_F(SimplTest, Cons) {
   auto e = run("(cons 2 nil)");
-  EXPECT_TRUE(holds<list_ptr_t>(e));
+  EXPECT_TRUE(holds<List>(e));
 }
 
 TEST_F(SimplTest, ConsWrongArgCount) {
@@ -97,12 +97,12 @@ TEST_F(SimplTest, ConsWrongArg) {
 
 TEST_F(SimplTest, ConsEmpty) {
   auto e = run("(cons 2 '())");
-  EXPECT_TRUE(holds<list_ptr_t>(e));
+  EXPECT_TRUE(holds<List>(e));
 }
 
 TEST_F(SimplTest, ConsList) {
   auto e = run("(cons 1 '(2 3))");
-  EXPECT_TRUE(holds<list_ptr_t>(e));
+  EXPECT_TRUE(holds<List>(e));
 }
 
 TEST_F(SimplTest, ListHead) {
@@ -125,8 +125,8 @@ TEST_F(SimplTest, VectorHead) {
 
 TEST_F(SimplTest, VectorTail) {
   auto e = run("(tail [1 2 3])");
-  EXPECT_TRUE(holds<list_ptr_t>(e));
-  EXPECT_EQ(std::get<int_type>(std::get<list_ptr_t>(e)->Head()), 2);
+  EXPECT_TRUE(holds<List>(e));
+  EXPECT_EQ(std::get<int_type>(std::get<List>(e).Head()), 2);
 }
 
 TEST_F(SimplTest, VectorGet) {
