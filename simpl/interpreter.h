@@ -29,12 +29,12 @@ class Interpreter {
       if (parent_) {
         return parent_->Define(name, std::forward<decltype(value)>(value));
       } else {
-        values_[name] = std::forward<value>(value);
+        values_[name] = std::forward<decltype(value)>(value);
       }
     }
 
     void Bind(const std::string& name, auto&& value) {
-      values_[name] = std::forward<value>(value);
+      values_[name] = std::forward<decltype(value)>(value);
     }
 
     const Expr& Get(const std::string& name) const {
