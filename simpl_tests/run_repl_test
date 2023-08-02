@@ -1,7 +1,7 @@
 #!/usr/bin/env -S expect -f
 
 set timeout 2
-spawn simpl/simpli
+spawn simpl/simpl
 expect {
     "> $" {}
     timeout { exit 1 }
