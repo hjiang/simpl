@@ -15,10 +15,6 @@
 
 namespace simpl {
 
-class List;
-class Vector;
-class Quoted;
-struct Symbol;
 class Callable;
 using callable_ptr_t = std::shared_ptr<Callable>;
 class Expr;
