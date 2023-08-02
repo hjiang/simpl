@@ -60,8 +60,8 @@ TEST(Parser, List) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   auto list = std::get<List>(exprs.front());
-  EXPECT_EQ(list.exprs().size(), 3);
-  auto i = list.exprs().begin();
+  EXPECT_EQ(list.size(), 3);
+  auto i = list.begin();
   EXPECT_EQ(std::get<Symbol>(*i).name, "+");
   i++;
   EXPECT_EQ(std::get<int_type>(*i), 1);

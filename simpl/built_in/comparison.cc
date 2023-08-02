@@ -32,9 +32,9 @@ int OrderingToInt(std::partial_ordering ordering) {
 int Compare(const Expr& lhs, const Expr& rhs);
 
 int CompareList(const List& lhs, const List& rhs) {
-  auto lhs_it = lhs.exprs().begin();
-  auto rhs_it = rhs.exprs().begin();
-  while (lhs_it != lhs.exprs().end() && rhs_it != rhs.exprs().end()) {
+  auto lhs_it = lhs.begin();
+  auto rhs_it = rhs.begin();
+  while (lhs_it != lhs.end() && rhs_it != rhs.end()) {
     auto cmp = Compare(*lhs_it, *rhs_it);
     if (cmp != 0) {
       return cmp;
@@ -42,10 +42,10 @@ int CompareList(const List& lhs, const List& rhs) {
     ++lhs_it;
     ++rhs_it;
   }
-  if (lhs_it == lhs.exprs().end() && rhs_it == rhs.exprs().end()) {
+  if (lhs_it == lhs.end() && rhs_it == rhs.end()) {
     return 0;
   }
-  if (lhs_it == lhs.exprs().end()) {
+  if (lhs_it == lhs.end()) {
     return -1;
   }
   return 1;

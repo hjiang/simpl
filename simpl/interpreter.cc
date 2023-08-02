@@ -33,16 +33,16 @@ struct Interpreter::EvalVisitor {
     interpreter->last_value_ = interpreter->env_->Get(expr.name);
   }
   void operator()(const List& list) {
-    if (list.exprs().empty()) {
+    if (list.empty()) {
       interpreter->last_value_ = nullptr;
       return;
     }
-    auto result = interpreter->Evaluate(list.exprs().front());
+    auto result = interpreter->Evaluate(list.front());
     if (holds<callable_ptr_t>(result)) {
       auto callable = std::get<callable_ptr_t>(result);
-      auto it = list.exprs().begin();
+      auto it = list.begin();
       ++it;
-      expr_list_t args(it, list.exprs().end());
+      ExprList args(it, list.end());
       interpreter->last_value_ = callable->Call(interpreter, std::move(args));
     } else {
       throw std::runtime_error("Cannot apply a non-callable");
@@ -85,7 +85,7 @@ const Expr& Interpreter::Evaluate(const Expr& expr) {
   return last_value_;
 }
 
-const Expr& Interpreter::Evaluate(const expr_list_t& exprs,
+const Expr& Interpreter::Evaluate(const ExprList& exprs,
                                   std::shared_ptr<Environment> env) {
   auto old_env = env_;
   if (env) {

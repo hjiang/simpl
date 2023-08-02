@@ -12,10 +12,6 @@ namespace rv = std::views;
 
 Quoted::Quoted(const Expr& expr) : expr_(std::make_unique<Expr>(expr)) {}
 
-List::List(std::list<Expr>&& l) : exprs_(std::move(l)) {}
-
-List::List(const std::list<Expr>& l) : exprs_(l) {}
-
 Quoted::Quoted(const Quoted& other)
     : expr_(std::make_unique<Expr>(*other.expr_)) {}
 
@@ -37,20 +33,26 @@ std::ostream& operator<<(std::ostream& os, const Symbol& s) {
 
 std::ostream& operator<<(std::ostream& os, const List& l) {
   os << '(';
-  for (auto& e : rv::take(l.exprs(), l.exprs().size() - 1)) {
-    os << e;
-    os << ' ';
+  if (!l.empty()) {
+    for (auto& e : rv::take(l, l.size() - 1)) {
+      os << e;
+      os << ' ';
+    }
+    os << l.back();
   }
-  return os << l.exprs().back() << ')';
+  return os << ')';
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector& vec) {
   os << '[';
-  for (auto& e : rv::take(vec, vec.size() - 1)) {
-    os << e;
-    os << ' ';
+  if (!vec.empty()) {
+    for (auto& e : rv::take(vec, vec.size() - 1)) {
+      os << e;
+      os << ' ';
+    }
+    os << vec.back();
   }
-  return os << vec.back() << ']';
+  return os << ']';
 }
 
 std::ostream& operator<<(std::ostream& os, const Quoted& qt) {
@@ -80,20 +82,6 @@ std::ostream& operator<<(std::ostream& os, const Expr& e) {
   ExprPrinter printer{os};
   std::visit(printer, e);
   return os;
-}
-
-Expr List::Cons(const Expr& expr) const {
-  std::list<Expr> exprs(exprs_);
-  exprs.push_front(expr);
-  return Expr{List(exprs)};
-}
-
-const Expr& List::Head() const { return exprs_.front(); }
-
-Expr List::Tail() const {
-  std::list<Expr> exprs(exprs_);
-  exprs.pop_front();
-  return Expr{List(exprs)};
 }
 
 }  // namespace simpl

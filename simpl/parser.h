@@ -22,7 +22,7 @@ class Parser {
  public:
   explicit Parser(const token_list_t& tokens)
       : tokens_(tokens), current_(tokens_.begin()) {}
-  expr_list_t Parse();
+  ExprList Parse();
 
   class ParseError : std::runtime_error {
    public:

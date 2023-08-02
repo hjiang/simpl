@@ -30,8 +30,8 @@ const Token& Parser::Consume(Token::Type type, const std::string& message) {
   throw Error(Peek(), message);
 }
 
-expr_list_t Parser::Parse() {
-  expr_list_t exprs;
+ExprList Parser::Parse() {
+  ExprList exprs;
   while (!AtEnd()) {
     exprs.push_back(ParseExpr());
   }
@@ -101,12 +101,12 @@ Expr Parser::ParseVector() {
 }
 
 Expr Parser::ParseList() {
-  expr_list_t exprs;
+  List exprs;
   while (!Check(Token::Type::kRightParen) && !AtEnd()) {
     exprs.push_back(ParseExpr());
   }
   Consume(Token::Type::kRightParen, "Expect ')' after list.");
-  return Expr{List(std::move(exprs))};
+  return Expr{std::move(exprs)};
 }
 
 bool Parser::Match(Token::Type type) {

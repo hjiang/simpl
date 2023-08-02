@@ -29,6 +29,16 @@ TEST(AST, ListOutput) {
   EXPECT_EQ(oss.str(), "(42 true \"hello\" 3.14)");
 }
 
+TEST(AST, EmptyListOutput) {
+  Lexer lexer("()");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  std::ostringstream oss;
+  oss << expr.front();
+  EXPECT_EQ(oss.str(), "()");
+}
+
 TEST(AST, VectorOutput) {
   Lexer lexer("[42 true good 3.14]");
   auto tokens = lexer.scan();
@@ -37,6 +47,16 @@ TEST(AST, VectorOutput) {
   std::ostringstream oss;
   oss << expr.front();
   EXPECT_EQ(oss.str(), "[42 true good 3.14]");
+}
+
+TEST(AST, EmptyVectorOutput) {
+  Lexer lexer("[]");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  std::ostringstream oss;
+  oss << expr.front();
+  EXPECT_EQ(oss.str(), "[]");
 }
 
 TEST(AST, QuoteOutput) {

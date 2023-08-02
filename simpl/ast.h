@@ -19,7 +19,9 @@ class Callable;
 using callable_ptr_t = std::shared_ptr<Callable>;
 class Expr;
 
-using expr_list_t = std::list<Expr>;
+class ExprList : public std::list<Expr> {
+  using std::list<Expr>::list;
+};
 
 struct Symbol {
   std::string name;
@@ -38,17 +40,9 @@ class Quoted {
   std::unique_ptr<Expr> expr_;  // TODO(hjiang): change to unique_ptr
 };
 
-class List {
- public:
-  explicit List(std::list<Expr>&& l);
-  explicit List(const std::list<Expr>& l);
-  Expr Cons(const Expr& expr) const;
-  const Expr& Head() const;
-  Expr Tail() const;
-  const std::list<Expr>& exprs() const { return exprs_; }
-
- private:
-  std::list<Expr> exprs_;
+// List and ExprList should not be automatically convertible
+class List : public std::list<Expr> {
+  using std::list<Expr>::list;
 };
 
 using Vector = std::vector<Expr>;
@@ -60,7 +54,7 @@ class Expr : public ExprBase {
  public:
   Expr() = default;
   template <typename T>
-  // implicit conversion by design
+  // TODO(hjiang): disable implicit conversion
   Expr(T&& t) : ExprBase(std::forward<T>(t)) {}  // NOLINT
 
   // TODO(hjiang): Do I need to define assignment to enable move?
@@ -70,7 +64,6 @@ std::ostream& operator<<(std::ostream& os, const Expr& e);
 std::ostream& operator<<(std::ostream& os, const List& l);
 std::ostream& operator<<(std::ostream& os, const Symbol& s);
 std::ostream& operator<<(std::ostream& os, const Vector& vec);
-
 std::ostream& operator<<(std::ostream& os, const Quoted& qt);
 
 }  // namespace simpl

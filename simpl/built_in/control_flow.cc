@@ -12,7 +12,7 @@ namespace simpl {
 
 namespace built_in {
 
-Expr If::Call(Interpreter* interpreter, const expr_list_t& exprs) {
+Expr If::Call(Interpreter* interpreter, const ExprList& exprs) {
   if (exprs.size() != 3) {
     throw std::runtime_error("'if' expects three arguments");
   }
@@ -29,7 +29,7 @@ Expr If::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   }
 }
 
-Expr Let::Call(Interpreter* interpreter, const expr_list_t& exprs) {
+Expr Let::Call(Interpreter* interpreter, const ExprList& exprs) {
   auto i = exprs.begin();
   auto bindings = std::get<Vector>(*i++);
   if (bindings.size() % 2 != 0) {
@@ -42,7 +42,7 @@ Expr Let::Call(Interpreter* interpreter, const expr_list_t& exprs) {
     auto value = interpreter->Evaluate(*j++);
     env->Bind(name, value);
   }
-  return interpreter->Evaluate(expr_list_t(i, exprs.end()), env);
+  return interpreter->Evaluate(ExprList(i, exprs.end()), env);
 }
 
 }  // namespace built_in

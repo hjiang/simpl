@@ -2,6 +2,7 @@
 
 #include "simpl/built_in/sequence.h"
 
+#include <concepts>
 #include <memory>
 #include <ranges>
 #include <stdexcept>
@@ -23,12 +24,14 @@ struct ConsVisitor {
 
   template <typename T>
   Expr operator()(T&& car, const List& cdr) const {
-    return cdr.Cons(std::forward<T>(car));
+    List l(cdr);
+    l.push_front(std::forward<T>(car));
+    return l;
   }
 
   template <typename T>
   Expr operator()(T&& car, nullptr_t) const {
-    return List(expr_list_t{std::forward<T>(car)});
+    return List{std::forward<T>(car)};
   }
 };
 
@@ -46,7 +49,7 @@ struct HeadVisitor {
 
 template <>
 Expr HeadVisitor::operator()(const List& list) const {
-  return list.Head();
+  return list.front();
 }
 
 template <>
@@ -61,21 +64,15 @@ Expr Head::FnCall(Interpreter*, const args_type& args) {
 
 struct TailVisitor {
   template <typename T>
-  Expr operator()(const T&) const {
-    throw std::runtime_error("head: invalid argument type");
+  Expr operator()(const T& seq) const {
+    if constexpr (std::same_as<T, List> || std::same_as<T, Vector>) {
+      auto tail = sv::drop(seq, 1);
+      return T(tail.begin(), tail.end());
+    } else {
+      throw std::runtime_error("head: invalid argument type");
+    }
   }
 };
-
-template <>
-Expr TailVisitor::operator()(const List& list) const {
-  return list.Tail();
-}
-
-template <>
-Expr TailVisitor::operator()(const Vector& vec) const {
-  auto tail = sv::drop(vec, 1);
-  return Vector(tail.begin(), tail.end());
-}
 
 Expr Tail::FnCall(Interpreter*, const args_type& args) {
   CheckArity("tail", args, 1);

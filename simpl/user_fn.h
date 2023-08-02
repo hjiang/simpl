@@ -17,7 +17,7 @@ namespace simpl {
 class FnDef {
  public:
   using param_list_t = std::list<std::string>;
-  using body_t = expr_list_t;
+  using body_t = ExprList;
   FnDef(param_list_t&& params, body_t&& body)
       : params_(std::move(params)), body_(std::move(body)) {}
   virtual ~FnDef() = default;
