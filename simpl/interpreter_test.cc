@@ -324,7 +324,7 @@ TEST(Interpreter, Vector) {
   auto expr = parser.Parse();
   Interpreter interpreter;
   auto vec = std::get<Vector>(interpreter.Evaluate(expr));
-  EXPECT_EQ(1, std::get<int_type>(vec.Head()));
+  EXPECT_EQ(1, std::get<int_type>(vec.front()));
 }
 
 TEST(Interpreter, Do) {

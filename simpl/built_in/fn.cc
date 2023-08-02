@@ -19,7 +19,7 @@ Expr Fn::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   auto params = std::get<Vector>(*i++);
   FnDef::param_list_t param_list;
 
-  for (const auto& param : params.exprs()) {
+  for (const auto& param : params) {
     param_list.push_back(std::get<Symbol>(param).name);
   }
   FnDef::body_t body(i, exprs.end());

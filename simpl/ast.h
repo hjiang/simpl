@@ -51,18 +51,7 @@ class List {
   std::list<Expr> exprs_;
 };
 
-class Vector {
- public:
-  using vector_impl_t = std::vector<Expr>;
-  explicit Vector(vector_impl_t&& l);
-  const vector_impl_t& exprs() const { return exprs_; }
-  const Expr& Head() const;
-  Expr Tail() const;
-  const Expr& Get(int_type idx) const;
-
- private:
-  vector_impl_t exprs_;
-};
+using Vector = std::vector<Expr>;
 
 using ExprBase = std::variant<int_type, float_type, bool, std::string, Symbol,
                               nullptr_t, callable_ptr_t, List, Vector, Quoted>;

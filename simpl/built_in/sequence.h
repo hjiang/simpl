@@ -8,6 +8,8 @@
 namespace simpl {
 namespace built_in {
 
+// TODO(hjiang): reevaluate whether vectors should support these functions.
+
 class Cons : public Function {
  private:
   Expr FnCall(Interpreter*, const args_type& args) override;

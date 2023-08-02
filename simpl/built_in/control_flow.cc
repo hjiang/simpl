@@ -31,7 +31,7 @@ Expr If::Call(Interpreter* interpreter, const expr_list_t& exprs) {
 
 Expr Let::Call(Interpreter* interpreter, const expr_list_t& exprs) {
   auto i = exprs.begin();
-  auto bindings = std::get<Vector>(*i++).exprs();
+  auto bindings = std::get<Vector>(*i++);
   if (bindings.size() % 2 != 0) {
     throw std::runtime_error(
         "The number of expressions in the binding list must be even.");

@@ -92,12 +92,12 @@ Expr Parser::ParseExpr() {
 }
 
 Expr Parser::ParseVector() {
-  Vector::vector_impl_t args;
+  Vector args;
   while (!Check(Token::Type::kRightBracket) && !AtEnd()) {
     args.push_back(ParseExpr());
   }
   Consume(Token::Type::kRightBracket, "Expect ']' at the end of vector.");
-  return Expr{Vector(std::move(args))};
+  return Expr{args};
 }
 
 Expr Parser::ParseList() {

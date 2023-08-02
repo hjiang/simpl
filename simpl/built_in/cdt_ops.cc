@@ -20,7 +20,7 @@ struct GetVisitor {
 
 template <>
 Expr GetVisitor::operator()(const Vector& v, int_type i) const {
-  return v.Get(i);
+  return v.at(static_cast<Vector::size_type>(i));
 }
 
 Expr Get::FnCall(Interpreter*, const args_type& args) {

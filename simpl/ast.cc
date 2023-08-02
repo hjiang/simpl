@@ -46,11 +46,11 @@ std::ostream& operator<<(std::ostream& os, const List& l) {
 
 std::ostream& operator<<(std::ostream& os, const Vector& vec) {
   os << '[';
-  for (auto& e : rv::take(vec.exprs(), vec.exprs().size() - 1)) {
+  for (auto& e : rv::take(vec, vec.size() - 1)) {
     os << e;
     os << ' ';
   }
-  return os << vec.exprs().back() << ']';
+  return os << vec.back() << ']';
 }
 
 std::ostream& operator<<(std::ostream& os, const Quoted& qt) {
@@ -94,20 +94,6 @@ Expr List::Tail() const {
   std::list<Expr> exprs(exprs_);
   exprs.pop_front();
   return Expr{List(exprs)};
-}
-
-Vector::Vector(vector_impl_t&& l) : exprs_(std::move(l)) {}
-
-const Expr& Vector::Head() const { return exprs_.front(); }
-
-Expr Vector::Tail() const {
-  auto begin = exprs_.begin();
-  std::list<Expr> exprs(++begin, exprs_.end());
-  return Expr{List(exprs)};
-}
-
-const Expr& Vector::Get(int_type idx) const {
-  return exprs_[static_cast<size_t>(idx)];
 }
 
 }  // namespace simpl

@@ -3,6 +3,7 @@
 #include "simpl/built_in/sequence.h"
 
 #include <memory>
+#include <ranges>
 #include <stdexcept>
 #include <utility>
 #include <variant>
@@ -11,6 +12,8 @@
 
 namespace simpl {
 namespace built_in {
+
+namespace sv = std::views;
 
 struct ConsVisitor {
   template <typename T, typename U>
@@ -48,7 +51,7 @@ Expr HeadVisitor::operator()(const List& list) const {
 
 template <>
 Expr HeadVisitor::operator()(const Vector& vec) const {
-  return vec.Head();
+  return vec.front();
 }
 
 Expr Head::FnCall(Interpreter*, const args_type& args) {
@@ -70,7 +73,8 @@ Expr TailVisitor::operator()(const List& list) const {
 
 template <>
 Expr TailVisitor::operator()(const Vector& vec) const {
-  return vec.Tail();
+  auto tail = sv::drop(vec, 1);
+  return Vector(tail.begin(), tail.end());
 }
 
 Expr Tail::FnCall(Interpreter*, const args_type& args) {

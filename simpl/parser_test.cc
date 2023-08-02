@@ -86,8 +86,8 @@ TEST(Parser, Vector) {
   auto exprs = parser.Parse();
   EXPECT_EQ(1, exprs.size());
   auto vec = std::get<Vector>(exprs.front());
-  EXPECT_EQ(3, vec.exprs().size());
-  EXPECT_EQ(1, std::get<int_type>(vec.Head()));
+  EXPECT_EQ(3, vec.size());
+  EXPECT_EQ(1, std::get<int_type>(vec.front()));
 }
 
 TEST(Parser, Let) {

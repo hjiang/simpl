@@ -125,8 +125,8 @@ TEST_F(SimplTest, VectorHead) {
 
 TEST_F(SimplTest, VectorTail) {
   auto e = run("(tail [1 2 3])");
-  EXPECT_TRUE(holds<List>(e));
-  EXPECT_EQ(std::get<int_type>(std::get<List>(e).Head()), 2);
+  EXPECT_TRUE(holds<Vector>(e));
+  EXPECT_EQ(std::get<int_type>(std::get<Vector>(e).front()), 2);
 }
 
 TEST_F(SimplTest, VectorGet) {
