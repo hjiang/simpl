@@ -5,6 +5,7 @@
 #include <ctype.h>
 
 #include <algorithm>
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <list>
@@ -20,17 +21,30 @@
 
 namespace simpl {
 
-Expr run(const std::string &source) {
+Expr run(const std::string &source, Timing *timing) {
+  auto t1 = std::chrono::high_resolution_clock::now();
   Lexer lexer(source);
   std::list<Token> tokens = lexer.scan();
+  auto t2 = std::chrono::high_resolution_clock::now();
   if (HadError()) {
     throw std::runtime_error("An error occurred while scanning tokens.");
   }
   try {
     Parser parser(tokens);
     auto ast = parser.Parse();
+    auto t3 = std::chrono::high_resolution_clock::now();
     static Interpreter interpreter;
-    return interpreter.Evaluate(ast);
+    const auto &result = interpreter.Evaluate(ast);
+    auto t4 = std::chrono::high_resolution_clock::now();
+    if (timing) {
+      timing->lexer_ms =
+          std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
+      timing->parser_ms =
+          std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2);
+      timing->interpreter_ms =
+          std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3);
+    }
+    return result;
   } catch (const Parser::ParseError &e) {
     throw std::runtime_error("An error occurred while parsing the input.");
   } catch (const std::runtime_error &e) {
@@ -45,13 +59,18 @@ void RunFile(const std::string &path) {
     std::ostringstream ss;
     ss << file.rdbuf();
     file.close();
-    run(ss.str());
+    Timing t;
+    run(ss.str(), &t);
     if (HadError()) {
       exit(65);
     }
     if (HadRuntimeError()) {
       exit(70);
     }
+    std::cout << "lexer: " << t.lexer_ms.count() << "ms, "
+              << "parser: " << t.parser_ms.count() << "ms, "
+              << "interpreter: " << t.interpreter_ms.count() << "ms"
+              << std::endl;
   } else {
     std::cout << "Could not open file: " << path << std::endl;
   }
