@@ -29,7 +29,7 @@ Expr Defn::Call(Interpreter* interpreter, const ExprList& exprs) {
   auto name = std::get<Symbol>(exprs.front()).name;
   List fn_body(++exprs.begin(), exprs.end());
   fn_body.push_front(Expr{Symbol{"fn"}});
-  interpreter->env()->Define(name, interpreter->Evaluate(std::move(fn_body)));
+  interpreter->env()->Define(name, interpreter->Evaluate(fn_body));
   return interpreter->last_value();
 }
 

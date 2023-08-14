@@ -43,7 +43,7 @@ struct Interpreter::EvalVisitor {
       auto it = list.begin();
       ++it;
       ExprList args(it, list.end());
-      interpreter->last_value_ = callable->Call(interpreter, std::move(args));
+      interpreter->last_value_ = callable->Call(interpreter, args);
     } else {
       throw std::runtime_error("Cannot apply a non-callable");
     }
