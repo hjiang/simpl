@@ -31,7 +31,8 @@ int OrderingToInt(std::partial_ordering ordering) {
 
 int Compare(const Expr& lhs, const Expr& rhs);
 
-int CompareList(const List& lhs, const List& rhs) {
+template <typename T1, typename T2>
+int CompareSeq(const T1& lhs, const T2& rhs) {
   auto lhs_it = lhs.begin();
   auto rhs_it = rhs.begin();
   while (lhs_it != lhs.end() && rhs_it != rhs.end()) {
@@ -68,7 +69,7 @@ int Compare(const Expr& lhs, const Expr& rhs) {
     return std::get<std::string>(lhs).compare(std::get<std::string>(rhs));
   }
   if (holds<List>(lhs) && holds<List>(rhs)) {
-    return CompareList(std::get<List>(lhs), std::get<List>(rhs));
+    return CompareSeq(std::get<List>(lhs), std::get<List>(rhs));
   }
   throw std::runtime_error("Incomparable types");  // FIXME: error handling
 }
