@@ -1,8 +1,10 @@
+*~
+.DS_Store
+.cache/
+\#*#
 bazel-bin
 bazel-out
 bazel-simpl
 bazel-testlogs
-genhtml
 build/*
-.DS_Store
-.cache/
+genhtml
