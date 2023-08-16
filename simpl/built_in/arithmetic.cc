@@ -2,6 +2,7 @@
 
 #include "simpl/built_in/arithmetic.h"
 
+#include <numeric>
 #include <string>
 
 #include "simpl/interpreter.h"
@@ -88,47 +89,42 @@ static Expr operator%(const Expr& lhs, const Expr& rhs) {
 }
 
 Expr Sum::FnCall(Interpreter*, const args_type& args) {
-  Expr result = args.front();
-  auto i = args.begin();
-  ++i;
-  for (; i != args.end(); ++i) {
-    result = result + *i;
-  }
-  return result;
+  return std::accumulate(
+      args.begin(), args.end(), Expr(0),
+      [](const Expr& lhs, const Expr& rhs) { return lhs + rhs; });
 }
 
 Expr Substract::FnCall(Interpreter*, const args_type& args) {
   auto i = args.begin();
-  Expr result = *i++;
-  for (; i != args.end(); ++i) {
-    result = result - *i;
-  }
-  return args.size() > 1 ? result : Expr(0) - result;
+  const Expr& init = *i++;
+  auto result = std::accumulate(
+      i, args.end(), init,
+      [](const Expr& lhs, const Expr& rhs) { return lhs - rhs; });
+  return args.size() > 1 ? result : Expr(0) - init;
 }
 
 Expr Multiply::FnCall(Interpreter*, const args_type& args) {
-  Expr result{1};
-  for (auto arg : args) {
-    result = result * arg;
-  }
-  return result;
+  return std::accumulate(
+      args.begin(), args.end(), Expr(1),
+      [](const Expr& lhs, const Expr& rhs) { return lhs * rhs; });
 }
+
 Expr Divide::FnCall(Interpreter*, const args_type& args) {
   auto i = args.begin();
-  Expr result = *i++;
-  for (; i != args.end(); ++i) {
-    result = result / *i;
-  }
-  return result;
+  const Expr& init = *i++;
+  return std::accumulate(
+      i, args.end(), init,
+      [](const Expr& lhs, const Expr& rhs) { return lhs / rhs; });
 }
+
 Expr Modulo::FnCall(Interpreter*, const args_type& args) {
   auto i = args.begin();
-  Expr result = *i++;
-  for (; i != args.end(); ++i) {
-    result = result % *i;
-  }
-  return result;
+  const Expr& init = *i++;
+  return std::accumulate(
+      i, args.end(), init,
+      [](const Expr& lhs, const Expr& rhs) { return lhs % rhs; });
 }
+
 }  // namespace built_in
 
 }  // namespace simpl
