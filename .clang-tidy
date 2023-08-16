@@ -1,0 +1,4 @@
+---
+FormatStyle: file
+ExtraArgs:
+  - -std=c++20
