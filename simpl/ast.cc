@@ -6,6 +6,8 @@
 #include <ostream>
 #include <ranges>
 
+#include "simpl/overload.h"
+
 namespace simpl {
 
 namespace rv = std::views;
@@ -83,5 +85,46 @@ std::ostream& operator<<(std::ostream& os, const Expr& e) {
   std::visit(printer, e);
   return os;
 }
+
+std::size_t Hash::operator()(const Expr& expr) const {
+  return std::visit(
+      Overload{[](int_type i) { return std::hash<int_type>{}(i); },
+               [](float_type f) { return std::hash<float_type>{}(f); },
+               [](bool b) { return std::hash<bool>{}(b); },
+               [](const std::string& s) { return std::hash<std::string>{}(s); },
+               [](const Symbol& s) { return s.hash(); },
+               [](nullptr_t) { return std::hash<uint32_t>{}(0xdeadbeef); },
+               [](callable_ptr_t c) { return std::hash<callable_ptr_t>{}(c); },
+               [](const List& l) {
+                 std::size_t seed = 0;
+                 for (auto& e : l) {
+                   seed ^= Hash{}(e);
+                 }
+                 return seed;
+               },
+               [](const Vector& v) {
+                 std::size_t seed = 0;
+                 for (auto& e : v) {
+                   seed ^= Hash{}(e);
+                 }
+                 return seed;
+               },
+               [](const Quoted& qt) { return qt.hash(); },
+               [](const Map& m) {
+                 std::size_t seed = 0;
+                 for (auto& [k, v] : m) {
+                   seed ^= Hash{}(k);
+                   seed ^= Hash{}(v);
+                 }
+                 return seed;
+               }},
+      expr);
+}
+
+bool Quoted::operator==(const Quoted& other) const {
+  return *expr_ == *other.expr_;
+}
+
+static Map static_map;
 
 }  // namespace simpl

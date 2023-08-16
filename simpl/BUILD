@@ -49,7 +49,7 @@ cc_test(
 
 cc_library(name ='ast',
            srcs = ['ast.cc', 'callable.cc'],
-           hdrs = ['ast.h', 'callable.h'],
+           hdrs = ['ast.h', 'callable.h', 'overload.h'],
            deps = ['config'])
 
 cc_test(name='ast_test',
