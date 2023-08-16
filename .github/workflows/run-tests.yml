@@ -6,8 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: sudo apt-get install -y expect
+      - run: |
+          sudo apt update
+          sudo apt install -y gcc-12 g++-12 expect
+        shell: bash
       - run: bazel coverage -c fastbuild --combined_report=lcov //...
+        shell: bash
+        env:
+          CC: gcc-12
+          CXX: g++-12
       - uses: codecov/codecov-action@v3
         with:
           files: ./bazel-out/_coverage/_coverage_report.dat
