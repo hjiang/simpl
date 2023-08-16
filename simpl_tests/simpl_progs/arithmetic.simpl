@@ -3,10 +3,6 @@
  "mixing integers and floats should work")
 
 (assert
- (= "foobar" (+ "foo" "bar"))
- "string concatenation")
-
-(assert
  (> (+ 3.0 2) (+ 1.5 2.0))
  "mixing integers and floats")
 

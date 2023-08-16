@@ -24,9 +24,6 @@ static Expr operator+(const Expr& lhs, const Expr& rhs) {
   if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
     return Expr{std::get<float_type>(lhs) + std::get<float_type>(rhs)};
   }
-  if (holds<std::string>(lhs) && holds<std::string>(rhs)) {
-    return Expr{std::get<std::string>(lhs) + std::get<std::string>(rhs)};
-  }
   throw std::runtime_error(
       "Invalid types for operator +");  // FIXME: error handling
 }
