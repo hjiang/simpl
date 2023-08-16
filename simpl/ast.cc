@@ -67,7 +67,7 @@ std::ostream& operator<<(std::ostream& os, const Callable&);
 struct ExprPrinter {
   std::ostream& os;
   void operator()(const Symbol& s) { os << s; }
-  void operator()(nullptr_t) { os << "nil"; }
+  void operator()(std::nullptr_t) { os << "nil"; }
   void operator()(const std::string& s) { os << "\"" << s << "\""; }
   void operator()(bool b) { os << (b ? "true" : "false"); }
   template <typename T>
@@ -94,7 +94,7 @@ std::size_t Hash::operator()(const Expr& expr) const {
                [](bool b) { return std::hash<bool>{}(b); },
                [](const std::string& s) { return std::hash<std::string>{}(s); },
                [](const Symbol& s) { return s.hash(); },
-               [](nullptr_t) { return std::hash<uint32_t>{}(0xdeadbeef); },
+               [](std::nullptr_t) { return std::hash<uint32_t>{}(0xdeadbeef); },
                [](callable_ptr_t c) { return std::hash<callable_ptr_t>{}(c); },
                [](const List& l) {
                  std::size_t seed = 0;

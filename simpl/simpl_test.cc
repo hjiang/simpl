@@ -73,7 +73,7 @@ TEST_F(SimplTest, OrExpectsArguments) {
 
 TEST_F(SimplTest, OrReturnsLastFalseArgument) {
   auto e = run("(or false nil ())");
-  EXPECT_TRUE(holds<nullptr_t>(e));
+  EXPECT_TRUE(holds<std::nullptr_t>(e));
 }
 
 TEST_F(SimplTest, AndReturnsLastTrueArgument) {

@@ -66,7 +66,7 @@ using Vector = std::vector<Expr>;
 using Map = std::unordered_map<Expr, Expr, Hash>;
 
 using ExprBase =
-    std::variant<int_type, float_type, bool, std::string, Symbol, nullptr_t,
+    std::variant<int_type, float_type, bool, std::string, Symbol, std::nullptr_t,
                  callable_ptr_t, List, Vector, Quoted, Map>;
 
 class Expr : public ExprBase {

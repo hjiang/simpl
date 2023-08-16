@@ -305,7 +305,7 @@ TEST(Interpreter, EmptyListIsNil) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(nullptr == std::get<nullptr_t>(interpreter.Evaluate(expr)));
+  EXPECT_TRUE(nullptr == std::get<std::nullptr_t>(interpreter.Evaluate(expr)));
 }
 
 TEST(Interpreter, Vector) {

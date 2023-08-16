@@ -30,7 +30,7 @@ struct ConsVisitor {
   }
 
   template <typename T>
-  Expr operator()(T&& car, nullptr_t) const {
+  Expr operator()(T&& car, std::nullptr_t) const {
     return List{std::forward<T>(car)};
   }
 };
