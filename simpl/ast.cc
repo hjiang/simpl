@@ -87,6 +87,7 @@ std::ostream& operator<<(std::ostream& os, const Expr& e) {
 }
 
 std::size_t Hash::operator()(const Expr& expr) const {
+  static Hash hash;
   return std::visit(
       Overload{[](int_type i) { return std::hash<int_type>{}(i); },
                [](float_type f) { return std::hash<float_type>{}(f); },
@@ -98,14 +99,14 @@ std::size_t Hash::operator()(const Expr& expr) const {
                [](const List& l) {
                  std::size_t seed = 0;
                  for (auto& e : l) {
-                   seed ^= Hash{}(e);
+                   seed ^= hash(e);
                  }
                  return seed;
                },
                [](const Vector& v) {
                  std::size_t seed = 0;
                  for (auto& e : v) {
-                   seed ^= Hash{}(e);
+                   seed ^= hash(e);
                  }
                  return seed;
                },
@@ -113,8 +114,8 @@ std::size_t Hash::operator()(const Expr& expr) const {
                [](const Map& m) {
                  std::size_t seed = 0;
                  for (auto& [k, v] : m) {
-                   seed ^= Hash{}(k);
-                   seed ^= Hash{}(v);
+                   seed ^= hash(k);
+                   seed ^= hash(v);
                  }
                  return seed;
                }},

@@ -47,7 +47,8 @@ class Quoted {
   Quoted& operator=(const Quoted& other);
   Quoted& operator=(Quoted&& other) noexcept;
   std::size_t hash() const {
-    return Hash{}(*expr_) ^ std::hash<uint32_t>{}(0xdeadbeef);
+    static Hash hash;
+    return hash(*expr_) ^ std::hash<uint32_t>{}(0xdeadbeef);
   }
   bool operator==(const Quoted& other) const;
 
@@ -74,7 +75,7 @@ class Expr : public ExprBase {
   template <typename T>
   // TODO(hjiang): disable implicit conversion
   // cppcheck-suppress noExplicitConstructor
-  Expr(T&& t) : ExprBase(std::forward<T>(t)) {}
+  Expr(T&& t) : ExprBase(std::forward<T>(t)) {}  // NOLINT
 
   // TODO(hjiang): Do I need to define assignment to enable move?
 };
