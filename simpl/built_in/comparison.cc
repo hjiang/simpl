@@ -29,29 +29,6 @@ int OrderingToInt(std::partial_ordering ordering) {
   throw std::runtime_error("Invalid ordering");
 }
 
-int Compare(const Expr& lhs, const Expr& rhs);
-
-template <typename T1, typename T2>
-int CompareSeq(const T1& lhs, const T2& rhs) {
-  auto lhs_it = lhs.begin();
-  auto rhs_it = rhs.begin();
-  while (lhs_it != lhs.end() && rhs_it != rhs.end()) {
-    auto cmp = Compare(*lhs_it, *rhs_it);
-    if (cmp != 0) {
-      return cmp;
-    }
-    ++lhs_it;
-    ++rhs_it;
-  }
-  if (lhs_it == lhs.end() && rhs_it == rhs.end()) {
-    return 0;
-  }
-  if (lhs_it == lhs.end()) {
-    return -1;
-  }
-  return 1;
-}
-
 int Compare(const Expr& lhs, const Expr& rhs) {
   if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
     return OrderingToInt(std::get<int_type>(lhs) <=> std::get<int_type>(rhs));
@@ -67,9 +44,6 @@ int Compare(const Expr& lhs, const Expr& rhs) {
   }
   if (holds<std::string>(lhs) && holds<std::string>(rhs)) {
     return std::get<std::string>(lhs).compare(std::get<std::string>(rhs));
-  }
-  if (holds<List>(lhs) && holds<List>(rhs)) {
-    return CompareSeq(std::get<List>(lhs), std::get<List>(rhs));
   }
   throw std::runtime_error("Incomparable types");  // FIXME: error handling
 }

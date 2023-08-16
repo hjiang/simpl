@@ -112,9 +112,9 @@ TEST_F(SimplTest, ListHead) {
 }
 
 TEST_F(SimplTest, ListTail) {
-  auto e = run("(= (tail '(1 2 3)) '(2 3))");
-  EXPECT_TRUE(holds<bool>(e));
-  EXPECT_TRUE(std::get<bool>(e));
+  auto e = run("(tail '(1 2 3))");
+  EXPECT_TRUE(holds<List>(e));
+  EXPECT_EQ(std::get<List>(e).size(), 2);
 }
 
 TEST_F(SimplTest, VectorHead) {
@@ -137,30 +137,6 @@ TEST_F(SimplTest, VectorGet) {
 
 TEST_F(SimplTest, ListCannotGet) {
   EXPECT_THROW(run("(get '(1 2 3) 2)"), std::runtime_error);
-}
-
-TEST_F(SimplTest, ShorterListIsSmaller) {
-  auto e = run("(> '(1 2 3) '(1 2))");
-  EXPECT_TRUE(holds<bool>(e));
-  EXPECT_TRUE(std::get<bool>(e));
-  e = run("(>= '(1 2 3) '(1 2))");
-  EXPECT_TRUE(holds<bool>(e));
-  EXPECT_TRUE(std::get<bool>(e));
-  e = run("(< '(1 2 ) '(1 2 3))");
-  EXPECT_TRUE(holds<bool>(e));
-  EXPECT_TRUE(std::get<bool>(e));
-  e = run("(<= '(1 2 ) '(1 2 3))");
-  EXPECT_TRUE(holds<bool>(e));
-  EXPECT_TRUE(std::get<bool>(e));
-}
-
-TEST_F(SimplTest, ListCompare) {
-  auto e = run("(< '(1 2 3) '(1 3))");
-  EXPECT_TRUE(holds<bool>(e));
-  EXPECT_TRUE(std::get<bool>(e));
-  auto f = run("(<= '(1 2 3) '(1 3))");
-  EXPECT_TRUE(holds<bool>(f));
-  EXPECT_TRUE(std::get<bool>(f));
 }
 
 TEST_F(SimplTest, CompareIntAndString) {
