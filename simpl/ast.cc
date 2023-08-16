@@ -125,6 +125,4 @@ bool Quoted::operator==(const Quoted& other) const {
   return *expr_ == *other.expr_;
 }
 
-static Map static_map;
-
 }  // namespace simpl
