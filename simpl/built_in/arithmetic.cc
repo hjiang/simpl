@@ -26,7 +26,7 @@ constexpr struct {
   Expr operator()(const T1& lhs, const T2& rhs) const {
     return Expr{lhs + rhs};
   }
-} Plus;
+} plus;
 
 constexpr struct {
   Expr operator()(auto, auto) const {
@@ -38,7 +38,7 @@ constexpr struct {
   Expr operator()(const T1& lhs, const T2& rhs) const {
     return Expr{lhs - rhs};
   }
-} Minus;
+} minus;
 
 constexpr struct {
   Expr operator()(auto, auto) const {
@@ -50,7 +50,7 @@ constexpr struct {
   Expr operator()(const T1& lhs, const T2& rhs) const {
     return Expr{lhs * rhs};
   }
-} Times;
+} times;
 
 constexpr struct {
   Expr operator()(auto, auto) const {
@@ -62,24 +62,24 @@ constexpr struct {
   Expr operator()(const T1& lhs, const T2& rhs) const {
     return Expr{lhs / rhs};
   }
-} Devide;
+} divide;
 
 }  // anonymous namespace
 
 static Expr operator+(const Expr& lhs, const Expr& rhs) {
-  return std::visit(Plus, lhs, rhs);
+  return std::visit(plus, lhs, rhs);
 }
 
 static Expr operator-(const Expr& lhs, const Expr& rhs) {
-  return std::visit(Minus, lhs, rhs);
+  return std::visit(minus, lhs, rhs);
 }
 
 static Expr operator*(const Expr& lhs, const Expr& rhs) {
-  return std::visit(Times, lhs, rhs);
+  return std::visit(times, lhs, rhs);
 }
 
 static Expr operator/(const Expr& lhs, const Expr& rhs) {
-  return std::visit(Devide, lhs, rhs);
+  return std::visit(divide, lhs, rhs);
 }
 
 static Expr operator%(const Expr& lhs, const Expr& rhs) {
