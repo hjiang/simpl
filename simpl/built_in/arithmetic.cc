@@ -2,10 +2,11 @@
 
 #include "simpl/built_in/arithmetic.h"
 
-#include <concepts>
 #include <numeric>
 #include <string>
 
+#include "simpl/ast.h"
+#include "simpl/concepts.hh"
 #include "simpl/interpreter.h"
 #include "simpl/interpreter_util.h"
 
@@ -14,9 +15,6 @@ namespace simpl {
 namespace built_in {
 
 namespace {
-
-template <typename T>
-concept Numerical = std::integral<T> || std::floating_point<T>;
 
 constexpr struct {
   Expr operator()(auto, auto) const {

@@ -7,6 +7,8 @@
 #include <string>
 #include <variant>
 
+#include "simpl/ast.h"
+#include "simpl/concepts.hh"
 #include "simpl/interpreter.h"
 #include "simpl/interpreter_util.h"
 
@@ -29,24 +31,26 @@ int OrderingToInt(std::partial_ordering ordering) {
   throw std::runtime_error("Invalid ordering");
 }
 
-int Compare(const Expr& lhs, const Expr& rhs) {
-  if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return OrderingToInt(std::get<int_type>(lhs) <=> std::get<int_type>(rhs));
+namespace {
+
+constexpr struct {
+  int operator()(auto, auto) const {
+    throw std::runtime_error("Incomparable types.");
   }
-  if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return OrderingToInt(std::get<int_type>(lhs) <=> std::get<float_type>(rhs));
+
+  template <typename T1, typename T2>
+    requires Numerical<T1> && Numerical<T2> &&
+             std::three_way_comparable_with<T1, T2>
+  int operator()(T1 lhs, T2 rhs) const {
+    return OrderingToInt(lhs <=> rhs);
   }
-  if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return OrderingToInt(std::get<float_type>(lhs) <=> std::get<int_type>(rhs));
+
+  int operator()(const std::string& lhs, const std::string& rhs) const {
+    return lhs.compare(rhs);
   }
-  if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return OrderingToInt(std::get<float_type>(lhs) <=> std::get<double>(rhs));
-  }
-  if (holds<std::string>(lhs) && holds<std::string>(rhs)) {
-    return std::get<std::string>(lhs).compare(std::get<std::string>(rhs));
-  }
-  throw std::runtime_error("Incomparable types");  // FIXME: error handling
-}
+} compare;
+
+}  // anonymous namespace
 
 int Compare(const std::list<Expr>& args) {
   if (args.size() != 2) {
@@ -54,7 +58,7 @@ int Compare(const std::list<Expr>& args) {
   }
   auto lhs = args.front();
   auto rhs = args.back();
-  return Compare(lhs, rhs);
+  return std::visit(compare, lhs, rhs);
 }
 
 }  // namespace
