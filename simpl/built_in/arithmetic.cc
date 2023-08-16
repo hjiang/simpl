@@ -2,6 +2,7 @@
 
 #include "simpl/built_in/arithmetic.h"
 
+#include <concepts>
 #include <numeric>
 #include <string>
 
@@ -12,72 +13,75 @@ namespace simpl {
 
 namespace built_in {
 
+namespace {
+
+template <typename T>
+concept Numerical = std::integral<T> || std::floating_point<T>;
+
+constexpr struct {
+  Expr operator()(auto, auto) const {
+    throw std::runtime_error("Invalid type for operator +");
+  }
+
+  template <typename T1, typename T2>
+    requires Numerical<T1> && Numerical<T2>
+  Expr operator()(const T1& lhs, const T2& rhs) const {
+    return Expr{lhs + rhs};
+  }
+} Plus;
+
+constexpr struct {
+  Expr operator()(auto, auto) const {
+    throw std::runtime_error("Invalid type for operator -");
+  }
+
+  template <typename T1, typename T2>
+    requires Numerical<T1> && Numerical<T2>
+  Expr operator()(const T1& lhs, const T2& rhs) const {
+    return Expr{lhs - rhs};
+  }
+} Minus;
+
+constexpr struct {
+  Expr operator()(auto, auto) const {
+    throw std::runtime_error("Invalid type for operator *");
+  }
+
+  template <typename T1, typename T2>
+    requires Numerical<T1> && Numerical<T2>
+  Expr operator()(const T1& lhs, const T2& rhs) const {
+    return Expr{lhs * rhs};
+  }
+} Times;
+
+constexpr struct {
+  Expr operator()(auto, auto) const {
+    throw std::runtime_error("Invalid type for operator /");
+  }
+
+  template <typename T1, typename T2>
+    requires Numerical<T1> && Numerical<T2>
+  Expr operator()(const T1& lhs, const T2& rhs) const {
+    return Expr{lhs / rhs};
+  }
+} Devide;
+
+}  // anonymous namespace
+
 static Expr operator+(const Expr& lhs, const Expr& rhs) {
-  if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return Expr{std::get<int_type>(lhs) + std::get<int_type>(rhs)};
-  }
-  if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return Expr{std::get<int_type>(lhs) + std::get<float_type>(rhs)};
-  }
-  if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return Expr{std::get<float_type>(lhs) + std::get<int_type>(rhs)};
-  }
-  if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return Expr{std::get<float_type>(lhs) + std::get<float_type>(rhs)};
-  }
-  throw std::runtime_error(
-      "Invalid types for operator +");  // FIXME: error handling
+  return std::visit(Plus, lhs, rhs);
 }
 
 static Expr operator-(const Expr& lhs, const Expr& rhs) {
-  if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return Expr{std::get<int_type>(lhs) - std::get<int_type>(rhs)};
-  }
-  if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return Expr{std::get<int_type>(lhs) - std::get<float_type>(rhs)};
-  }
-  if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return Expr{std::get<float_type>(lhs) - std::get<int_type>(rhs)};
-  }
-  if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return Expr{std::get<float_type>(lhs) - std::get<float_type>(rhs)};
-  }
-  throw std::runtime_error(
-      "Invalid types for operator -");  // FIXME: error handling
+  return std::visit(Minus, lhs, rhs);
 }
 
 static Expr operator*(const Expr& lhs, const Expr& rhs) {
-  if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return Expr{std::get<int_type>(lhs) * std::get<int_type>(rhs)};
-  }
-  if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return Expr{std::get<int_type>(lhs) * std::get<float_type>(rhs)};
-  }
-  if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return Expr{std::get<float_type>(lhs) * std::get<int_type>(rhs)};
-  }
-  if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return Expr{std::get<float_type>(lhs) * std::get<float_type>(rhs)};
-  }
-  throw std::runtime_error(
-      "Invalid types for operator *");  // FIXME: error handling
+  return std::visit(Times, lhs, rhs);
 }
 
 static Expr operator/(const Expr& lhs, const Expr& rhs) {
-  if (holds<int_type>(lhs) && holds<int_type>(rhs)) {
-    return Expr{std::get<int_type>(lhs) / std::get<int_type>(rhs)};
-  }
-  if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
-    return Expr{std::get<int_type>(lhs) / std::get<float_type>(rhs)};
-  }
-  if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
-    return Expr{std::get<float_type>(lhs) / std::get<int_type>(rhs)};
-  }
-  if (holds<float_type>(lhs) && holds<float_type>(rhs)) {
-    return Expr{std::get<float_type>(lhs) / std::get<float_type>(rhs)};
-  }
-  throw std::runtime_error(
-      "Invalid types for operator /");  // FIXME: error handling
+  return std::visit(Devide, lhs, rhs);
 }
 
 static Expr operator%(const Expr& lhs, const Expr& rhs) {
