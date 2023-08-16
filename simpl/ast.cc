@@ -36,7 +36,7 @@ std::ostream& operator<<(std::ostream& os, const Symbol& s) {
 std::ostream& operator<<(std::ostream& os, const List& l) {
   os << '(';
   if (!l.empty()) {
-    for (auto& e : rv::take(l, l.size() - 1)) {
+    for (const auto& e : rv::take(l, l.size() - 1)) {
       os << e;
       os << ' ';
     }
@@ -48,7 +48,7 @@ std::ostream& operator<<(std::ostream& os, const List& l) {
 std::ostream& operator<<(std::ostream& os, const Vector& vec) {
   os << '[';
   if (!vec.empty()) {
-    for (auto& e : rv::take(vec, vec.size() - 1)) {
+    for (const auto& e : rv::take(vec, vec.size() - 1)) {
       os << e;
       os << ' ';
     }
