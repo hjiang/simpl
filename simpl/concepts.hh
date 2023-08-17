@@ -8,7 +8,7 @@
 namespace simpl {
 
 template <typename T>
-concept Numerical = std::integral<T> || std::floating_point<T>;
+concept Numerical = (std::integral<T> || std::floating_point<T>) && (! std::same_as<T, bool>);
 
 }  // namespace simpl
 
