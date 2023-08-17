@@ -52,6 +52,17 @@ TEST(Interpreter, Quoted) {
   EXPECT_TRUE(holds<List>(interpreter.Evaluate(exprs)));
 }
 
+TEST(Interpreter, QuotedSymbol) {
+  Lexer lexer("'(let [a 'b] (cons a '(1 2)))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  EXPECT_EQ(exprs.size(), 1);
+  Interpreter interpreter;
+  EXPECT_TRUE(holds<List>(interpreter.Evaluate(exprs)));
+  EXPECT_EQ(std::get<List>(interpreter.Evaluate(exprs)).size(), 3);
+}
+
 TEST(Interpreter, NestedSum) {
   Lexer lexer("(+ 1 2 (+ 3 4))");
   auto tokens = lexer.scan();
