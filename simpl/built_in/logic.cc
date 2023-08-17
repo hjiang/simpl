@@ -2,33 +2,25 @@
 
 #include "simpl/built_in/logic.h"
 
+#include <numeric>
+
 namespace simpl {
 namespace built_in {
 
 Expr Or::Call(Interpreter* interpreter, const ExprList& exprs) {
-  if (exprs.empty()) {
-    throw std::runtime_error("`or` expects at least one argument");
-  }
-  for (const auto& expr : exprs) {
-    decltype(auto) r = interpreter->Evaluate(expr);
-    if (IsTruthy(r)) {
-      return r;
-    }
-  }
-  return interpreter->last_value();
+  return std::accumulate(
+      exprs.begin(), exprs.end(), Expr{false},
+      [interpreter](const Expr& acc, const Expr& expr) -> Expr {
+        return IsTruthy(acc) ? acc : interpreter->Evaluate(expr);
+      });
 }
 
 Expr And::Call(Interpreter* interpreter, const ExprList& exprs) {
-  if (exprs.empty()) {
-    throw std::runtime_error("`and` expects at least one argument");
-  }
-  for (const auto& expr : exprs) {
-    decltype(auto) r = interpreter->Evaluate(expr);
-    if (!IsTruthy(r)) {
-      return r;
-    }
-  }
-  return interpreter->last_value();
+  return std::accumulate(
+      exprs.begin(), exprs.end(), Expr{true},
+      [interpreter](const Expr& acc, const Expr& expr) -> Expr {
+        return IsTruthy(acc) ? interpreter->Evaluate(expr) : acc;
+      });
 }
 
 }  // namespace built_in

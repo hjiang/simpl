@@ -63,13 +63,9 @@ TEST_F(SimplTest, InvalidArgument) {
   EXPECT_THROW(run("(% \"foo\" 32)"), std::runtime_error);
 }
 
-TEST_F(SimplTest, AndExpectsArguments) {
-  EXPECT_THROW(run("(and)"), std::runtime_error);
-}
+TEST_F(SimplTest, AndWithoutArguments) { EXPECT_EQ(run("(and)"), Expr{true}); }
 
-TEST_F(SimplTest, OrExpectsArguments) {
-  EXPECT_THROW(run("(and)"), std::runtime_error);
-}
+TEST_F(SimplTest, OrWithoutArguments) { EXPECT_EQ(run("(or)"), Expr{false}); }
 
 TEST_F(SimplTest, OrReturnsLastFalseArgument) {
   auto e = run("(or false nil ())");
@@ -156,8 +152,6 @@ TEST_F(SimplTest, InvalidLet) {
 }
 
 TEST_F(SimplTest, InvalidFn) { EXPECT_THROW(run("(fn)"), std::runtime_error); }
-
-TEST_F(SimplTest, InvalidOr) { EXPECT_THROW(run("(or)"), std::runtime_error); }
 
 TEST_F(SimplTest, InvalidSequenceOp) {
   EXPECT_THROW(run("(head 123)"), std::runtime_error);
