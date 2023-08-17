@@ -54,6 +54,16 @@ TEST(Parser, Symbol) {
   EXPECT_EQ(std::get<Symbol>(atom).name, "foo");
 }
 
+TEST(Parser, Keyword) {
+  Lexer lexer(":foo");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kKeyword);
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  auto atom = exprs.front();
+  EXPECT_EQ(std::get<Keyword>(atom).name, "foo");
+}
+
 TEST(Parser, List) {
   Lexer lexer("(+ 1 2)");
   auto tokens = lexer.scan();

@@ -73,6 +73,9 @@ Expr Parser::ParseSimpleExpr() {
     case Token::Type::kSymbol:
       return Expr{Symbol{token.lexeme}};
       break;
+    case Token::Type::kKeyword:
+      return Expr{Keyword{std::get<std::string>(token.literal)}};
+      break;
     case Token::Type::kNil:
       return Expr{nullptr};
       break;
