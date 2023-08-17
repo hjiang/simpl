@@ -26,6 +26,7 @@ class Lexer {
   void String();
   void Number();
   void Symbol();
+  void Keyword();
   const std::string source_;
   std::list<Token> tokens_;
   size_t start_ = 0;

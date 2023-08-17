@@ -15,7 +15,7 @@ namespace simpl {
 
 namespace {
 
-const std::unordered_map<std::string, Token::Type> kKeywords{
+const std::unordered_map<std::string, Token::Type> kReserved{
     {"false", Token::kFalse},
     {"nil", Token::kNil},
     {"true", Token::kTrue},
@@ -105,6 +105,9 @@ void Lexer::ScanToken() {
     case '\n':
       line_++;
       break;
+    case ':':
+      Keyword();
+      break;
     case '+':
       if (isspace(Peek())) {
         AddToken(Token::kPlus);
@@ -193,8 +196,18 @@ void Lexer::Symbol() {
   while (CanBeInSymbol(Peek())) Advance();
 
   const auto text = source_.substr(start_, current_ - start_);
-  const auto it = kKeywords.find(text);
-  it != kKeywords.end() ? AddToken(it->second) : AddToken(Token::kSymbol);
+  const auto it = kReserved.find(text);
+  it != kReserved.end() ? AddToken(it->second) : AddToken(Token::kSymbol);
+}
+
+void Lexer::Keyword() {
+  while (CanBeInSymbol(Peek())) Advance();
+  if (start_ + 2 > current_) {
+    Error(line_, "Invalid keyword.");
+    return;
+  }
+  const auto text = source_.substr(start_ + 1, current_ - start_ - 1);
+  AddToken(Token::kKeyword, text);
 }
 
 char Lexer::PeekNext() {

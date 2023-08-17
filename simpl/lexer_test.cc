@@ -92,6 +92,31 @@ TEST(Lexer, Identifier) {
   EXPECT_FALSE(simpl::HadError());
 }
 
+TEST(Lexer, Keyword) {
+  simpl::ClearError();
+  Lexer lexer(":name");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 2);
+  EXPECT_EQ(tokens.front().type, Token::kKeyword);
+  EXPECT_FALSE(simpl::HadError());
+}
+
+TEST(Lexer, EmptyKeyword) {
+  simpl::ClearError();
+  Lexer lexer(":");
+  auto tokens = lexer.scan();
+  EXPECT_TRUE(simpl::HadError());
+}
+
+TEST(Lexer, ShortestKeyword) {
+  simpl::ClearError();
+  Lexer lexer(":a");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 2);
+  EXPECT_EQ(tokens.front().type, Token::kKeyword);
+  EXPECT_FALSE(simpl::HadError());
+}
+
 TEST(Lexer, NegativeInteger) {
   simpl::ClearError();
   Lexer lexer("-123");

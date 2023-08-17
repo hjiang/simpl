@@ -38,6 +38,7 @@ class Token {
 
     // Literals.
     kSymbol,
+    kKeyword,
     kString,
     kInteger,
     kFloat,
