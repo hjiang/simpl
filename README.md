@@ -86,6 +86,19 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
 (get a 2)  ; => 3
 ```
 
+### Map
+
+```clojure
+(def person {:name "John Snow"
+             :age 35
+             :alive true
+             :knows nil})
+
+(assert (= (:name person) "John Snow"))
+(assert (= (:age person) 35))
+(assert (:alive person))
+```
+
 ### Lambda function as first-class value
 
 ``` clojure
@@ -112,7 +125,6 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
 ## Coming soon
 
 - More control flow options
-- Standard data structures: `map`, `set`
 - `loop`, `recur` and tail-call optimization
 - Macros
 - Richer standard library
