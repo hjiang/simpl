@@ -89,6 +89,8 @@ Expr Parser::ParseExpr() {
     return ParseList();
   } else if (Match(Token::Type::kLeftBracket)) {
     return ParseVector();
+  } else if (Match(Token::Type::kLeftBrace)) {
+    return ParseMap();
   } else {
     return ParseSimpleExpr();
   }
@@ -100,7 +102,7 @@ Expr Parser::ParseVector() {
     args.push_back(ParseExpr());
   }
   Consume(Token::Type::kRightBracket, "Expect ']' at the end of vector.");
-  return Expr{args};
+  return Expr{std::move(args)};
 }
 
 Expr Parser::ParseList() {
@@ -110,6 +112,17 @@ Expr Parser::ParseList() {
   }
   Consume(Token::Type::kRightParen, "Expect ')' after list.");
   return Expr{std::move(exprs)};
+}
+
+Expr Parser::ParseMap() {
+  Map s_map;
+  while (!Check(Token::Type::kRightBrace) && !AtEnd()) {
+    auto key = ParseExpr();
+    auto value = ParseExpr();
+    s_map.emplace(std::move(key), std::move(value));
+  }
+  Consume(Token::Type::kRightBrace, "Expect '}' at the end of a map.");
+  return Expr{std::move(s_map)};
 }
 
 bool Parser::Match(Token::Type type) {

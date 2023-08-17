@@ -100,6 +100,17 @@ TEST(Parser, Vector) {
   EXPECT_EQ(1, std::get<int_type>(vec.front()));
 }
 
+TEST(Parser, Map) {
+  Lexer lexer("{:a 1 :b 2}");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto exprs = parser.Parse();
+  auto m = std::get<Map>(exprs.front());
+  EXPECT_EQ(1, exprs.size());
+  EXPECT_EQ(2, m.size());
+  EXPECT_EQ(Expr{1}, m[Expr{Keyword{"a"}}]);
+  EXPECT_EQ(Expr{2}, m[Expr{Keyword{"b"}}]);
+}
 TEST(Parser, Let) {
   Lexer lexer("(let [a 2] a)");
   auto tokens = lexer.scan();
