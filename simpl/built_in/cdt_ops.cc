@@ -12,9 +12,14 @@ namespace simpl {
 namespace built_in {
 
 struct GetVisitor {
-  template <typename T, typename U>
-  Expr operator()(const T&, U) const {
+  template <typename T, typename K>
+  Expr operator()(const T&, K) const {
     throw std::runtime_error("get: invalid argument types");
+  }
+
+  template <typename K>
+  Expr operator()(const Map& v, K key) const {
+    return v.at(Expr{key});
   }
 };
 

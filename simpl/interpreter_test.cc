@@ -356,8 +356,13 @@ TEST(Interpreter, AssertFalse) {
   EXPECT_THROW(interpreter.Evaluate(expr), std::runtime_error);
 }
 
-}  // namespace simpl
+TEST(Interpreter, GetMapKey) {
+  Lexer lexer("(let [m {:a 1 :b 2}] (get m :a))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(1, std::get<int_type>(interpreter.Evaluate(expr)));
+}
 
-// Local Variables:
-// compile-command : "bazel test //simpl:all"
-// End:
+}  // namespace simpl
