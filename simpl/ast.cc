@@ -94,6 +94,7 @@ std::size_t Hash::operator()(const Expr& expr) const {
                [](bool b) { return std::hash<bool>{}(b); },
                [](const std::string& s) { return std::hash<std::string>{}(s); },
                [](const Symbol& s) { return s.hash(); },
+               [](const Keyword& kw) { return kw.hash(); },
                [](std::nullptr_t) { return std::hash<uint32_t>{}(0xdeadbeef); },
                [](callable_ptr_t c) { return std::hash<callable_ptr_t>{}(c); },
                [](const List& l) {

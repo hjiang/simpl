@@ -38,6 +38,14 @@ struct Symbol {
   bool operator==(const Symbol& other) const { return name == other.name; }
 };
 
+struct Keyword {
+  std::string name;
+  std::size_t hash() const {
+    return std::hash<std::string>{}(name) ^ std::hash<uint32_t>{}(0xbeefdead);
+  }
+  bool operator==(const Keyword& other) const { return name == other.name; }
+};
+
 class Quoted {
  public:
   Quoted(const Quoted& other);
@@ -65,9 +73,9 @@ using Vector = std::vector<Expr>;
 
 using Map = std::unordered_map<Expr, Expr, Hash>;
 
-using ExprBase =
-    std::variant<int_type, float_type, bool, std::string, Symbol,
-                 std::nullptr_t, callable_ptr_t, List, Vector, Quoted, Map>;
+using ExprBase = std::variant<int_type, float_type, bool, std::string, Symbol,
+                              std::nullptr_t, callable_ptr_t, List, Vector,
+                              Quoted, Map, Keyword>;
 
 class Expr : public ExprBase {
  public:
