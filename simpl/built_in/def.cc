@@ -19,7 +19,7 @@ Expr Def::Call(Interpreter* interpreter, const ExprList& exprs) {
   }
   interpreter->env()->Define(std::get<Symbol>(exprs.front()).name,
                              interpreter->Evaluate(exprs.back()));
-  return interpreter->last_value();
+  return Expr{nullptr};
 }
 
 Expr Defn::Call(Interpreter* interpreter, const ExprList& exprs) {
@@ -30,7 +30,7 @@ Expr Defn::Call(Interpreter* interpreter, const ExprList& exprs) {
   List fn_body(++exprs.begin(), exprs.end());
   fn_body.push_front(Expr{Symbol{"fn"}});
   interpreter->env()->Define(name, interpreter->Evaluate(fn_body));
-  return interpreter->last_value();
+  return Expr{nullptr};
 }
 
 }  // namespace built_in

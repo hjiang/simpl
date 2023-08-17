@@ -20,22 +20,20 @@
 #include "simpl/config.h"
 #include "simpl/interpreter_util.h"
 #include "simpl/user_fn.h"
+#include "simpl/util.hh"
 
 namespace simpl {
 
 struct Interpreter::EvalVisitor {
   Interpreter* interpreter;
-  void operator()(const auto& expr) { interpreter->last_value_ = expr; }
-  void operator()(const Quoted& expr) {
-    interpreter->last_value_ = expr.expr();
+  Expr operator()(auto&& expr) { return std::forward<Expr>(expr); }
+  Expr operator()(const Quoted& expr) { return expr.expr(); }
+  Expr operator()(const Symbol& expr) {
+    return interpreter->env_->Get(expr.name);
   }
-  void operator()(const Symbol& expr) {
-    interpreter->last_value_ = interpreter->env_->Get(expr.name);
-  }
-  void operator()(const List& list) {
+  Expr operator()(const List& list) {
     if (list.empty()) {
-      interpreter->last_value_ = nullptr;
-      return;
+      return Expr{nullptr};
     }
     auto result = interpreter->Evaluate(list.front());
     if (holds<callable_ptr_t>(result)) {
@@ -43,14 +41,14 @@ struct Interpreter::EvalVisitor {
       auto it = list.begin();
       ++it;
       ExprList args(it, list.end());
-      interpreter->last_value_ = callable->Call(interpreter, args);
+      return callable->Call(interpreter, args);
     } else {
       throw std::runtime_error("Cannot apply a non-callable");
     }
   }
 };
 
-Interpreter::Interpreter() : last_value_(nullptr), env_(new Environment()) {
+Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("=", std::make_unique<built_in::Equals>());
   env_->Define(">", std::make_unique<built_in::GreaterThan>());
   env_->Define(">=", std::make_unique<built_in::GreaterThanOrEqualTo>());
@@ -79,25 +77,25 @@ Interpreter::Interpreter() : last_value_(nullptr), env_(new Environment()) {
   env_->Define("get", std::make_unique<built_in::Get>());
 }
 
-const Expr& Interpreter::Evaluate(const Expr& expr) {
+Expr Interpreter::Evaluate(const Expr& expr) {
   EvalVisitor visitor{this};
-  std::visit(visitor, expr);
-  return last_value_;
+  return std::visit(visitor, expr);
 }
 
-const Expr& Interpreter::Evaluate(const ExprList& exprs,
-                                  std::shared_ptr<Environment> env) {
+Expr Interpreter::Evaluate(const ExprList& exprs,
+                           std::shared_ptr<Environment> env) {
   auto old_env = env_;
   if (env) {
     env_ = env;
   }
-  for (const auto& e : exprs) {
-    Evaluate(e);
-  }
-  if (env) {
-    env_ = old_env;
-  }
-  return last_value_;
+  auto restore = defer([this, env, old_env]() {
+    if (env) {
+      this->env_ = old_env;
+    }
+  });
+  return std::accumulate(
+      exprs.begin(), exprs.end(), Expr(nullptr),
+      [this](const Expr&, const Expr& rhs) { return Evaluate(rhs); });
 }
 
 }  // namespace simpl

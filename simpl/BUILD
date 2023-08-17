@@ -28,8 +28,8 @@ cc_test(name = 'simpl_test',
         ],
         size = 'small')
 
-cc_library(name = 'concepts',
-           hdrs = ['concepts.hh'])
+cc_library(name = 'util',
+           hdrs = ['util.hh'])
 
 cc_library(name = 'token',
            srcs = ['token.cc'],
@@ -118,7 +118,7 @@ cc_library(name = 'interpreter',
                'interpreter_util.h',
                'user_fn.h',
            ],
-           deps = ['ast', 'built_in_util', 'error', 'config', 'concepts'])
+           deps = ['ast', 'built_in_util', 'error', 'config', 'util'])
 
 cc_test(name = 'interpreter_test',
         srcs = ['interpreter_test.cc'],
