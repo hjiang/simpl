@@ -36,7 +36,13 @@ struct Interpreter::EvalVisitor {
       return Expr{nullptr};
     }
     auto result = interpreter->Evaluate(list.front());
-    if (holds<callable_ptr_t>(result)) {
+    if (holds<Keyword>(result)) {
+      if (list.size() != 2) {
+        throw std::runtime_error("Keyword expects 1 argument.");
+      }
+      auto m = interpreter->Evaluate(list.back());
+      return std::get<Map>(m).at(result);
+    } else if (holds<callable_ptr_t>(result)) {
       auto callable = std::get<callable_ptr_t>(result);
       auto it = list.begin();
       ++it;

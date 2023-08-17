@@ -18,7 +18,9 @@ class Assert : public Function {
  private:
   Expr FnCall(Interpreter*, const args_type& args) override {
     if (!IsTruthy(args.front())) {
-      throw std::runtime_error(std::get<std::string>(args.back()));
+      auto reason = args.size() == 2 ? std::get<std::string>(args.back())
+                                     : "Assertion failed.";
+      throw std::runtime_error(reason);
     }
     return Expr{nullptr};
   }

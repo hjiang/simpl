@@ -19,6 +19,16 @@ sh_test(
 )
 
 sh_test(
+    name = "complex_data_types_test",
+    size = "small",
+    srcs = ["run_simpl_tests"],
+    data = [
+        "//simpl:simpl",
+        "simpl_progs/complex_data_types.simpl",
+    ]
+)
+
+sh_test(
     name = "repl_test",
     size = "small",
     flaky = True,

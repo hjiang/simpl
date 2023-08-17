@@ -1,0 +1,8 @@
+(def m {:name "John Snow"
+        :age 35
+        :alive true})
+
+(assert (= (:name m) "John Snow"))
+(assert (= (:age m) 35))
+(assert (:alive m))
+

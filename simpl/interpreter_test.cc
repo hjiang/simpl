@@ -365,4 +365,13 @@ TEST(Interpreter, GetMapKey) {
   EXPECT_EQ(1, std::get<int_type>(interpreter.Evaluate(expr)));
 }
 
+TEST(Interpreter, KeyMap) {
+  Lexer lexer("(let [m {:a 1 :b 2}] (:a m))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(1, std::get<int_type>(interpreter.Evaluate(expr)));
+}
+
 }  // namespace simpl
