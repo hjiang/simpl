@@ -39,7 +39,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numerical<T1> && Numerical<T2> &&
+    requires Numeric<T1> && Numeric<T2> &&
              std::three_way_comparable_with<T1, T2>
   int operator()(T1 lhs, T2 rhs) const {
     return OrderingToInt(lhs <=> rhs);

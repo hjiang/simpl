@@ -22,7 +22,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numerical<T1> && Numerical<T2>
+    requires Numeric<T1> && Numeric<T2>
   Expr operator()(T1 lhs, T2 rhs) const {
     return Expr{lhs + rhs};
   }
@@ -34,7 +34,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numerical<T1> && Numerical<T2>
+    requires Numeric<T1> && Numeric<T2>
   Expr operator()(T1 lhs, T2 rhs) const {
     return Expr{lhs - rhs};
   }
@@ -46,7 +46,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numerical<T1> && Numerical<T2>
+    requires Numeric<T1> && Numeric<T2>
   Expr operator()(T1 lhs, T2 rhs) const {
     return Expr{lhs * rhs};
   }
@@ -58,7 +58,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numerical<T1> && Numerical<T2>
+    requires Numeric<T1> && Numeric<T2>
   Expr operator()(T1 lhs, T2 rhs) const {
     return Expr{lhs / rhs};
   }
