@@ -11,8 +11,12 @@ namespace built_in {
 
 class Fn : public Callable {
  public:
+  explicit Fn(bool lazy = false) : lazy_(lazy) {}
   virtual ~Fn() = default;
   Expr Call(Interpreter* interpreter, const ExprList& exprs) override;
+
+ private:
+  bool lazy_;
 };
 
 }  // namespace built_in

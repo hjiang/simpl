@@ -75,6 +75,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("or", std::make_unique<built_in::Or>());
   env_->Define("do", std::make_unique<built_in::Do>());
   env_->Define("fn", std::make_unique<built_in::Fn>());
+  env_->Define("lazy-fn", std::make_unique<built_in::Fn>(true));
   env_->Define("def", std::make_unique<built_in::Def>());
   env_->Define("defn", std::make_unique<built_in::Defn>());
   env_->Define("eval", std::make_unique<built_in::Eval>());

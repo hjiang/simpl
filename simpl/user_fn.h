@@ -32,8 +32,9 @@ class FnDef {
 class UserFn : public Function {
  public:
   explicit UserFn(FnDef&& definition,
-                  std::shared_ptr<Interpreter::Environment> closure = nullptr)
-      : definition_(definition), closure_(closure) {}
+                  std::shared_ptr<Interpreter::Environment> closure = nullptr,
+                  bool lazy = false)
+      : Function(lazy), definition_(definition), closure_(closure) {}
 
  private:
   Expr FnCall(Interpreter*, const args_type& args) override;

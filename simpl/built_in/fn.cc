@@ -25,7 +25,7 @@ Expr Fn::Call(Interpreter* interpreter, const ExprList& exprs) {
   return std::make_unique<UserFn>(
       FnDef(FnDef::param_list_t(param_names.begin(), param_names.end()),
             std::move(body)),
-      interpreter->env());
+      interpreter->env(), lazy_);
 }
 
 }  // namespace built_in

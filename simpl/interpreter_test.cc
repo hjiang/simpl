@@ -374,4 +374,13 @@ TEST(Interpreter, KeyMap) {
   EXPECT_EQ(1, std::get<int_type>(interpreter.Evaluate(expr)));
 }
 
+TEST(Interpreter, LazyFn) {
+  Lexer lexer("(let [f (lazy-fn [a] (eval (head a)))] (f ((/ 2 1) (/ 2 0))))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(2, std::get<int_type>(interpreter.Evaluate(expr)));
+}
+
 }  // namespace simpl
