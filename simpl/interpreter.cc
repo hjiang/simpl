@@ -13,6 +13,7 @@
 #include "simpl/built_in/comparison.h"
 #include "simpl/built_in/control_flow.h"
 #include "simpl/built_in/def.h"
+#include "simpl/built_in/eval.hh"
 #include "simpl/built_in/fn.h"
 #include "simpl/built_in/io.h"
 #include "simpl/built_in/logic.h"
@@ -76,6 +77,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("fn", std::make_unique<built_in::Fn>());
   env_->Define("def", std::make_unique<built_in::Def>());
   env_->Define("defn", std::make_unique<built_in::Defn>());
+  env_->Define("eval", std::make_unique<built_in::Eval>());
   env_->Define("let", std::make_unique<built_in::Let>());
   env_->Define("cons", std::make_unique<built_in::Cons>());
   env_->Define("head", std::make_unique<built_in::Head>());
