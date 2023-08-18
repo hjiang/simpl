@@ -3,7 +3,6 @@
 #ifndef SIMPL_BUILT_IN_CDT_OPS_H_
 #define SIMPL_BUILT_IN_CDT_OPS_H_
 
-#include "simpl/ast.h"
 #include "simpl/function.h"
 
 namespace simpl {
