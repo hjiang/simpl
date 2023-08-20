@@ -122,6 +122,21 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
 (printl lst)  ;; prints `1 2 3`
 ```
 
+### `eval`
+
+``` clojure
+(eval '(+ 1 2 3))  ;; => 6
+```
+
+### Lazy function
+
+``` clojure
+(let
+    [f (lazy-fn [a]
+        (eval (head a)))]
+    (f ((/ 2 1) (/ 2 0))))  ;; => 2
+```
+
 ## Coming soon
 
 - More control flow options
