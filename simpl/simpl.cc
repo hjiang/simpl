@@ -9,17 +9,42 @@
 #include <fstream>
 #include <iostream>
 #include <list>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 #include "simpl/ast.h"
 #include "simpl/error.h"
 #include "simpl/interpreter.h"
 #include "simpl/lexer.h"
 #include "simpl/parser.h"
+#include "simpl_lib/arrows.hh"
 
 namespace simpl {
+
+namespace {
+
+std::unique_ptr<Interpreter> InitSimpl() {
+  std::string source(simpl_lib_arrows_simpl,
+                     simpl_lib_arrows_simpl + sizeof(simpl_lib_arrows_simpl));
+  Lexer lexer(source);
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto interpreter = std::make_unique<Interpreter>();
+  interpreter->Evaluate(parser.Parse());
+  return interpreter;
+}
+
+Expr RunInterpreter(Interpreter *interpreter, std::string &&source) {
+  Lexer lexer(std::move(source));
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  return interpreter->Evaluate(parser.Parse());
+}
+
+}  // anonymous namespace
 
 Expr run(const std::string &source, Timing *timing) {
   auto t1 = std::chrono::high_resolution_clock::now();
@@ -33,8 +58,8 @@ Expr run(const std::string &source, Timing *timing) {
     Parser parser(tokens);
     auto ast = parser.Parse();
     auto t3 = std::chrono::high_resolution_clock::now();
-    static Interpreter interpreter;
-    const auto &result = interpreter.Evaluate(ast);
+    auto interpreter = InitSimpl();
+    const auto &result = interpreter->Evaluate(ast);
     auto t4 = std::chrono::high_resolution_clock::now();
     if (timing) {
       timing->lexer_ms =
@@ -78,6 +103,7 @@ void RunFile(const std::string &path) {
 
 void RunREPL() {
   std::cout << "Simpl " << kVersion << std::endl;
+  auto interpreter = InitSimpl();
   while (true) {
     ClearError();
     std::cout << "> ";
@@ -90,7 +116,8 @@ void RunREPL() {
       continue;
     }
     try {
-      std::cout << run(line) << std::endl;
+      std::cout << RunInterpreter(interpreter.get(), std::move(line))
+                << std::endl;
     } catch (const std::runtime_error &e) {
       std::cerr << e.what() << std::endl;
       ClearError();

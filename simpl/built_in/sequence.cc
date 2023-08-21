@@ -10,6 +10,7 @@
 #include <variant>
 
 #include "simpl/built_in/util.h"
+#include "simpl/overload.h"
 
 namespace simpl {
 namespace built_in {
@@ -77,6 +78,31 @@ struct TailVisitor {
 Expr Tail::FnCall(Interpreter*, const args_type& args) {
   CheckArity("tail", args, 1);
   return std::visit(TailVisitor(), args.front());
+}
+
+namespace {
+
+template <typename T>
+concept HasEmpty = requires(T t) {
+                     { t.empty() } -> std::convertible_to<bool>;
+                   };  // NOLINT
+
+static struct {
+  template <HasEmpty T>
+  bool operator()(const T& c) {
+    return c.empty();
+  }
+
+  bool operator()(const auto&) {
+    throw std::runtime_error("empty?: invalid argument type");
+  }
+} IsEmpty;
+
+}  // anonymous namespace
+
+Expr Empty::FnCall(Interpreter*, const args_type& args) {
+  CheckArity("empty?", args, 1);
+  return Expr{std::visit(IsEmpty, args.front())};
 }
 
 }  // namespace built_in

@@ -84,6 +84,7 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("head", std::make_unique<built_in::Head>());
   env_->Define("tail", std::make_unique<built_in::Tail>());
   env_->Define("get", std::make_unique<built_in::Get>());
+  env_->Define("empty?", std::make_unique<built_in::Empty>());
 }
 
 Expr Interpreter::Evaluate(const Expr& expr) {

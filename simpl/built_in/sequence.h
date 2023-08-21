@@ -25,6 +25,11 @@ class Tail : public Function {
   Expr FnCall(Interpreter*, const args_type& args) override;
 };
 
+class Empty : public Function {
+ private:
+  Expr FnCall(Interpreter*, const args_type& args) override;
+};
+
 }  // namespace built_in
 }  // namespace simpl
 

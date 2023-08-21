@@ -181,15 +181,31 @@ TEST(Lexer, Equal) {
 }
 
 TEST(Lexer, Arrow) {
+  simpl::ClearError();
+  Lexer lexer("(-> a (+ 1 2))");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 10);
+  EXPECT_FALSE(simpl::HadError());
+}
+
+TEST(Lexer, LongArrow) {
   Lexer lexer("-->");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kSymbol);
+}
+
+TEST(Lexer, QuestionMark) {
+  Lexer lexer("empty?");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kSymbol);
+  EXPECT_EQ(tokens.front().lexeme, "empty?");
 }
 
 TEST(Lexer, SymbolCanHaveExclamation) {
   Lexer lexer("put!");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kSymbol);
+  EXPECT_EQ(tokens.front().lexeme, "put!");
 }
 
 TEST(Lexer, QuotedList) {

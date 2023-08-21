@@ -7,7 +7,8 @@ cc_binary(name = 'simpl',
           visibility = ['//visibility:public'])
 
 cc_library(name = 'simplib',
-           srcs = ['simpl.cc'],
+           srcs = ['simpl.cc',
+                   '//simpl_lib:arrows.hh'],
            hdrs = ['simpl.h'],
            deps = [
                'error',

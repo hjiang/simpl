@@ -22,11 +22,11 @@ const std::unordered_map<std::string, Token::Type> kReserved{
 };
 
 bool CanStartSymbol(char c) {
-  return isalpha(c) || '_' == c || '-' == c || '&' == c;
+  return isalpha(c) || '_' == c || '-' == c || '&' == c || '>' == c || '?' == c;
 }
 
 bool CanBeInSymbol(char c) {
-  return isalnum(c) || '_' == c || '-' == c || '!' == c || '/' == c || '&' == c;
+  return CanStartSymbol(c) || isdigit(c) || '!' == c || '/' == c;
 }
 
 bool CanEndNumber(char c) {

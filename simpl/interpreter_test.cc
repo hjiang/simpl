@@ -401,4 +401,22 @@ TEST(Interpreter, LazyFn) {
   EXPECT_EQ(2, std::get<int_type>(interpreter.Evaluate(expr)));
 }
 
+TEST(Interpreter, Empty) {
+  Lexer lexer("(empty? [])");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(expr)));
+}
+
+TEST(Interpreter, NotEmpty) {
+  Lexer lexer("(empty? [1])");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(expr)));
+}
+
 }  // namespace simpl

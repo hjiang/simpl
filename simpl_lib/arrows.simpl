@@ -1,0 +1,10 @@
+(def ->
+  (lazy-fn
+   [v & es]
+   (if (empty? es)
+     v
+     (let [e (head es)
+           t (tail es)]
+       (let [exp (cons (head e) (cons v (tail e)))]
+         (let [v (eval exp)]
+           (eval (cons '-> (cons v t)))))))))
