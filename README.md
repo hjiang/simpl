@@ -99,7 +99,14 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
 (assert (:alive person))
 ```
 
-### Lambda function as first-class value
+### `eval`
+
+``` clojure
+(eval '(+ 1 2 3))  ;; => 6
+```
+
+### Function
+#### Lambda function as first-class value
 
 ``` clojure
 (defn cons [h t]  ;; cons is a built-in function but can be overridden.
@@ -122,13 +129,8 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
 (printl lst)  ;; prints `1 2 3`
 ```
 
-### `eval`
 
-``` clojure
-(eval '(+ 1 2 3))  ;; => 6
-```
-
-### Lazy function
+#### Lazy function
 
 ``` clojure
 (let
@@ -137,17 +139,26 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
     (f ((/ 2 1) (/ 2 0))))  ;; => 2
 ```
 
+#### Variadic function
+
+``` clojure
+(defn foo [a & b]
+    (head b))
+
+(foo 1 2 3)  ;; => 2
+```
+
 ## Coming soon
 
 - More control flow options
 - `loop`, `recur` and tail-call optimization
-- Macros
-- Richer standard library
+- A richer standard library
 
 ## Longer-term road map
 
 - Coroutines
 - Threading
+- Maybe a virtual machine for performance
 
 ## Contributing
 
