@@ -18,14 +18,18 @@ class FnDef {
  public:
   using param_list_t = std::list<std::string>;
   using body_t = ExprList;
-  FnDef(param_list_t&& params, body_t&& body)
-      : params_(std::move(params)), body_(std::move(body)) {}
+  FnDef(param_list_t&& params, body_t&& body, std::string&& param_rest = "")
+      : params_(std::move(params)),
+        param_rest_(std::move(param_rest)),
+        body_(std::move(body)) {}
   virtual ~FnDef() = default;
   const param_list_t& params() const { return params_; }
+  const std::string& param_rest() const { return param_rest_; }
   const body_t& body() const { return body_; }
 
  private:
   const param_list_t params_;
+  const std::string param_rest_;
   const body_t body_;
 };
 

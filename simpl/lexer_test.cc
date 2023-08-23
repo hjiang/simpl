@@ -207,8 +207,12 @@ TEST(Lexer, Map) {
   EXPECT_FALSE(simpl::HadError());
 }
 
-}  // namespace simpl
+TEST(Lexer, VariadicFn) {
+  simpl::ClearError();
+  Lexer lexer("(defn foo [a & b] a)");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.size(), 11);
+  EXPECT_FALSE(simpl::HadError());
+}
 
-// Local Variables:
-// compile-command : "bazel test //simpl:lexer_test"
-// End:
+}  // namespace simpl

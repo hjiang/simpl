@@ -292,6 +292,24 @@ TEST(Interpreter, Defn) {
   EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
 }
 
+TEST(Interpreter, DefnVariadic) {
+  Lexer lexer("(defn foo [a & b] (head b))");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_TRUE(holds<std::nullptr_t>(interpreter.Evaluate(expr)));
+}
+
+TEST(Interpreter, EvalVariadic) {
+  Lexer lexer("(defn foo [a & b] (head b)) (foo 1 2 3)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 2);
+}
+
 TEST(Interpreter, Or) {
   Lexer lexer("(or true false)");
   auto tokens = lexer.scan();

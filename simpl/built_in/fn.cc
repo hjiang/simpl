@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <ranges>
+#include <string>
 #include <utility>
 
 #include "simpl/ast.h"
@@ -13,18 +14,27 @@ namespace simpl {
 namespace built_in {
 
 Expr Fn::Call(Interpreter* interpreter, const ExprList& exprs) {
-  namespace rvs = std::ranges::views;
+  namespace rgs = std::ranges;
   if (exprs.size() < 1) {
     throw std::runtime_error("fn: missing arguments");
   }
   auto i = exprs.begin();
   auto params = std::get<Vector>(*i++);
-  auto param_names = rvs::transform(
-      params, [](const auto& param) { return std::get<Symbol>(param).name; });
+  auto pos_params_end = rgs::find_if(params, [](const auto& param) {
+    return std::get<Symbol>(param).name == "&";
+  });
+  FnDef::param_list_t param_names;
+  rgs::transform(
+      params.begin(), pos_params_end, std::back_inserter(param_names),
+      [](const auto& param) { return std::get<Symbol>(param).name; });
+  std::string param_rest;
+  if (pos_params_end != params.end()) {
+    param_rest = std::get<Symbol>(*++pos_params_end).name;
+  }
   FnDef::body_t body(i, exprs.end());
   return std::make_unique<UserFn>(
       FnDef(FnDef::param_list_t(param_names.begin(), param_names.end()),
-            std::move(body)),
+            std::move(body), std::move(param_rest)),
       interpreter->env(), lazy_);
 }
 

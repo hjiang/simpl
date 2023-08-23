@@ -4,6 +4,7 @@
 
 #include <memory>
 
+#include "simpl/ast.h"
 #include "simpl/interpreter.h"
 
 namespace simpl {
@@ -13,6 +14,9 @@ Expr UserFn::FnCall(Interpreter* interpreter, const Function::args_type& args) {
   auto arg = args.begin();
   for (const auto& param : definition_.params()) {
     env->Bind(param, *arg++);
+  }
+  if (!definition_.param_rest().empty()) {
+    env->Bind(definition_.param_rest(), List(arg, args.end()));
   }
   return interpreter->Evaluate(definition_.body(), env);
 }
