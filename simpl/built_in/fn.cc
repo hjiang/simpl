@@ -2,6 +2,7 @@
 
 #include "simpl/built_in/fn.h"
 
+#include <algorithm>
 #include <memory>
 #include <ranges>
 #include <string>
