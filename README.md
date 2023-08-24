@@ -105,6 +105,16 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
 (eval '(+ 1 2 3))  ;; => 6
 ```
 
+Note: `eval` in Simpl can access the lexical scope, which is different from most
+other LISP languages. In other words, the following works:
+
+``` clojure
+(let [a 1]
+  (eval '(+ a 2)))  ;; => 3
+```
+
+I might revisit this decision.
+
 ### Function
 #### Lambda function as first-class value
 
@@ -146,6 +156,12 @@ Comparisons: `=`, `>`, `>=`, `<`, `<=`.
     (head b))
 
 (foo 1 2 3)  ;; => 2
+```
+
+#### Arrows
+
+``` clojure
+(-> 1 (+ 2 3) (* 2))  ;; => 12
 ```
 
 ## Coming soon
