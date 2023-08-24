@@ -6,33 +6,23 @@
 #include <variant>
 
 #include "simpl/built_in/util.h"
+#include "simpl/overload.h"
 
 namespace simpl {
-
 namespace built_in {
-
-struct GetVisitor {
-  template <typename T, typename K>
-  Expr operator()(const T&, K) const {
-    throw std::runtime_error("get: invalid argument types");
-  }
-
-  template <typename K>
-  Expr operator()(const Map& v, K key) const {
-    return v.at(Expr{key});
-  }
-};
-
-template <>
-Expr GetVisitor::operator()(const Vector& v, int_type i) const {
-  return v.at(static_cast<Vector::size_type>(i));
-}
 
 Expr Get::FnCall(Interpreter*, const args_type& args) {
   CheckArity("get", args, 2);
-  return std::visit(GetVisitor(), args.front(), args.back());
+  return std::visit(
+      Overload{[](const auto&, const auto&) -> Expr {
+                 throw std::runtime_error("get: invalid argument types");
+               },
+               [](const Map& v, const auto& key) { return v.at(Expr{key}); },
+               [](const Vector& v, int_type i) {
+                 return v.at(static_cast<Vector::size_type>(i));
+               }},
+      args.front(), args.back());
 }
 
 }  // namespace built_in
-
 }  // namespace simpl

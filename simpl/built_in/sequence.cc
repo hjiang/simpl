@@ -16,51 +16,53 @@ namespace simpl {
 namespace built_in {
 
 namespace sv = std::views;
+namespace sr = std::ranges;
 
-struct ConsVisitor {
-  template <typename T, typename U>
-  Expr operator()(T&&, const U&) const {
-    throw std::runtime_error("cons: invalid argument type");
-  }
+namespace {
 
-  template <typename T>
-  Expr operator()(T&& car, const List& cdr) const {
-    List l(cdr);
-    l.push_front(std::forward<T>(car));
-    return l;
-  }
+template <typename T>
+concept HasEmpty = requires(T t) {
+                     { t.empty() } -> std::convertible_to<bool>;
+                   };  // NOLINT
 
-  template <typename T>
-  Expr operator()(T&& car, std::nullptr_t) const {
-    return List{std::forward<T>(car)};
-  }
-};
+template <typename T>
+concept HasFront = requires(T t) {
+                     {
+                       t.front()
+                       } -> std::convertible_to<typename T::value_type>;
+                   };  // NOLINT
+
+}  // anonymous namespace
 
 Expr Cons::FnCall(Interpreter*, const args_type& args) {
   CheckArity("cons", args, 2);
-  return std::visit(ConsVisitor(), args.front(), args.back());
-}
-
-struct HeadVisitor {
-  template <typename T>
-  Expr operator()(const T&) const {
-    throw std::runtime_error("head: invalid argument type");
-  }
-};
-
-template <>
-Expr HeadVisitor::operator()(const List& list) const {
-  return list.front();
-}
-
-template <>
-Expr HeadVisitor::operator()(const Vector& vec) const {
-  return vec.front();
+  return std::visit(
+      Overload{
+          [](auto&&, auto&&) -> Expr {
+            throw std::runtime_error("cons: invalid argument types");
+          },
+          [](auto&& car, const List& cdr) {
+            List l(cdr);
+            l.push_front(std::forward<decltype(car)>(car));
+            return Expr{l};
+          },
+          [](auto&& car, std::nullptr_t) {
+            return Expr{List{std::forward<decltype(car)>(car)}};
+          },
+      },
+      args.front(), args.back());
 }
 
 Expr Head::FnCall(Interpreter*, const args_type& args) {
   CheckArity("head", args, 1);
-  return std::visit(HeadVisitor(), args.front());
+  return std::visit(
+      Overload{
+          [](auto&&) -> Expr {
+            throw std::runtime_error("head: invalid argument type");
+          },
+          []<HasFront T>(const T& seq) { return Expr{seq.front()}; },
+      },
+      args.front());
 }
 
 struct TailVisitor {
@@ -77,32 +79,17 @@ struct TailVisitor {
 
 Expr Tail::FnCall(Interpreter*, const args_type& args) {
   CheckArity("tail", args, 1);
-  return std::visit(TailVisitor(), args.front());
+  return std::visit(TailVisitor{}, args.front());
 }
-
-namespace {
-
-template <typename T>
-concept HasEmpty = requires(T t) {
-                     { t.empty() } -> std::convertible_to<bool>;
-                   };  // NOLINT
-
-static struct {
-  template <HasEmpty T>
-  bool operator()(const T& c) {
-    return c.empty();
-  }
-
-  bool operator()(const auto&) {
-    throw std::runtime_error("empty?: invalid argument type");
-  }
-} IsEmpty;
-
-}  // anonymous namespace
 
 Expr Empty::FnCall(Interpreter*, const args_type& args) {
   CheckArity("empty?", args, 1);
-  return Expr{std::visit(IsEmpty, args.front())};
+  return Expr{std::visit(Overload{[]<HasEmpty T>(T&& c) { return c.empty(); },
+                                  [](auto&&) -> bool {
+                                    throw std::runtime_error(
+                                        "empty?: invalid argument type");
+                                  }},
+                         args.front())};
 }
 
 }  // namespace built_in
