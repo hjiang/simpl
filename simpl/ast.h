@@ -61,7 +61,7 @@ class Quoted {
   bool operator==(const Quoted& other) const;
 
  private:
-  std::unique_ptr<Expr> expr_;  // TODO(hjiang): change to unique_ptr
+  std::unique_ptr<Expr> expr_;
 };
 
 // List and ExprList should not be automatically convertible
