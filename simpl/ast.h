@@ -79,13 +79,7 @@ using ExprBase = std::variant<int_type, float_type, bool, std::string, Symbol,
 
 class Expr : public ExprBase {
  public:
-  Expr() = default;
-  template <typename T>
-  // TODO(hjiang): disable implicit conversion
-  // cppcheck-suppress noExplicitConstructor
-  Expr(T&& t) : ExprBase(std::forward<T>(t)) {}  // NOLINT
-
-  // TODO(hjiang): Do I need to define assignment to enable move?
+  using ExprBase::ExprBase;
 };
 
 std::ostream& operator<<(std::ostream& os, const Expr& e);
