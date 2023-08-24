@@ -35,7 +35,7 @@ struct Symbol {
   std::size_t hash() const {
     return std::hash<std::string>{}(name) ^ std::hash<uint32_t>{}(0xdeadbeef);
   }
-  bool operator==(const Symbol& other) const { return name == other.name; }
+  bool operator==(const Symbol& other) const = default;
 };
 
 struct Keyword {
@@ -43,7 +43,7 @@ struct Keyword {
   std::size_t hash() const {
     return std::hash<std::string>{}(name) ^ std::hash<uint32_t>{}(0xbeefdead);
   }
-  bool operator==(const Keyword& other) const { return name == other.name; }
+  bool operator==(const Keyword& other) const = default;
 };
 
 class Quoted {
