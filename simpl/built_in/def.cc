@@ -13,23 +13,23 @@
 namespace simpl {
 namespace built_in {
 
-Expr Def::Call(Interpreter* interpreter, const ExprList& exprs) {
+Expr Def::Call(Interpreter* interpreter, ExprList&& exprs) {
   if (exprs.size() != 2) {
     throw std::runtime_error("`def` expects 2 arguments.");
   }
   interpreter->env()->Define(std::get<Symbol>(exprs.front()).name,
-                             interpreter->Evaluate(exprs.back()));
+                             interpreter->Evaluate(std::move(exprs.back())));
   return Expr{nullptr};
 }
 
-Expr Defn::Call(Interpreter* interpreter, const ExprList& exprs) {
+Expr Defn::Call(Interpreter* interpreter, ExprList&& exprs) {
   if (exprs.size() < 2) {
     throw std::runtime_error("`defn` expects at least 2 arguments.");
   }
   auto name = std::get<Symbol>(exprs.front()).name;
   List fn_body(++exprs.begin(), exprs.end());
   fn_body.push_front(Expr{Symbol{"fn"}});
-  interpreter->env()->Define(name, interpreter->Evaluate(fn_body));
+  interpreter->env()->Define(name, interpreter->Evaluate(std::move(fn_body)));
   return Expr{nullptr};
 }
 

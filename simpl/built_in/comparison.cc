@@ -34,53 +34,51 @@ int OrderingToInt(std::partial_ordering ordering) {
 namespace {
 
 constexpr struct {
-  int operator()(auto, auto) const {
+  int operator()(auto&&, auto&&) const {
     throw std::runtime_error("Incomparable types.");
   }
 
   template <typename T1, typename T2>
     requires Numeric<T1> && Numeric<T2> &&
              std::three_way_comparable_with<T1, T2>
-  int operator()(T1 lhs, T2 rhs) const {
+  int operator()(T1&& lhs, T2&& rhs) const {
     return OrderingToInt(lhs <=> rhs);
   }
 
-  int operator()(const std::string& lhs, const std::string& rhs) const {
-    return lhs.compare(rhs);
+  int operator()(std::string&& lhs, std::string&& rhs) const {
+    return lhs.compare(std::move(rhs));
   }
 } compare;
 
 }  // anonymous namespace
 
-int Compare(const std::list<Expr>& args) {
+int Compare(std::list<Expr>&& args) {
   if (args.size() != 2) {
     throw std::runtime_error("comparison requires 2 arguments");
   }
-  auto lhs = args.front();
-  auto rhs = args.back();
-  return std::visit(compare, lhs, rhs);
+  return std::visit(compare, std::move(args.front()), std::move(args.back()));
 }
 
 }  // namespace
 
-Expr Equals::FnCall(Interpreter*, const args_type& args) {
-  return Compare(args) == 0;
+Expr Equals::FnCall(Interpreter*, args_type&& args) {
+  return Compare(std::move(args)) == 0;
 }
 
-Expr GreaterThan::FnCall(Interpreter*, const args_type& args) {
-  return Compare(args) > 0;
+Expr GreaterThan::FnCall(Interpreter*, args_type&& args) {
+  return Compare(std::move(args)) > 0;
 }
 
-Expr GreaterThanOrEqualTo::FnCall(Interpreter*, const args_type& args) {
-  return Compare(args) >= 0;
+Expr GreaterThanOrEqualTo::FnCall(Interpreter*, args_type&& args) {
+  return Compare(std::move(args)) >= 0;
 }
 
-Expr LessThan::FnCall(Interpreter*, const args_type& args) {
-  return Compare(args) < 0;
+Expr LessThan::FnCall(Interpreter*, args_type&& args) {
+  return Compare(std::move(args)) < 0;
 }
 
-Expr LessThanOrEqualTo::FnCall(Interpreter*, const args_type& args) {
-  return Compare(args) <= 0;
+Expr LessThanOrEqualTo::FnCall(Interpreter*, args_type&& args) {
+  return Compare(std::move(args)) <= 0;
 }
 
 }  // namespace built_in

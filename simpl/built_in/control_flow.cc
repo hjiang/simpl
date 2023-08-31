@@ -2,6 +2,7 @@
 
 #include "simpl/built_in/control_flow.h"
 
+#include <iterator>
 #include <memory>
 
 #include "simpl/ast.h"
@@ -12,12 +13,12 @@ namespace simpl {
 
 namespace built_in {
 
-Expr If::Call(Interpreter* interpreter, const ExprList& exprs) {
+Expr If::Call(Interpreter* interpreter, ExprList&& exprs) {
   if (exprs.size() != 3) {
     throw std::runtime_error("'if' expects three arguments");
   }
 
-  auto i = exprs.begin();
+  auto i = make_move_iterator(exprs.begin());
   auto cond = interpreter->Evaluate(*i++);
   auto then = i++;
   auto otherwise = i++;
@@ -29,7 +30,7 @@ Expr If::Call(Interpreter* interpreter, const ExprList& exprs) {
   }
 }
 
-Expr Let::Call(Interpreter* interpreter, const ExprList& exprs) {
+Expr Let::Call(Interpreter* interpreter, ExprList&& exprs) {
   auto i = exprs.begin();
   auto bindings = std::get<Vector>(*i++);
   if (bindings.size() % 2 != 0) {
@@ -37,7 +38,8 @@ Expr Let::Call(Interpreter* interpreter, const ExprList& exprs) {
         "The number of expressions in the binding list must be even.");
   }
   auto env = std::make_shared<Interpreter::Environment>(interpreter->env());
-  for (auto j = bindings.begin(); j != bindings.end();) {
+  for (auto j = make_move_iterator(bindings.begin());
+       j != make_move_iterator(bindings.end());) {
     auto name = std::get<Symbol>(*j++).name;
     auto value = interpreter->Evaluate(*j++);
     env->Bind(name, value);

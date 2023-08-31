@@ -2,6 +2,7 @@
 
 #include "simpl/interpreter.h"
 
+#include <iterator>
 #include <numeric>
 #include <stdexcept>
 #include <string>
@@ -28,27 +29,28 @@ namespace simpl {
 struct Interpreter::EvalVisitor {
   Interpreter* interpreter;
   Expr operator()(auto&& expr) { return std::forward<Expr>(expr); }
-  Expr operator()(const Quoted& expr) { return expr.expr(); }
-  Expr operator()(const Symbol& expr) {
-    return interpreter->env_->Get(expr.name);
+  Expr operator()(Quoted&& expr) { return std::move(expr.expr()); }
+  Expr operator()(Symbol&& expr) {
+    return interpreter->env_->Get(std::move(expr.name));
   }
-  Expr operator()(const List& list) {
+  Expr operator()(List&& list) {
     if (list.empty()) {
       return Expr{nullptr};
     }
-    auto result = interpreter->Evaluate(list.front());
+    auto result = interpreter->Evaluate(std::move(list.front()));
     if (holds<Keyword>(result)) {
       if (list.size() != 2) {
         throw std::runtime_error("Keyword expects 1 argument.");
       }
-      auto m = interpreter->Evaluate(list.back());
+      auto m = interpreter->Evaluate(std::move(list.back()));
       return std::get<Map>(m).at(result);
     } else if (holds<callable_ptr_t>(result)) {
       auto callable = std::get<callable_ptr_t>(result);
       auto it = list.begin();
       ++it;
-      ExprList args(it, list.end());
-      return callable->Call(interpreter, args);
+      ExprList args;
+      std::move(it, list.end(), std::back_inserter(args));
+      return callable->Call(interpreter, std::move(args));
     } else {
       throw std::runtime_error("Cannot apply a non-callable");
     }
@@ -87,13 +89,12 @@ Interpreter::Interpreter() : env_(new Environment()) {
   env_->Define("empty?", std::make_unique<built_in::Empty>());
 }
 
-Expr Interpreter::Evaluate(const Expr& expr) {
+Expr Interpreter::Evaluate(Expr&& expr) {
   EvalVisitor visitor{this};
-  return std::visit(visitor, expr);
+  return std::visit(visitor, std::move(expr));
 }
 
-Expr Interpreter::Evaluate(const ExprList& exprs,
-                           std::shared_ptr<Environment> env) {
+Expr Interpreter::Evaluate(ExprList&& exprs, std::shared_ptr<Environment> env) {
   auto old_env = env_;
   if (env) {
     env_ = env;
@@ -104,8 +105,9 @@ Expr Interpreter::Evaluate(const ExprList& exprs,
     }
   });
   return std::accumulate(
-      exprs.begin(), exprs.end(), Expr(nullptr),
-      [this](const Expr&, const Expr& rhs) { return Evaluate(rhs); });
+      make_move_iterator(exprs.begin()), make_move_iterator(exprs.end()),
+      Expr(nullptr),
+      [this](Expr&&, Expr&& rhs) { return Evaluate(std::move(rhs)); });
 }
 
 }  // namespace simpl

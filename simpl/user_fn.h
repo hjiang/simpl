@@ -30,7 +30,7 @@ class FnDef {
  private:
   const param_list_t params_;
   const std::string param_rest_;
-  const body_t body_;
+  body_t body_;
 };
 
 class UserFn : public Function {
@@ -41,7 +41,7 @@ class UserFn : public Function {
       : Function(lazy), definition_(definition), closure_(closure) {}
 
  private:
-  Expr FnCall(Interpreter*, const args_type& args) override;
+  Expr FnCall(Interpreter*, args_type&& args) override;
   FnDef definition_;
   std::shared_ptr<Interpreter::Environment> closure_;
 };

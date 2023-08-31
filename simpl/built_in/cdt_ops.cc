@@ -11,7 +11,7 @@
 namespace simpl {
 namespace built_in {
 
-Expr Get::FnCall(Interpreter*, const args_type& args) {
+Expr Get::FnCall(Interpreter*, args_type&& args) {
   CheckArity("get", args, 2);
   return std::visit(
       Overload{[](const auto&, const auto&) -> Expr {

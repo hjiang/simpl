@@ -10,7 +10,7 @@ namespace built_in {
 
 class Get : public Function {
  private:
-  Expr FnCall(Interpreter*, const args_type& args) override;
+  Expr FnCall(Interpreter*, args_type&& args);
 };
 
 }  // namespace built_in

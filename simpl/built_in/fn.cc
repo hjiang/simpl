@@ -14,7 +14,7 @@
 namespace simpl {
 namespace built_in {
 
-Expr Fn::Call(Interpreter* interpreter, const ExprList& exprs) {
+Expr Fn::Call(Interpreter* interpreter, ExprList&& exprs) {
   namespace rgs = std::ranges;
   if (exprs.size() < 1) {
     throw std::runtime_error("fn: missing arguments");
@@ -32,7 +32,8 @@ Expr Fn::Call(Interpreter* interpreter, const ExprList& exprs) {
   if (pos_params_end != params.end()) {
     param_rest = std::get<Symbol>(*++pos_params_end).name;
   }
-  FnDef::body_t body(i, exprs.end());
+  FnDef::body_t body;
+  std::move(i, exprs.end(), std::back_inserter(body));
   return std::make_unique<UserFn>(
       FnDef(FnDef::param_list_t(param_names.begin(), param_names.end()),
             std::move(body), std::move(param_rest)),

@@ -90,13 +90,13 @@ static Expr operator%(const Expr& lhs, const Expr& rhs) {
       "Invalid types for operator %");  // FIXME: error handling
 }
 
-Expr Sum::FnCall(Interpreter*, const args_type& args) {
+Expr Sum::FnCall(Interpreter*, args_type&& args) {
   return std::accumulate(
       args.begin(), args.end(), Expr(0),
       [](const Expr& lhs, const Expr& rhs) { return lhs + rhs; });
 }
 
-Expr Substract::FnCall(Interpreter*, const args_type& args) {
+Expr Substract::FnCall(Interpreter*, args_type&& args) {
   auto i = args.begin();
   const Expr& init = *i++;
   auto result = std::accumulate(
@@ -105,13 +105,13 @@ Expr Substract::FnCall(Interpreter*, const args_type& args) {
   return args.size() > 1 ? result : Expr(0) - init;
 }
 
-Expr Multiply::FnCall(Interpreter*, const args_type& args) {
+Expr Multiply::FnCall(Interpreter*, args_type&& args) {
   return std::accumulate(
       args.begin(), args.end(), Expr(1),
       [](const Expr& lhs, const Expr& rhs) { return lhs * rhs; });
 }
 
-Expr Divide::FnCall(Interpreter*, const args_type& args) {
+Expr Divide::FnCall(Interpreter*, args_type&& args) {
   auto i = args.begin();
   const Expr& init = *i++;
   return std::accumulate(
@@ -119,7 +119,7 @@ Expr Divide::FnCall(Interpreter*, const args_type& args) {
       [](const Expr& lhs, const Expr& rhs) { return lhs / rhs; });
 }
 
-Expr Modulo::FnCall(Interpreter*, const args_type& args) {
+Expr Modulo::FnCall(Interpreter*, args_type&& args) {
   auto i = args.begin();
   const Expr& init = *i++;
   return std::accumulate(

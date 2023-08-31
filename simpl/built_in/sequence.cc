@@ -16,7 +16,6 @@ namespace simpl {
 namespace built_in {
 
 namespace sv = std::views;
-namespace sr = std::ranges;
 
 namespace {
 
@@ -34,62 +33,62 @@ concept HasFront = requires(T t) {
 
 }  // anonymous namespace
 
-Expr Cons::FnCall(Interpreter*, const args_type& args) {
+Expr Cons::FnCall(Interpreter*, args_type&& args) {
   CheckArity("cons", args, 2);
   return std::visit(
       Overload{
           [](auto&&, auto&&) -> Expr {
             throw std::runtime_error("cons: invalid argument types");
           },
-          [](auto&& car, const List& cdr) {
-            List l(cdr);
-            l.push_front(std::forward<decltype(car)>(car));
-            return Expr{l};
+          [](auto&& car, List&& cdr) {
+            cdr.push_front(std::forward<decltype(car)>(car));
+            return Expr{std::move(cdr)};
           },
           [](auto&& car, std::nullptr_t) {
             return Expr{List{std::forward<decltype(car)>(car)}};
           },
       },
-      args.front(), args.back());
+      std::move(args.front()), std::move(args.back()));
 }
 
-Expr Head::FnCall(Interpreter*, const args_type& args) {
+Expr Head::FnCall(Interpreter*, args_type&& args) {
   CheckArity("head", args, 1);
   return std::visit(
       Overload{
           [](auto&&) -> Expr {
             throw std::runtime_error("head: invalid argument type");
           },
-          []<HasFront T>(const T& seq) { return Expr{seq.front()}; },
+          [](HasFront auto&& seq) { return Expr{std::move(seq.front())}; },
       },
-      args.front());
+      std::move(args.front()));
 }
 
 struct TailVisitor {
   template <typename T>
-  Expr operator()(const T& seq) const {
+  Expr operator()(T&& seq) const {
     if constexpr (std::same_as<T, List> || std::same_as<T, Vector>) {
       auto tail = sv::drop(seq, 1);
-      return T(tail.begin(), tail.end());
+      return T(make_move_iterator(tail.begin()),
+               make_move_iterator(tail.end()));
     } else {
       throw std::runtime_error("head: invalid argument type");
     }
   }
 };
 
-Expr Tail::FnCall(Interpreter*, const args_type& args) {
+Expr Tail::FnCall(Interpreter*, args_type&& args) {
   CheckArity("tail", args, 1);
-  return std::visit(TailVisitor{}, args.front());
+  return std::visit(TailVisitor{}, std::move(args.front()));
 }
 
-Expr Empty::FnCall(Interpreter*, const args_type& args) {
+Expr Empty::FnCall(Interpreter*, args_type&& args) {
   CheckArity("empty?", args, 1);
-  return Expr{std::visit(Overload{[]<HasEmpty T>(T&& c) { return c.empty(); },
+  return Expr{std::visit(Overload{[](HasEmpty auto&& c) { return c.empty(); },
                                   [](auto&&) -> bool {
                                     throw std::runtime_error(
                                         "empty?: invalid argument type");
                                   }},
-                         args.front())};
+                         std::move(args.front()))};
 }
 
 }  // namespace built_in

@@ -9,9 +9,9 @@ namespace simpl {
 
 namespace built_in {
 
-Expr Eval::FnCall(Interpreter* interpreter, const args_type& args) {
+Expr Eval::FnCall(Interpreter* interpreter, args_type&& args) {
   CheckArity("eval", args, 1);
-  return interpreter->Evaluate(args.front());
+  return interpreter->Evaluate(std::move(args.front()));
 }
 
 }  // namespace built_in

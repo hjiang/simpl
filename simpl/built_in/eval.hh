@@ -10,7 +10,7 @@ namespace built_in {
 
 class Eval : public Function {
  private:
-  Expr FnCall(Interpreter*, const args_type& args) override;
+  Expr FnCall(Interpreter*, args_type&& args) override;
 };
 
 }  // namespace built_in

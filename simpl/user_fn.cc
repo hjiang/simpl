@@ -9,7 +9,7 @@
 
 namespace simpl {
 
-Expr UserFn::FnCall(Interpreter* interpreter, const Function::args_type& args) {
+Expr UserFn::FnCall(Interpreter* interpreter, Function::args_type&& args) {
   auto env = make_shared<Interpreter::Environment>(closure_);
   auto arg = args.begin();
   for (const auto& param : definition_.params()) {
@@ -18,7 +18,8 @@ Expr UserFn::FnCall(Interpreter* interpreter, const Function::args_type& args) {
   if (!definition_.param_rest().empty()) {
     env->Bind(definition_.param_rest(), List(arg, args.end()));
   }
-  return interpreter->Evaluate(definition_.body(), env);
+  // Make a copy of the body so that it doesn't get moved by Evaluate.
+  return interpreter->Evaluate(ExprList{definition_.body()}, env);
 }
 
 }  // namespace simpl

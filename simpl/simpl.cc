@@ -47,20 +47,20 @@ Expr RunInterpreter(Interpreter *interpreter, std::string &&source) {
 }  // anonymous namespace
 
 Expr run(const std::string &source, Timing *timing) {
-  auto t1 = std::chrono::high_resolution_clock::now();
+  auto t1 = std::chrono::steady_clock::now();
   Lexer lexer(source);
   std::list<Token> tokens = lexer.scan();
-  auto t2 = std::chrono::high_resolution_clock::now();
+  auto t2 = std::chrono::steady_clock::now();
   if (HadError()) {
     throw std::runtime_error("An error occurred while scanning tokens.");
   }
   try {
     Parser parser(tokens);
     auto ast = parser.Parse();
-    auto t3 = std::chrono::high_resolution_clock::now();
+    auto t3 = std::chrono::steady_clock::now();
     auto interpreter = InitSimpl();
-    const auto &result = interpreter->Evaluate(ast);
-    auto t4 = std::chrono::high_resolution_clock::now();
+    const auto &result = interpreter->Evaluate(std::move(ast));
+    auto t4 = std::chrono::steady_clock::now();
     if (timing) {
       timing->lexer_ms =
           std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);

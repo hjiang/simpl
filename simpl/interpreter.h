@@ -37,13 +37,13 @@ class Interpreter {
       values_.insert_or_assign(name, std::forward<decltype(value)>(value));
     }
 
-    const Expr& Get(const std::string& name) const {
+    const Expr& Get(auto&& name) const {
       auto it = values_.find(name);
       if (it != values_.end()) {
         return it->second;
       }
       if (parent_) {
-        return parent_->Get(name);
+        return parent_->Get(std::forward<decltype(name)>(name));
       }
       throw std::runtime_error("Undefined variable '" + name + "'");
     }
@@ -55,9 +55,8 @@ class Interpreter {
 
   Interpreter();
   virtual ~Interpreter() {}
-  Expr Evaluate(const Expr& expr);
-  Expr Evaluate(const ExprList& expr,
-                std::shared_ptr<Environment> env = nullptr);
+  Expr Evaluate(Expr&& expr);
+  Expr Evaluate(ExprList&& expr, std::shared_ptr<Environment> env = nullptr);
   std::shared_ptr<Environment> env() const { return env_; }
 
  private:

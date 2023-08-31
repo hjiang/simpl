@@ -14,7 +14,7 @@ namespace built_in {
 class If : public Callable {
  public:
   virtual ~If() = default;
-  Expr Call(Interpreter* interpreter, const ExprList& exprs) override;
+  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
 };
 
 class Do : public Function {
@@ -22,15 +22,15 @@ class Do : public Function {
   virtual ~Do() = default;
 
  private:
-  Expr FnCall(Interpreter*, const args_type& args) override {
-    return args.back();
+  Expr FnCall(Interpreter*, args_type&& args) override {
+    return std::move(args.back());
   };
 };
 
 class Let : public Callable {
  public:
   virtual ~Let() = default;
-  Expr Call(Interpreter* interpreter, const ExprList& exprs) override;
+  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
 };
 
 }  // namespace built_in

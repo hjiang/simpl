@@ -12,27 +12,27 @@ namespace built_in {
 
 class Sum : public Function {
  private:
-  Expr FnCall(Interpreter* interpreter, const args_type& args) override;
+  Expr FnCall(Interpreter* interpreter, args_type&& args) override;
 };
 
 class Substract : public Function {
  private:
-  Expr FnCall(Interpreter* interpreter, const args_type& args) override;
+  Expr FnCall(Interpreter* interpreter, args_type&& args) override;
 };
 
 class Multiply : public Function {
  private:
-  Expr FnCall(Interpreter* interpreter, const args_type& args) override;
+  Expr FnCall(Interpreter* interpreter, args_type&& args) override;
 };
 
 class Divide : public Function {
  private:
-  Expr FnCall(Interpreter* interpreter, const args_type& args) override;
+  Expr FnCall(Interpreter* interpreter, args_type&& args) override;
 };
 
 class Modulo : public Function {
  private:
-  Expr FnCall(Interpreter* interpreter, const args_type& args) override;
+  Expr FnCall(Interpreter* interpreter, args_type&& args) override;
 };
 
 }  // namespace built_in

@@ -14,7 +14,7 @@ class Interpreter;
 class Callable {
  public:
   virtual ~Callable() {}
-  virtual Expr Call(Interpreter*, const ExprList& exprs) = 0;
+  virtual Expr Call(Interpreter*, ExprList&& exprs) = 0;
 };
 
 std::ostream& operator<<(std::ostream& os, const Callable&);

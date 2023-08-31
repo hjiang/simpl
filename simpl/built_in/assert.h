@@ -16,7 +16,7 @@ namespace built_in {
 
 class Assert : public Function {
  private:
-  Expr FnCall(Interpreter*, const args_type& args) override {
+  Expr FnCall(Interpreter*, args_type&& args) override {
     if (!IsTruthy(args.front())) {
       auto reason = args.size() == 2 ? std::get<std::string>(args.back())
                                      : "Assertion failed.";

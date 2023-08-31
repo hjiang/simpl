@@ -2,24 +2,25 @@
 
 #include "simpl/built_in/logic.h"
 
+#include <iterator>
 #include <numeric>
 
 namespace simpl {
 namespace built_in {
 
-Expr Or::Call(Interpreter* interpreter, const ExprList& exprs) {
+Expr Or::Call(Interpreter* interpreter, ExprList&& exprs) {
   return std::accumulate(
-      exprs.begin(), exprs.end(), Expr{false},
-      [interpreter](const Expr& acc, const Expr& expr) -> Expr {
-        return IsTruthy(acc) ? acc : interpreter->Evaluate(expr);
+      make_move_iterator(exprs.begin()), make_move_iterator(exprs.end()),
+      Expr{false}, [interpreter](Expr&& acc, Expr&& expr) -> Expr {
+        return IsTruthy(acc) ? acc : interpreter->Evaluate(std::move(expr));
       });
 }
 
-Expr And::Call(Interpreter* interpreter, const ExprList& exprs) {
+Expr And::Call(Interpreter* interpreter, ExprList&& exprs) {
   return std::accumulate(
-      exprs.begin(), exprs.end(), Expr{true},
-      [interpreter](const Expr& acc, const Expr& expr) -> Expr {
-        return IsTruthy(acc) ? interpreter->Evaluate(expr) : acc;
+      make_move_iterator(exprs.begin()), make_move_iterator(exprs.end()),
+      Expr{true}, [interpreter](Expr&& acc, Expr&& expr) -> Expr {
+        return IsTruthy(acc) ? interpreter->Evaluate(std::move(expr)) : acc;
       });
 }
 

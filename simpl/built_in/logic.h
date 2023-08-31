@@ -14,7 +14,7 @@ namespace built_in {
 
 class Not : public Function {
  private:
-  Expr FnCall(Interpreter*, const args_type& args) override {
+  Expr FnCall(Interpreter*, args_type&& args) override {
     return Expr(static_cast<bool>(!IsTruthy(args.front())));
   }
 };
@@ -22,13 +22,13 @@ class Not : public Function {
 class Or : public Callable {
  public:
   virtual ~Or() = default;
-  Expr Call(Interpreter* interpreter, const ExprList& exprs) override;
+  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
 };
 
 class And : public Callable {
  public:
   virtual ~And() = default;
-  Expr Call(Interpreter* interpreter, const ExprList& exprs) override;
+  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
 };
 
 }  // namespace built_in

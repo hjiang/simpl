@@ -18,18 +18,16 @@ TEST(Interpreter, Integer) {
   Lexer lexer("42");
   auto tokens = lexer.scan();
   Parser parser(tokens);
-  auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 42);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(parser.Parse())), 42);
 }
 
 TEST(Interpreter, Bool) {
   Lexer lexer("true");
   auto tokens = lexer.scan();
   Parser parser(tokens);
-  auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(expr)));
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(parser.Parse())));
 }
 
 TEST(Interpreter, Plus) {
@@ -39,7 +37,7 @@ TEST(Interpreter, Plus) {
   auto exprs = parser.Parse();
   EXPECT_EQ(exprs.size(), 1);
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(exprs)), 3);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(exprs))), 3);
 }
 
 TEST(Interpreter, Quoted) {
@@ -49,7 +47,7 @@ TEST(Interpreter, Quoted) {
   auto exprs = parser.Parse();
   EXPECT_EQ(exprs.size(), 1);
   Interpreter interpreter;
-  EXPECT_TRUE(holds<List>(interpreter.Evaluate(exprs)));
+  EXPECT_TRUE(holds<List>(interpreter.Evaluate(std::move(exprs))));
 }
 
 TEST(Interpreter, QuotedSymbol) {
@@ -59,8 +57,9 @@ TEST(Interpreter, QuotedSymbol) {
   auto exprs = parser.Parse();
   EXPECT_EQ(exprs.size(), 1);
   Interpreter interpreter;
-  EXPECT_TRUE(holds<List>(interpreter.Evaluate(exprs)));
-  EXPECT_EQ(std::get<List>(interpreter.Evaluate(exprs)).size(), 3);
+  auto res = interpreter.Evaluate(std::move(exprs));
+  EXPECT_TRUE(holds<List>(res));
+  EXPECT_EQ(std::get<List>(res).size(), 3);
 }
 
 TEST(Interpreter, NestedSum) {
@@ -69,7 +68,7 @@ TEST(Interpreter, NestedSum) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 10);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 10);
 }
 
 TEST(Interpreter, UnarySum) {
@@ -78,7 +77,7 @@ TEST(Interpreter, UnarySum) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 42);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 42);
 }
 
 TEST(Interpreter, Substract) {
@@ -87,7 +86,7 @@ TEST(Interpreter, Substract) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), -1);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), -1);
 }
 
 TEST(Interpreter, MoreSubstract) {
@@ -96,7 +95,7 @@ TEST(Interpreter, MoreSubstract) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), -8);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), -8);
 }
 
 TEST(Interpreter, UnarySubstract) {
@@ -105,7 +104,7 @@ TEST(Interpreter, UnarySubstract) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), -12);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), -12);
 }
 
 TEST(Interpreter, Multiply) {
@@ -114,7 +113,7 @@ TEST(Interpreter, Multiply) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 6);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 6);
 }
 
 TEST(Interpreter, MoreMultiply) {
@@ -123,7 +122,7 @@ TEST(Interpreter, MoreMultiply) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 24);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 24);
 }
 
 TEST(Interpreter, divide) {
@@ -132,7 +131,7 @@ TEST(Interpreter, divide) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 3);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 3);
 }
 
 TEST(Interpreter, mod) {
@@ -141,7 +140,7 @@ TEST(Interpreter, mod) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 2);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 2);
 }
 
 TEST(Interpreter, StringCompareNotEqual) {
@@ -150,7 +149,7 @@ TEST(Interpreter, StringCompareNotEqual) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(expr)));
+  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, InterpretProgram) {
@@ -159,7 +158,7 @@ TEST(Interpreter, InterpretProgram) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 7);
 }
 
 TEST(Interpreter, DefineVar) {
@@ -168,7 +167,7 @@ TEST(Interpreter, DefineVar) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 6);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 6);
 }
 
 TEST(Interpreter, Let) {
@@ -177,7 +176,7 @@ TEST(Interpreter, Let) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 7);
 }
 
 TEST(Interpreter, NestedLet) {
@@ -186,7 +185,7 @@ TEST(Interpreter, NestedLet) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 2);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 2);
 }
 
 TEST(Interpreter, If) {
@@ -195,11 +194,11 @@ TEST(Interpreter, If) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(exprs)), 3);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(exprs))), 3);
   Lexer lexer2("(if false 3 4)");
   Parser parser2(lexer2.scan());
   exprs = parser2.Parse();
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(exprs)), 4);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(exprs))), 4);
 }
 
 TEST(Interpreter, Not) {
@@ -208,7 +207,7 @@ TEST(Interpreter, Not) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(std::move(exprs))));
 }
 
 TEST(Interpreter, EqualityTrue) {
@@ -217,7 +216,7 @@ TEST(Interpreter, EqualityTrue) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(std::move(exprs))));
 }
 
 TEST(Interpreter, EqualityFalse) {
@@ -226,7 +225,7 @@ TEST(Interpreter, EqualityFalse) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   Interpreter interpreter;
-  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(exprs)));
+  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(std::move(exprs))));
 }
 
 TEST(Interpreter, GreaterThan) {
@@ -235,7 +234,7 @@ TEST(Interpreter, GreaterThan) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(std::move(exprs))));
 }
 
 TEST(Interpreter, GreaterThan_False) {
@@ -244,7 +243,7 @@ TEST(Interpreter, GreaterThan_False) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   Interpreter interpreter;
-  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(exprs)));
+  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(std::move(exprs))));
 }
 
 TEST(Interpreter, LessThan_False) {
@@ -253,7 +252,7 @@ TEST(Interpreter, LessThan_False) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   Interpreter interpreter;
-  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(exprs)));
+  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(std::move(exprs))));
 }
 
 TEST(Interpreter, LessThan) {
@@ -262,7 +261,7 @@ TEST(Interpreter, LessThan) {
   Parser parser(tokens);
   auto exprs = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(exprs)));
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(std::move(exprs))));
 }
 
 TEST(Interpreter, LetAndFn) {
@@ -271,7 +270,7 @@ TEST(Interpreter, LetAndFn) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 7);
 }
 
 TEST(Interpreter, Closure) {
@@ -280,7 +279,7 @@ TEST(Interpreter, Closure) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 7);
 }
 
 TEST(Interpreter, Defn) {
@@ -289,7 +288,7 @@ TEST(Interpreter, Defn) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 7);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 7);
 }
 
 TEST(Interpreter, DefnVariadic) {
@@ -298,7 +297,7 @@ TEST(Interpreter, DefnVariadic) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(holds<std::nullptr_t>(interpreter.Evaluate(expr)));
+  EXPECT_TRUE(holds<std::nullptr_t>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, EvalVariadic) {
@@ -307,7 +306,15 @@ TEST(Interpreter, EvalVariadic) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(expr)), 2);
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 2);
+}
+
+TEST(Interpreter, EmptyRestArgs) {
+  Lexer lexer("(defn foo [a & b] (empty? b)) (foo 1)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  Interpreter interpreter;
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(parser.Parse())));
 }
 
 TEST(Interpreter, Or) {
@@ -316,7 +323,7 @@ TEST(Interpreter, Or) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(expr)));
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, And) {
@@ -325,7 +332,7 @@ TEST(Interpreter, And) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(expr)));
+  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, EmptyListIsNil) {
@@ -334,7 +341,8 @@ TEST(Interpreter, EmptyListIsNil) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(nullptr == std::get<std::nullptr_t>(interpreter.Evaluate(expr)));
+  EXPECT_TRUE(nullptr ==
+              std::get<std::nullptr_t>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, Vector) {
@@ -343,7 +351,7 @@ TEST(Interpreter, Vector) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  auto vec = std::get<Vector>(interpreter.Evaluate(expr));
+  auto vec = std::get<Vector>(interpreter.Evaluate(std::move(expr)));
   EXPECT_EQ(1, std::get<int_type>(vec.front()));
 }
 
@@ -353,7 +361,7 @@ TEST(Interpreter, Do) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(42, std::get<int_type>(interpreter.Evaluate(expr)));
+  EXPECT_EQ(42, std::get<int_type>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, AssertTrue) {
@@ -362,7 +370,7 @@ TEST(Interpreter, AssertTrue) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_NO_THROW(interpreter.Evaluate(expr));
+  EXPECT_NO_THROW(interpreter.Evaluate(std::move(expr)));
 }
 
 TEST(Interpreter, AssertFalse) {
@@ -371,7 +379,7 @@ TEST(Interpreter, AssertFalse) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_THROW(interpreter.Evaluate(expr), std::runtime_error);
+  EXPECT_THROW(interpreter.Evaluate(std::move(expr)), std::runtime_error);
 }
 
 TEST(Interpreter, GetMapKey) {
@@ -380,7 +388,7 @@ TEST(Interpreter, GetMapKey) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(1, std::get<int_type>(interpreter.Evaluate(expr)));
+  EXPECT_EQ(1, std::get<int_type>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, KeyMap) {
@@ -389,7 +397,7 @@ TEST(Interpreter, KeyMap) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(1, std::get<int_type>(interpreter.Evaluate(expr)));
+  EXPECT_EQ(1, std::get<int_type>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, LazyFn) {
@@ -398,7 +406,7 @@ TEST(Interpreter, LazyFn) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_EQ(2, std::get<int_type>(interpreter.Evaluate(expr)));
+  EXPECT_EQ(2, std::get<int_type>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, Empty) {
@@ -407,7 +415,7 @@ TEST(Interpreter, Empty) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(expr)));
+  EXPECT_TRUE(std::get<bool>(interpreter.Evaluate(std::move(expr))));
 }
 
 TEST(Interpreter, NotEmpty) {
@@ -416,7 +424,16 @@ TEST(Interpreter, NotEmpty) {
   Parser parser(tokens);
   auto expr = parser.Parse();
   Interpreter interpreter;
-  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(expr)));
+  EXPECT_FALSE(std::get<bool>(interpreter.Evaluate(std::move(expr))));
+}
+
+TEST(Interpreter, CallTwice) {
+  Lexer lexer("(defn foo [a] (+ 1 a)) (foo 1) (foo 1)");
+  auto tokens = lexer.scan();
+  Parser parser(tokens);
+  auto expr = parser.Parse();
+  Interpreter interpreter;
+  EXPECT_EQ(std::get<int_type>(interpreter.Evaluate(std::move(expr))), 2);
 }
 
 }  // namespace simpl
