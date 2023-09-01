@@ -15,14 +15,13 @@ Expr Function::Call(Interpreter* interpreter, args_type&& exprs) {
   if (lazy_) {
     return FnCall(interpreter, std::move(exprs));
   }
-  // TODO(hjiang): pass the args by pointer and avoid unnecessary copy?
-  args_type args;
   std::transform(make_move_iterator(exprs.begin()),
-                 make_move_iterator(exprs.end()), std::back_inserter(args),
+                 make_move_iterator(exprs.end()), exprs.begin(),
                  [interpreter](Expr&& expr) {
                    return interpreter->Evaluate(std::move(expr));
                  });
-  return FnCall(interpreter, std::move(args));
+  return FnCall(interpreter, std::move(exprs));
+}
 }
 
 }  // namespace simpl
