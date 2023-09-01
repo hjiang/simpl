@@ -17,6 +17,7 @@ class Callable {
   using args_iterator = args_type::iterator;
   virtual ~Callable() {}
   virtual Expr Call(Interpreter*, args_type&& exprs) = 0;
+  virtual Expr Call(Interpreter*, args_iterator begin, args_iterator end);
 };
 
 std::ostream& operator<<(std::ostream& os, const Callable&);
