@@ -11,13 +11,13 @@ namespace built_in {
 class Def : public Callable {
  public:
   virtual ~Def() = default;
-  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
+  Expr Call(Interpreter* interpreter, args_type&& exprs) override;
 };
 
 class Defn : public Callable {
  public:
   virtual ~Defn() = default;
-  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
+  Expr Call(Interpreter* interpreter, args_type&& exprs) override;
 };
 
 }  // namespace built_in

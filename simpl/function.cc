@@ -11,7 +11,7 @@
 
 namespace simpl {
 
-Expr Function::Call(Interpreter* interpreter, ExprList&& exprs) {
+Expr Function::Call(Interpreter* interpreter, args_type&& exprs) {
   if (lazy_) {
     return FnCall(interpreter, std::move(exprs));
   }

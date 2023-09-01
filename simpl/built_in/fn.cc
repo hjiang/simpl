@@ -14,7 +14,7 @@
 namespace simpl {
 namespace built_in {
 
-Expr Fn::Call(Interpreter* interpreter, ExprList&& exprs) {
+Expr Fn::Call(Interpreter* interpreter, args_type&& exprs) {
   namespace rgs = std::ranges;
   if (exprs.size() < 1) {
     throw std::runtime_error("fn: missing arguments");

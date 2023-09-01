@@ -14,7 +14,7 @@ namespace built_in {
 class If : public Callable {
  public:
   virtual ~If() = default;
-  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
+  Expr Call(Interpreter* interpreter, args_type&& exprs) override;
 };
 
 class Do : public Function {
@@ -30,7 +30,7 @@ class Do : public Function {
 class Let : public Callable {
  public:
   virtual ~Let() = default;
-  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
+  Expr Call(Interpreter* interpreter, args_type&& exprs) override;
 };
 
 }  // namespace built_in

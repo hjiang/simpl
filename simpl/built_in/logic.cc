@@ -8,7 +8,7 @@
 namespace simpl {
 namespace built_in {
 
-Expr Or::Call(Interpreter* interpreter, ExprList&& exprs) {
+Expr Or::Call(Interpreter* interpreter, args_type&& exprs) {
   return std::accumulate(
       make_move_iterator(exprs.begin()), make_move_iterator(exprs.end()),
       Expr{false}, [interpreter](Expr&& acc, Expr&& expr) -> Expr {
@@ -16,7 +16,7 @@ Expr Or::Call(Interpreter* interpreter, ExprList&& exprs) {
       });
 }
 
-Expr And::Call(Interpreter* interpreter, ExprList&& exprs) {
+Expr And::Call(Interpreter* interpreter, args_type&& exprs) {
   return std::accumulate(
       make_move_iterator(exprs.begin()), make_move_iterator(exprs.end()),
       Expr{true}, [interpreter](Expr&& acc, Expr&& expr) -> Expr {

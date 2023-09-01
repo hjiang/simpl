@@ -13,7 +13,7 @@
 namespace simpl {
 namespace built_in {
 
-Expr Def::Call(Interpreter* interpreter, ExprList&& exprs) {
+Expr Def::Call(Interpreter* interpreter, args_type&& exprs) {
   if (exprs.size() != 2) {
     throw std::runtime_error("`def` expects 2 arguments.");
   }
@@ -22,7 +22,7 @@ Expr Def::Call(Interpreter* interpreter, ExprList&& exprs) {
   return Expr{nullptr};
 }
 
-Expr Defn::Call(Interpreter* interpreter, ExprList&& exprs) {
+Expr Defn::Call(Interpreter* interpreter, args_type&& exprs) {
   if (exprs.size() < 2) {
     throw std::runtime_error("`defn` expects at least 2 arguments.");
   }

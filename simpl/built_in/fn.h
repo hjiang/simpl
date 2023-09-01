@@ -13,7 +13,7 @@ class Fn : public Callable {
  public:
   explicit Fn(bool lazy = false) : lazy_(lazy) {}
   virtual ~Fn() = default;
-  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
+  Expr Call(Interpreter* interpreter, args_type&& exprs) override;
 
  private:
   bool lazy_;

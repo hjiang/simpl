@@ -13,8 +13,7 @@ namespace simpl {
 class Function : public Callable {
  public:
   explicit Function(bool lazy = false) : lazy_(lazy) {}
-  using args_type = std::list<Expr>;
-  Expr Call(Interpreter*, ExprList&& exprs) override;
+  Expr Call(Interpreter*, args_type&& exprs) override;
 
  private:
   virtual Expr FnCall(Interpreter*, args_type&& args) = 0;

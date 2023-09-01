@@ -22,13 +22,13 @@ class Not : public Function {
 class Or : public Callable {
  public:
   virtual ~Or() = default;
-  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
+  Expr Call(Interpreter* interpreter, args_type&& exprs) override;
 };
 
 class And : public Callable {
  public:
   virtual ~And() = default;
-  Expr Call(Interpreter* interpreter, ExprList&& exprs) override;
+  Expr Call(Interpreter* interpreter, args_type&& exprs) override;
 };
 
 }  // namespace built_in

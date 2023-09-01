@@ -13,8 +13,10 @@ class Interpreter;
 
 class Callable {
  public:
+  using args_type = std::list<Expr>;
+  using args_iterator = args_type::iterator;
   virtual ~Callable() {}
-  virtual Expr Call(Interpreter*, ExprList&& exprs) = 0;
+  virtual Expr Call(Interpreter*, args_type&& exprs) = 0;
 };
 
 std::ostream& operator<<(std::ostream& os, const Callable&);

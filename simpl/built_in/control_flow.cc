@@ -13,7 +13,7 @@ namespace simpl {
 
 namespace built_in {
 
-Expr If::Call(Interpreter* interpreter, ExprList&& exprs) {
+Expr If::Call(Interpreter* interpreter, args_type&& exprs) {
   if (exprs.size() != 3) {
     throw std::runtime_error("'if' expects three arguments");
   }
@@ -30,7 +30,7 @@ Expr If::Call(Interpreter* interpreter, ExprList&& exprs) {
   }
 }
 
-Expr Let::Call(Interpreter* interpreter, ExprList&& exprs) {
+Expr Let::Call(Interpreter* interpreter, args_type&& exprs) {
   auto i = exprs.begin();
   auto bindings = std::get<Vector>(*i++);
   if (bindings.size() % 2 != 0) {
