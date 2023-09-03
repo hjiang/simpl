@@ -4,6 +4,7 @@
 
 #include <iterator>
 #include <memory>
+#include <utility>
 
 #include "simpl/ast.h"
 #include "simpl/interpreter.h"
@@ -45,6 +46,10 @@ Expr Let::Call(Interpreter* interpreter, args_type&& exprs) {
     env->Bind(name, value);
   }
   return interpreter->Evaluate(ExprList(i, exprs.end()), env);
+}
+
+Expr Do::FnCall(Interpreter*, args_type&& args) {
+  return std::move(args.back());
 }
 
 }  // namespace built_in

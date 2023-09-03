@@ -22,9 +22,7 @@ class Do : public Function {
   virtual ~Do() = default;
 
  private:
-  Expr FnCall(Interpreter*, args_type&& args) override {
-    return std::move(args.back());
-  };
+  Expr FnCall(Interpreter*, args_type&& args) override;
 };
 
 class Let : public Callable {

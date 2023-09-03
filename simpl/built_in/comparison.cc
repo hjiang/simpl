@@ -5,6 +5,7 @@
 #include <compare>
 #include <list>
 #include <string>
+#include <utility>
 #include <variant>
 
 #include "simpl/ast.h"

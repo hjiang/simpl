@@ -4,6 +4,7 @@
 
 #include <iterator>
 #include <numeric>
+#include <utility>
 
 namespace simpl {
 namespace built_in {
