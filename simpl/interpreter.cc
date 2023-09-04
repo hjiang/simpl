@@ -29,7 +29,7 @@ namespace simpl {
 struct Interpreter::EvalVisitor {
   Interpreter* interpreter;
   Expr operator()(auto&& expr) { return std::forward<Expr>(expr); }
-  Expr operator()(Quoted&& expr) { return std::move(expr.expr()); }
+  Expr operator()(Quoted&& expr) { return expr.expr(); }
   Expr operator()(Symbol&& expr) {
     return interpreter->env_->Get(std::move(expr.name));
   }
