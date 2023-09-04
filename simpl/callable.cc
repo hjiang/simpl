@@ -1,10 +1,10 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/callable.h"
+#include "simpl/callable.hh"
 
 #include <ostream>
 
-#include "simpl/ast.h"
+#include "simpl/ast.hh"
 
 namespace simpl {
 

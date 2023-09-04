@@ -3,7 +3,7 @@
 #ifndef SIMPL_BUILT_IN_DEF_H_
 #define SIMPL_BUILT_IN_DEF_H_
 
-#include "simpl/callable.h"
+#include "simpl/callable.hh"
 
 namespace simpl {
 namespace built_in {

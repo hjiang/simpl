@@ -1,27 +1,27 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/interpreter.h"
+#include "simpl/interpreter.hh"
 
 #include <iterator>
 #include <numeric>
 #include <stdexcept>
 #include <string>
 
-#include "simpl/ast.h"
-#include "simpl/built_in/arithmetic.h"
-#include "simpl/built_in/assert.h"
-#include "simpl/built_in/cdt_ops.h"
-#include "simpl/built_in/comparison.h"
-#include "simpl/built_in/control_flow.h"
-#include "simpl/built_in/def.h"
+#include "simpl/ast.hh"
+#include "simpl/built_in/arithmetic.hh"
+#include "simpl/built_in/assert.hh"
+#include "simpl/built_in/cdt_ops.hh"
+#include "simpl/built_in/comparison.hh"
+#include "simpl/built_in/control_flow.hh"
+#include "simpl/built_in/def.hh"
 #include "simpl/built_in/eval.hh"
-#include "simpl/built_in/fn.h"
-#include "simpl/built_in/io.h"
-#include "simpl/built_in/logic.h"
-#include "simpl/built_in/sequence.h"
-#include "simpl/config.h"
-#include "simpl/interpreter_util.h"
-#include "simpl/user_fn.h"
+#include "simpl/built_in/fn.hh"
+#include "simpl/built_in/io.hh"
+#include "simpl/built_in/logic.hh"
+#include "simpl/built_in/sequence.hh"
+#include "simpl/config.hh"
+#include "simpl/interpreter_util.hh"
+#include "simpl/user_fn.hh"
 #include "simpl/util.hh"
 
 namespace simpl {

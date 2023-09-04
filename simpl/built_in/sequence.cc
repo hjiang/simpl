@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/built_in/sequence.h"
+#include "simpl/built_in/sequence.hh"
 
 #include <concepts>
 #include <memory>
@@ -9,8 +9,8 @@
 #include <utility>
 #include <variant>
 
-#include "simpl/built_in/util.h"
-#include "simpl/overload.h"
+#include "simpl/built_in/util.hh"
+#include "simpl/overload.hh"
 
 namespace simpl {
 namespace built_in {
@@ -21,15 +21,13 @@ namespace {
 
 template <typename T>
 concept HasEmpty = requires(T t) {
-                     { t.empty() } -> std::convertible_to<bool>;
-                   };  // NOLINT
+  { t.empty() } -> std::convertible_to<bool>;
+};  // NOLINT
 
 template <typename T>
 concept HasFront = requires(T t) {
-                     {
-                       t.front()
-                       } -> std::convertible_to<typename T::value_type>;
-                   };  // NOLINT
+  { t.front() } -> std::convertible_to<typename T::value_type>;
+};  // NOLINT
 
 }  // anonymous namespace
 

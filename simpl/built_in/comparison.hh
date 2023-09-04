@@ -5,8 +5,8 @@
 
 #include <vector>
 
-#include "simpl/function.h"
-#include "simpl/interpreter.h"
+#include "simpl/function.hh"
+#include "simpl/interpreter.hh"
 
 namespace simpl {
 

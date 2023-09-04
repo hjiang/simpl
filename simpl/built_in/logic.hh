@@ -3,10 +3,10 @@
 #ifndef SIMPL_BUILT_IN_LOGIC_H_
 #define SIMPL_BUILT_IN_LOGIC_H_
 
-#include "simpl/callable.h"
-#include "simpl/function.h"
-#include "simpl/interpreter.h"
-#include "simpl/interpreter_util.h"
+#include "simpl/callable.hh"
+#include "simpl/function.hh"
+#include "simpl/interpreter.hh"
+#include "simpl/interpreter_util.hh"
 
 namespace simpl {
 

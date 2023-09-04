@@ -1,12 +1,12 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/built_in/cdt_ops.h"
+#include "simpl/built_in/cdt_ops.hh"
 
 #include <stdexcept>
 #include <variant>
 
-#include "simpl/built_in/util.h"
-#include "simpl/overload.h"
+#include "simpl/built_in/util.hh"
+#include "simpl/overload.hh"
 
 namespace simpl {
 namespace built_in {

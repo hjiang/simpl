@@ -4,8 +4,8 @@
 
 #include <sstream>
 
-#include "simpl/lexer.h"
-#include "simpl/parser.h"
+#include "simpl/lexer.hh"
+#include "simpl/parser.hh"
 
 namespace simpl {
 

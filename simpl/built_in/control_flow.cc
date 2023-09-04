@@ -1,14 +1,14 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/built_in/control_flow.h"
+#include "simpl/built_in/control_flow.hh"
 
 #include <iterator>
 #include <memory>
 #include <utility>
 
-#include "simpl/ast.h"
-#include "simpl/interpreter.h"
-#include "simpl/interpreter_util.h"
+#include "simpl/ast.hh"
+#include "simpl/interpreter.hh"
+#include "simpl/interpreter_util.hh"
 
 namespace simpl {
 

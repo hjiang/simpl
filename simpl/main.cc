@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "simpl/simpl.h"
+#include "simpl/simpl.hh"
 
 int main(int argc, char *argv[]) {
   if (argc > 2) {

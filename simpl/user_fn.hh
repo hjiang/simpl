@@ -8,9 +8,9 @@
 #include <string>
 #include <utility>
 
-#include "simpl/ast.h"
-#include "simpl/function.h"
-#include "simpl/interpreter.h"
+#include "simpl/ast.hh"
+#include "simpl/function.hh"
+#include "simpl/interpreter.hh"
 
 namespace simpl {
 

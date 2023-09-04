@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/simpl.h"
+#include "simpl/simpl.hh"
 
 #include <ctype.h>
 
@@ -15,11 +15,11 @@
 #include <string>
 #include <utility>
 
-#include "simpl/ast.h"
-#include "simpl/error.h"
-#include "simpl/interpreter.h"
-#include "simpl/lexer.h"
-#include "simpl/parser.h"
+#include "simpl/ast.hh"
+#include "simpl/error.hh"
+#include "simpl/interpreter.hh"
+#include "simpl/lexer.hh"
+#include "simpl/parser.hh"
 #include "simpl_lib/arrows.hh"
 
 namespace simpl {

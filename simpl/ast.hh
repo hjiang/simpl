@@ -13,7 +13,7 @@
 #include <variant>
 #include <vector>
 
-#include "simpl/config.h"
+#include "simpl/config.hh"
 
 namespace simpl {
 

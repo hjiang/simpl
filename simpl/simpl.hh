@@ -6,7 +6,7 @@
 #include <chrono>
 #include <string>
 
-#include "simpl/ast.h"
+#include "simpl/ast.hh"
 
 namespace simpl {
 

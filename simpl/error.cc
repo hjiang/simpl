@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/error.h"
+#include "simpl/error.hh"
 
 #include <iostream>
 #include <string>

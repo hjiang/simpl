@@ -1,15 +1,15 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/simpl.h"
+#include "simpl/simpl.hh"
 
 #include <gtest/gtest.h>
 
 #include <stdexcept>
 
-#include "simpl/ast.h"
-#include "simpl/config.h"
-#include "simpl/error.h"
-#include "simpl/interpreter_util.h"
+#include "simpl/ast.hh"
+#include "simpl/config.hh"
+#include "simpl/error.hh"
+#include "simpl/interpreter_util.hh"
 
 namespace simpl {
 

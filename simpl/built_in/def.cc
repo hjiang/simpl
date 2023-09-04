@@ -1,14 +1,14 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/built_in/def.h"
+#include "simpl/built_in/def.hh"
 
 #include <memory>
 #include <stdexcept>
 #include <utility>
 #include <variant>
 
-#include "simpl/ast.h"
-#include "simpl/interpreter.h"
+#include "simpl/ast.hh"
+#include "simpl/interpreter.hh"
 
 namespace simpl {
 namespace built_in {

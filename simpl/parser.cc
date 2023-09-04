@@ -1,13 +1,13 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/parser.h"
+#include "simpl/parser.hh"
 
 #include <memory>
 #include <string>
 
-#include "simpl/ast.h"
-#include "simpl/config.h"
-#include "simpl/error.h"
+#include "simpl/ast.hh"
+#include "simpl/config.hh"
+#include "simpl/error.hh"
 
 namespace simpl {
 

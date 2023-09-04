@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/lexer.h"
+#include "simpl/lexer.hh"
 
 #include <cassert>
 #include <cctype>
@@ -8,8 +8,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "simpl/error.h"
-#include "simpl/token.h"
+#include "simpl/error.hh"
+#include "simpl/token.hh"
 
 namespace simpl {
 

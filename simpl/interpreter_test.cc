@@ -1,16 +1,16 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/interpreter.h"
+#include "simpl/interpreter.hh"
 
 #include <gtest/gtest.h>
 
 #include <memory>
 #include <stdexcept>
 
-#include "simpl/ast.h"
-#include "simpl/interpreter_util.h"
-#include "simpl/lexer.h"
-#include "simpl/parser.h"
+#include "simpl/ast.hh"
+#include "simpl/interpreter_util.hh"
+#include "simpl/lexer.hh"
+#include "simpl/parser.hh"
 
 namespace simpl {
 

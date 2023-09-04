@@ -1,3 +1,3 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/built_in/assert.h"
+#include "simpl/built_in/assert.hh"

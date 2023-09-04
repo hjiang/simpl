@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#include "simpl/function.h"
+#include "simpl/function.hh"
 
 namespace simpl {
 

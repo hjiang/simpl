@@ -3,9 +3,9 @@
 #ifndef SIMPL_BUILT_IN_CONTROL_FLOW_H_
 #define SIMPL_BUILT_IN_CONTROL_FLOW_H_
 
-#include "simpl/ast.h"
-#include "simpl/callable.h"
-#include "simpl/function.h"
+#include "simpl/ast.hh"
+#include "simpl/callable.hh"
+#include "simpl/function.hh"
 
 namespace simpl {
 

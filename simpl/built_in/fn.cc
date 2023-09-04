@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/built_in/fn.h"
+#include "simpl/built_in/fn.hh"
 
 #include <algorithm>
 #include <memory>
@@ -8,8 +8,8 @@
 #include <string>
 #include <utility>
 
-#include "simpl/ast.h"
-#include "simpl/user_fn.h"
+#include "simpl/ast.hh"
+#include "simpl/user_fn.hh"
 
 namespace simpl {
 namespace built_in {

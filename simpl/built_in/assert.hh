@@ -6,9 +6,9 @@
 #include <stdexcept>
 #include <string>
 
-#include "simpl/function.h"
-#include "simpl/interpreter.h"
-#include "simpl/interpreter_util.h"
+#include "simpl/function.hh"
+#include "simpl/interpreter.hh"
+#include "simpl/interpreter_util.hh"
 
 namespace simpl {
 

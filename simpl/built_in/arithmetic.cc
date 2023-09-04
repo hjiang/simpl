@@ -1,13 +1,13 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/built_in/arithmetic.h"
+#include "simpl/built_in/arithmetic.hh"
 
 #include <numeric>
 #include <string>
 
-#include "simpl/ast.h"
-#include "simpl/interpreter.h"
-#include "simpl/interpreter_util.h"
+#include "simpl/ast.hh"
+#include "simpl/interpreter.hh"
+#include "simpl/interpreter_util.hh"
 #include "simpl/util.hh"
 
 namespace simpl {
@@ -22,8 +22,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numeric<T1> && Numeric<T2>
-  Expr operator()(T1 lhs, T2 rhs) const {
+  requires Numeric<T1> && Numeric<T2> Expr operator()(T1 lhs, T2 rhs) const {
     return Expr{lhs + rhs};
   }
 } plus;
@@ -34,8 +33,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numeric<T1> && Numeric<T2>
-  Expr operator()(T1 lhs, T2 rhs) const {
+  requires Numeric<T1> && Numeric<T2> Expr operator()(T1 lhs, T2 rhs) const {
     return Expr{lhs - rhs};
   }
 } minus;
@@ -46,8 +44,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numeric<T1> && Numeric<T2>
-  Expr operator()(T1 lhs, T2 rhs) const {
+  requires Numeric<T1> && Numeric<T2> Expr operator()(T1 lhs, T2 rhs) const {
     return Expr{lhs * rhs};
   }
 } times;
@@ -58,8 +55,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numeric<T1> && Numeric<T2>
-  Expr operator()(T1 lhs, T2 rhs) const {
+  requires Numeric<T1> && Numeric<T2> Expr operator()(T1 lhs, T2 rhs) const {
     return Expr{lhs / rhs};
   }
 } divide;

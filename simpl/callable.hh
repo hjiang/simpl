@@ -6,7 +6,7 @@
 #include <list>
 #include <ostream>
 
-#include "simpl/ast.h"
+#include "simpl/ast.hh"
 
 namespace simpl {
 

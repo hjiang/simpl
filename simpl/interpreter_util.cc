@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/interpreter_util.h"
+#include "simpl/interpreter_util.hh"
 
 namespace simpl {
 

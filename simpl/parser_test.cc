@@ -1,15 +1,15 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/parser.h"
+#include "simpl/parser.hh"
 
 #include <gtest/gtest.h>
 
 #include <memory>
 #include <variant>
 
-#include "simpl/ast.h"
-#include "simpl/config.h"
-#include "simpl/lexer.h"
+#include "simpl/ast.hh"
+#include "simpl/config.hh"
+#include "simpl/lexer.hh"
 
 namespace simpl {
 

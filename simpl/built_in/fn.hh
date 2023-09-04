@@ -3,8 +3,8 @@
 #ifndef SIMPL_BUILT_IN_FN_H_
 #define SIMPL_BUILT_IN_FN_H_
 
-#include "simpl/ast.h"
-#include "simpl/callable.h"
+#include "simpl/ast.hh"
+#include "simpl/callable.hh"
 
 namespace simpl {
 namespace built_in {

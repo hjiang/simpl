@@ -1,6 +1,6 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/built_in/comparison.h"
+#include "simpl/built_in/comparison.hh"
 
 #include <compare>
 #include <list>
@@ -8,9 +8,9 @@
 #include <utility>
 #include <variant>
 
-#include "simpl/ast.h"
-#include "simpl/interpreter.h"
-#include "simpl/interpreter_util.h"
+#include "simpl/ast.hh"
+#include "simpl/interpreter.hh"
+#include "simpl/interpreter_util.hh"
 #include "simpl/util.hh"
 
 namespace simpl {
@@ -40,8 +40,7 @@ constexpr struct {
   }
 
   template <typename T1, typename T2>
-    requires Numeric<T1> && Numeric<T2> &&
-             std::three_way_comparable_with<T1, T2>
+  requires Numeric<T1> && Numeric<T2> && std::three_way_comparable_with<T1, T2>
   int operator()(T1&& lhs, T2&& rhs) const {
     return OrderingToInt(lhs <=> rhs);
   }

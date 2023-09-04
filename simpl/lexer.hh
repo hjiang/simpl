@@ -6,7 +6,7 @@
 #include <list>
 #include <string>
 
-#include "simpl/token.h"
+#include "simpl/token.hh"
 
 namespace simpl {
 

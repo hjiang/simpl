@@ -7,7 +7,7 @@
 #include <string>
 #include <variant>
 
-#include "simpl/interpreter.h"
+#include "simpl/interpreter.hh"
 
 namespace simpl {
 

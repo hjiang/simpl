@@ -1,12 +1,12 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/ast.h"
+#include "simpl/ast.hh"
 
 #include <iterator>
 #include <ostream>
 #include <ranges>
 
-#include "simpl/overload.h"
+#include "simpl/overload.hh"
 
 namespace simpl {
 

@@ -3,7 +3,7 @@
 #ifndef SIMPL_BUILT_IN_EVAL_HH_
 #define SIMPL_BUILT_IN_EVAL_HH_
 
-#include "simpl/function.h"
+#include "simpl/function.hh"
 
 namespace simpl {
 namespace built_in {

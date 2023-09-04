@@ -6,7 +6,7 @@
 #include <string>
 #include <variant>
 
-#include "simpl/config.h"
+#include "simpl/config.hh"
 
 namespace simpl {
 

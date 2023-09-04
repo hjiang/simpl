@@ -1,11 +1,11 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/user_fn.h"
+#include "simpl/user_fn.hh"
 
 #include <memory>
 
-#include "simpl/ast.h"
-#include "simpl/interpreter.h"
+#include "simpl/ast.hh"
+#include "simpl/interpreter.hh"
 
 namespace simpl {
 

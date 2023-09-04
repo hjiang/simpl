@@ -1,13 +1,13 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#include "simpl/function.h"
+#include "simpl/function.hh"
 
 #include <algorithm>
 #include <iterator>
 #include <utility>
 
-#include "simpl/ast.h"
-#include "simpl/interpreter.h"
+#include "simpl/ast.hh"
+#include "simpl/interpreter.hh"
 
 namespace simpl {
 

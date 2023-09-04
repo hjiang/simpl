@@ -11,8 +11,8 @@
 #include <utility>
 #include <variant>
 
-#include "simpl/ast.h"
-#include "simpl/token.h"
+#include "simpl/ast.hh"
+#include "simpl/token.hh"
 
 namespace simpl {
 
