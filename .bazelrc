@@ -1,13 +1,10 @@
 build --action_env=BAZEL_CXXOPTS="-std=c++20"
 build --action_env=BAZEL_CXXOPTS='-Wall'
-build --action_env=BAZEL_CXXOPTS='-Weffc++'
 build --action_env=BAZEL_CXXOPTS='-Wextra'
-build --action_env=BAZEL_CXXOPTS='-Wconversion'
-build --action_env=BAZEL_CXXOPTS='-Wsign-conversion'
+build --action_env=BAZEL_CXXOPTS='-Werror'
 build --cxxopt='-std=c++20'
 build --cxxopt='-Wall'
-build --cxxopt='-Weffc++'
 build --cxxopt='-Wextra'
-build --cxxopt='-Wconversion'
-build --cxxopt='-Wsign-conversion'
+build --cxxopt='-Werror'
+build --features=external_include_paths
 test --test_output=errors
