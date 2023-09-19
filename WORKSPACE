@@ -2,9 +2,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "gtest",
-    urls = ["https://github.com/google/googletest/archive/8a6feabf04bec8fb125e0df0ad1195c42350725f.zip"],
-    strip_prefix = "googletest-8a6feabf04bec8fb125e0df0ad1195c42350725f",
-    sha256 = "c83f69fa8cb7a503d3ae9f736cf679b0846772b1ae955c63133520b749491a7c"
+    urls = ["https://github.com/google/googletest/archive/adc514538678a61b13c240f7b41babbc03b2ac24.zip"],
+    strip_prefix = "googletest-adc514538678a61b13c240f7b41babbc03b2ac24",
+    sha256 = "530c078038b8d216ee2527ca603740e2922b832f0436366892cef7f806dd38f6"
 )
 
 # Hedron's Compile Commands Extractor for Bazel
