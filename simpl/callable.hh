@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_CALLABLE_H_
-#define SIMPL_CALLABLE_H_
+#ifndef SIMPL_CALLABLE_HH_
+#define SIMPL_CALLABLE_HH_
 
 #include <list>
 #include <ostream>
@@ -25,4 +25,4 @@ std::ostream& operator<<(std::ostream& os, const Callable&);
 
 }  // namespace simpl
 
-#endif  // SIMPL_CALLABLE_H_
+#endif  // SIMPL_CALLABLE_HH_

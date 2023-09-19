@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_CONFIG_H_
-#define SIMPL_CONFIG_H_
+#ifndef SIMPL_CONFIG_HH_
+#define SIMPL_CONFIG_HH_
 
 #include <cstdint>
 
@@ -14,4 +14,4 @@ const char* const kVersion = "0.0.1";
 
 }  // namespace simpl
 
-#endif  // SIMPL_CONFIG_H_
+#endif  // SIMPL_CONFIG_HH_

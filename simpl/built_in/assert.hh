@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_BUILT_IN_ASSERT_H_
-#define SIMPL_BUILT_IN_ASSERT_H_
+#ifndef SIMPL_BUILT_IN_ASSERT_HH_
+#define SIMPL_BUILT_IN_ASSERT_HH_
 
 #include <stdexcept>
 #include <string>
@@ -30,4 +30,4 @@ class Assert : public Function {
 
 }  // namespace simpl
 
-#endif  // SIMPL_BUILT_IN_ASSERT_H_
+#endif  // SIMPL_BUILT_IN_ASSERT_HH_

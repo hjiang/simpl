@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_OVERLOAD_H_
-#define SIMPL_OVERLOAD_H_
+#ifndef SIMPL_OVERLOAD_HH_
+#define SIMPL_OVERLOAD_HH_
 
 namespace simpl {
 
@@ -15,4 +15,4 @@ Overload(Ts...) -> Overload<Ts...>;
 
 }  // namespace simpl
 
-#endif  // SIMPL_OVERLOAD_H_
+#endif  // SIMPL_OVERLOAD_HH_

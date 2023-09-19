@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_INTERPRETER_H_
-#define SIMPL_INTERPRETER_H_
+#ifndef SIMPL_INTERPRETER_HH_
+#define SIMPL_INTERPRETER_HH_
 
 #include <functional>
 #include <list>
@@ -66,7 +66,7 @@ class Interpreter {
 
 }  // namespace simpl
 
-#endif  // SIMPL_INTERPRETER_H_
+#endif  // SIMPL_INTERPRETER_HH_
 
 // Local Variables:
 // compile-command : "bazel build //simpl:all"

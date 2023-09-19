@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_USER_FN_H_
-#define SIMPL_USER_FN_H_
+#ifndef SIMPL_USER_FN_HH_
+#define SIMPL_USER_FN_HH_
 
 #include <list>
 #include <memory>
@@ -48,4 +48,4 @@ class UserFn : public Function {
 
 }  // namespace simpl
 
-#endif  // SIMPL_USER_FN_H_
+#endif  // SIMPL_USER_FN_HH_

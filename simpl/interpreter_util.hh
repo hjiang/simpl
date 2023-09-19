@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_INTERPRETER_UTIL_H_
-#define SIMPL_INTERPRETER_UTIL_H_
+#ifndef SIMPL_INTERPRETER_UTIL_HH_
+#define SIMPL_INTERPRETER_UTIL_HH_
 
 #include <cstddef>
 #include <string>
@@ -53,4 +53,4 @@ inline std::string TypeStr<bool>() {
 
 }  // namespace simpl
 
-#endif  // SIMPL_INTERPRETER_UTIL_H_
+#endif  // SIMPL_INTERPRETER_UTIL_HH_

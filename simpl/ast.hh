@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_AST_H_
-#define SIMPL_AST_H_
+#ifndef SIMPL_AST_HH_
+#define SIMPL_AST_HH_
 
 #include <concepts>
 #include <list>
@@ -90,4 +90,4 @@ std::ostream& operator<<(std::ostream& os, const Quoted& qt);
 
 }  // namespace simpl
 
-#endif  // SIMPL_AST_H_
+#endif  // SIMPL_AST_HH_

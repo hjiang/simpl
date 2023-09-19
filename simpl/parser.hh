@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_PARSER_H_
-#define SIMPL_PARSER_H_
+#ifndef SIMPL_PARSER_HH_
+#define SIMPL_PARSER_HH_
 
 #include <initializer_list>
 #include <iterator>
@@ -49,7 +49,7 @@ class Parser {
 
 }  // namespace simpl
 
-#endif  // SIMPL_PARSER_H_
+#endif  // SIMPL_PARSER_HH_
 
 // Local Variables:
 // compile-command : "bazel test //simpl:all"

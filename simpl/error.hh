@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_ERROR_H_
-#define SIMPL_ERROR_H_
+#ifndef SIMPL_ERROR_HH_
+#define SIMPL_ERROR_HH_
 
 #include <stdexcept>
 #include <string>
@@ -22,4 +22,4 @@ void ClearRuntimeError();
 
 }  // namespace simpl
 
-#endif  // SIMPL_ERROR_H_
+#endif  // SIMPL_ERROR_HH_

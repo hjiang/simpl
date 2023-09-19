@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_BUILT_IN_CDT_OPS_H_
-#define SIMPL_BUILT_IN_CDT_OPS_H_
+#ifndef SIMPL_BUILT_IN_CDT_OPS_HH_
+#define SIMPL_BUILT_IN_CDT_OPS_HH_
 
 #include "simpl/function.hh"
 
@@ -16,4 +16,4 @@ class Get : public Function {
 }  // namespace built_in
 }  // namespace simpl
 
-#endif  // SIMPL_BUILT_IN_CDT_OPS_H_
+#endif  // SIMPL_BUILT_IN_CDT_OPS_HH_

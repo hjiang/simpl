@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_BUILT_IN_COMPARISON_H_
-#define SIMPL_BUILT_IN_COMPARISON_H_
+#ifndef SIMPL_BUILT_IN_COMPARISON_HH_
+#define SIMPL_BUILT_IN_COMPARISON_HH_
 
 #include <vector>
 
@@ -41,4 +41,4 @@ class LessThanOrEqualTo : public Function {
 
 }  // namespace simpl
 
-#endif  // SIMPL_BUILT_IN_COMPARISON_H_
+#endif  // SIMPL_BUILT_IN_COMPARISON_HH_

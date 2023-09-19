@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_TOKEN_H_
-#define SIMPL_TOKEN_H_
+#ifndef SIMPL_TOKEN_HH_
+#define SIMPL_TOKEN_HH_
 
 #include <string>
 #include <variant>
@@ -66,7 +66,7 @@ class Token {
 
 }  // namespace simpl
 
-#endif  // SIMPL_TOKEN_H_
+#endif  // SIMPL_TOKEN_HH_
 
 // Local Variables:
 // compile-command : "bazel build //simpl:lexer"

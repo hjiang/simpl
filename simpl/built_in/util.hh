@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_BUILT_IN_UTIL_H_
-#define SIMPL_BUILT_IN_UTIL_H_
+#ifndef SIMPL_BUILT_IN_UTIL_HH_
+#define SIMPL_BUILT_IN_UTIL_HH_
 
 #include <stdexcept>
 #include <string>
@@ -20,4 +20,4 @@ void CheckArity(const std::string& name, const T& args, size_t arity) {
 }  // namespace built_in
 }  // namespace simpl
 
-#endif  // SIMPL_BUILT_IN_UTIL_H_
+#endif  // SIMPL_BUILT_IN_UTIL_HH_

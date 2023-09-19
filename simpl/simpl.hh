@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_SIMPL_H_
-#define SIMPL_SIMPL_H_
+#ifndef SIMPL_SIMPL_HH_
+#define SIMPL_SIMPL_HH_
 
 #include <chrono>
 #include <string>
@@ -22,4 +22,4 @@ void RunFile(const std::string &path);
 
 }  // namespace simpl
 
-#endif  // SIMPL_SIMPL_H_
+#endif  // SIMPL_SIMPL_HH_

@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_FUNCTION_H_
-#define SIMPL_FUNCTION_H_
+#ifndef SIMPL_FUNCTION_HH_
+#define SIMPL_FUNCTION_HH_
 
 #include "simpl/ast.hh"
 #include "simpl/callable.hh"
@@ -22,4 +22,4 @@ class Function : public Callable {
 
 }  // namespace simpl
 
-#endif  // SIMPL_FUNCTION_H_
+#endif  // SIMPL_FUNCTION_HH_

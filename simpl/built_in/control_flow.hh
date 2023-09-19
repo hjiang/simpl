@@ -1,7 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
-#ifndef SIMPL_BUILT_IN_CONTROL_FLOW_H_
-#define SIMPL_BUILT_IN_CONTROL_FLOW_H_
+#ifndef SIMPL_BUILT_IN_CONTROL_FLOW_HH_
+#define SIMPL_BUILT_IN_CONTROL_FLOW_HH_
 
 #include "simpl/ast.hh"
 #include "simpl/callable.hh"
@@ -35,4 +35,4 @@ class Let : public Callable {
 
 }  // namespace simpl
 
-#endif  // SIMPL_BUILT_IN_CONTROL_FLOW_H_
+#endif  // SIMPL_BUILT_IN_CONTROL_FLOW_HH_
