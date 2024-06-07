@@ -3,6 +3,7 @@
 #include "simpl/lexer.hh"
 
 #include <gtest/gtest.h>
+#include <string>
 
 #include "simpl/error.hh"
 

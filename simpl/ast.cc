@@ -3,8 +3,11 @@
 #include "simpl/ast.hh"
 
 #include <iterator>
+#include <memory>
 #include <ostream>
 #include <ranges>
+#include <string>
+#include <utility>
 
 #include "simpl/overload.hh"
 

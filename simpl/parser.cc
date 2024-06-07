@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "simpl/ast.hh"
 #include "simpl/config.hh"

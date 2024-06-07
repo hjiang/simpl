@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <utility>
 
 #include "simpl/ast.hh"
 #include "simpl/interpreter_util.hh"

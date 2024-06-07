@@ -3,9 +3,11 @@
 #include "simpl/interpreter.hh"
 
 #include <iterator>
+#include <memory>
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 #include "simpl/ast.hh"
 #include "simpl/built_in/arithmetic.hh"
