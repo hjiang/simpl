@@ -18,3 +18,4 @@ jobs:
       - uses: codecov/codecov-action@v4
         with:
           files: ./bazel-out/_coverage/_coverage_report.dat
+          token: ${{ secrets.CODECOV_TOKEN }}
