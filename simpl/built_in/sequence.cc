@@ -3,7 +3,6 @@
 #include "simpl/built_in/sequence.hh"
 
 #include <concepts>
-#include <memory>
 #include <ranges>
 #include <stdexcept>
 #include <utility>

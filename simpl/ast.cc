@@ -2,7 +2,6 @@
 
 #include "simpl/ast.hh"
 
-#include <iterator>
 #include <memory>
 #include <ostream>
 #include <ranges>
