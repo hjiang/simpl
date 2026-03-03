@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <stdexcept>
+#include <string>
 
 #include "simpl/ast.hh"
 #include "simpl/interpreter_util.hh"
@@ -27,17 +28,13 @@ TEST_F(InterpreterTest, Integer) {
   EXPECT_EQ(std::get<int_type>(Eval("42")), 42);
 }
 
-TEST_F(InterpreterTest, Bool) {
-  EXPECT_TRUE(std::get<bool>(Eval("true")));
-}
+TEST_F(InterpreterTest, Bool) { EXPECT_TRUE(std::get<bool>(Eval("true"))); }
 
 TEST_F(InterpreterTest, Plus) {
   EXPECT_EQ(std::get<int_type>(Eval("(+ 1 2)")), 3);
 }
 
-TEST_F(InterpreterTest, Quoted) {
-  EXPECT_TRUE(holds<List>(Eval("'(+ 1 2)")));
-}
+TEST_F(InterpreterTest, Quoted) { EXPECT_TRUE(holds<List>(Eval("'(+ 1 2)"))); }
 
 TEST_F(InterpreterTest, QuotedSymbol) {
   auto res = Eval("'(let [a 'b] (cons a '(1 2)))");
@@ -106,9 +103,7 @@ TEST_F(InterpreterTest, If) {
   EXPECT_EQ(std::get<int_type>(Eval("(if false 3 4)")), 4);
 }
 
-TEST_F(InterpreterTest, Not) {
-  EXPECT_TRUE(std::get<bool>(Eval("(not nil)")));
-}
+TEST_F(InterpreterTest, Not) { EXPECT_TRUE(std::get<bool>(Eval("(not nil)"))); }
 
 TEST_F(InterpreterTest, EqualityTrue) {
   EXPECT_TRUE(std::get<bool>(Eval("(= 2 2)")));
@@ -135,15 +130,20 @@ TEST_F(InterpreterTest, LessThan) {
 }
 
 TEST_F(InterpreterTest, LetAndFn) {
-  EXPECT_EQ(std::get<int_type>(Eval("(let [plus (fn [a b] (+ a b))] (plus 3 4))")), 7);
+  EXPECT_EQ(
+      std::get<int_type>(Eval("(let [plus (fn [a b] (+ a b))] (plus 3 4))")),
+      7);
 }
 
 TEST_F(InterpreterTest, Closure) {
-  EXPECT_EQ(std::get<int_type>(Eval("(let [a 5] (def plus (fn [b] (+ a b)))) (plus 2)")), 7);
+  EXPECT_EQ(std::get<int_type>(
+                Eval("(let [a 5] (def plus (fn [b] (+ a b)))) (plus 2)")),
+            7);
 }
 
 TEST_F(InterpreterTest, Defn) {
-  EXPECT_EQ(std::get<int_type>(Eval("(defn plus [a b] (+ a b)) (plus 3 4)")), 7);
+  EXPECT_EQ(std::get<int_type>(Eval("(defn plus [a b] (+ a b)) (plus 3 4)")),
+            7);
 }
 
 TEST_F(InterpreterTest, DefnVariadic) {
@@ -151,7 +151,8 @@ TEST_F(InterpreterTest, DefnVariadic) {
 }
 
 TEST_F(InterpreterTest, EvalVariadic) {
-  EXPECT_EQ(std::get<int_type>(Eval("(defn foo [a & b] (head b)) (foo 1 2 3)")), 2);
+  EXPECT_EQ(std::get<int_type>(Eval("(defn foo [a & b] (head b)) (foo 1 2 3)")),
+            2);
 }
 
 TEST_F(InterpreterTest, EmptyRestArgs) {
@@ -196,9 +197,8 @@ TEST_F(InterpreterTest, KeyMap) {
 }
 
 TEST_F(InterpreterTest, LazyFn) {
-  EXPECT_EQ(2, std::get<int_type>(
-                   Eval("(let [f (lazy-fn [a] (eval (head a)))] "
-                        "(f ((/ 2 1) (/ 2 0))))")));
+  EXPECT_EQ(2, std::get<int_type>(Eval("(let [f (lazy-fn [a] (eval (head a)))] "
+                                       "(f ((/ 2 1) (/ 2 0))))")));
 }
 
 TEST_F(InterpreterTest, Empty) {
@@ -210,7 +210,8 @@ TEST_F(InterpreterTest, NotEmpty) {
 }
 
 TEST_F(InterpreterTest, CallTwice) {
-  EXPECT_EQ(std::get<int_type>(Eval("(defn foo [a] (+ 1 a)) (foo 1) (foo 1)")), 2);
+  EXPECT_EQ(std::get<int_type>(Eval("(defn foo [a] (+ 1 a)) (foo 1) (foo 1)")),
+            2);
 }
 
 // Stage 3: Coverage gap tests
@@ -232,9 +233,9 @@ TEST_F(InterpreterTest, DivisionByZero) {
 }
 
 TEST_F(InterpreterTest, Recursion) {
-  EXPECT_EQ(std::get<int_type>(Eval(
-                "(defn fact [n] (if (= n 0) 1 (* n (fact (- n 1))))) "
-                "(fact 5)")),
+  EXPECT_EQ(std::get<int_type>(
+                Eval("(defn fact [n] (if (= n 0) 1 (* n (fact (- n 1))))) "
+                     "(fact 5)")),
             120);
 }
 

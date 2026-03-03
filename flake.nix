@@ -12,6 +12,7 @@
         devShells.default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages.stdenv; } {
           nativeBuildInputs = [
 	          pkgs.bazel
+            pkgs.cpplint
 	          pkgs.expect
             pkgs.llvmPackages.clang
             pkgs.llvmPackages.clang-tools
