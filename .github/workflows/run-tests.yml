@@ -11,7 +11,7 @@ jobs:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
       - run: nix develop --command bazel coverage -c fastbuild --combined_report=lcov //...
         shell: bash
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           files: ./bazel-out/_coverage/_coverage_report.dat
           token: ${{ secrets.CODECOV_TOKEN }}
