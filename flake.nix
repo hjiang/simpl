@@ -11,7 +11,8 @@
       let pkgs = nixpkgs.legacyPackages.${system}; in {
         devShells.default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages.stdenv; } {
           nativeBuildInputs = [
-	    pkgs.bazel
+	          pkgs.bazel
+	          pkgs.expect
             pkgs.llvmPackages.clang
             pkgs.llvmPackages.clang-tools
           ];
