@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 
-#include <memory>
 #include <string>
 #include <variant>
 
@@ -14,62 +13,50 @@
 
 namespace simpl {
 
+static ExprList Parse(const std::string& source) {
+  Lexer lexer(source);
+  return Parser(lexer.scan()).Parse();
+}
+
 TEST(Parser, Integer) {
   Lexer lexer("1");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kInteger);
   EXPECT_EQ(std::get<int_type>(tokens.front().literal), 1);
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  auto atom = exprs.front();
-  EXPECT_EQ(std::get<int_type>(atom), 1);
+  auto exprs = Parse("1");
+  EXPECT_EQ(std::get<int_type>(exprs.front()), 1);
 }
 
 TEST(Parser, String) {
   Lexer lexer("\"hello\"");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kString);
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  auto atom = exprs.front();
-  EXPECT_EQ(std::get<std::string>(atom), "hello");
+  EXPECT_EQ(std::get<std::string>(Parse("\"hello\"").front()), "hello");
 }
 
 TEST(Parser, Bool) {
   Lexer lexer("false");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kFalse);
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  auto atom = exprs.front();
-  EXPECT_EQ(std::get<bool>(atom), false);
+  EXPECT_EQ(std::get<bool>(Parse("false").front()), false);
 }
 
 TEST(Parser, Symbol) {
   Lexer lexer("foo");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kSymbol);
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  auto atom = exprs.front();
-  EXPECT_EQ(std::get<Symbol>(atom).name, "foo");
+  EXPECT_EQ(std::get<Symbol>(Parse("foo").front()).name, "foo");
 }
 
 TEST(Parser, Keyword) {
   Lexer lexer(":foo");
   auto tokens = lexer.scan();
   EXPECT_EQ(tokens.front().type, Token::kKeyword);
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  auto atom = exprs.front();
-  EXPECT_EQ(std::get<Keyword>(atom).name, "foo");
+  EXPECT_EQ(std::get<Keyword>(Parse(":foo").front()).name, "foo");
 }
 
 TEST(Parser, List) {
-  Lexer lexer("(+ 1 2)");
-  auto tokens = lexer.scan();
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
+  auto exprs = Parse("(+ 1 2)");
   auto list = std::get<List>(exprs.front());
   EXPECT_EQ(list.size(), 3);
   auto i = list.begin();
@@ -84,17 +71,14 @@ TEST(Parser, Def) {
   Lexer lexer("(def foo 42)");
   auto tokens = lexer.scan();
   EXPECT_EQ(6, tokens.size());
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  EXPECT_EQ(1, exprs.size());
+  EXPECT_EQ(1, Parse("(def foo 42)").size());
 }
 
 TEST(Parser, Vector) {
   Lexer lexer("[1 2 3]");
   auto tokens = lexer.scan();
   EXPECT_EQ(6, tokens.size());
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
+  auto exprs = Parse("[1 2 3]");
   EXPECT_EQ(1, exprs.size());
   auto vec = std::get<Vector>(exprs.front());
   EXPECT_EQ(3, vec.size());
@@ -102,51 +86,35 @@ TEST(Parser, Vector) {
 }
 
 TEST(Parser, Map) {
-  Lexer lexer("{:a 1 :b 2}");
-  auto tokens = lexer.scan();
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
+  auto exprs = Parse("{:a 1 :b 2}");
   auto m = std::get<Map>(exprs.front());
   EXPECT_EQ(1, exprs.size());
   EXPECT_EQ(2, m.size());
   EXPECT_EQ(Expr{1}, m[Expr{Keyword{"a"}}]);
   EXPECT_EQ(Expr{2}, m[Expr{Keyword{"b"}}]);
 }
+
 TEST(Parser, Let) {
   Lexer lexer("(let [a 2] a)");
   auto tokens = lexer.scan();
   EXPECT_EQ(9, tokens.size());
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  EXPECT_EQ(1, exprs.size());
+  EXPECT_EQ(1, Parse("(let [a 2] a)").size());
 }
 
 TEST(Parser, If) {
   Lexer lexer("(if a 2 3)");
   auto tokens = lexer.scan();
   EXPECT_EQ(7, tokens.size());
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  EXPECT_EQ(1, exprs.size());
+  EXPECT_EQ(1, Parse("(if a 2 3)").size());
 }
 
 TEST(Parser, Nil) {
-  Lexer lexer("nil");
-  auto tokens = lexer.scan();
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
+  auto exprs = Parse("nil");
   EXPECT_EQ(1, exprs.size());
-  auto atom = exprs.front();
-  EXPECT_EQ(std::get<std::nullptr_t>(atom), nullptr);
+  EXPECT_EQ(std::get<std::nullptr_t>(exprs.front()), nullptr);
 }
 
-TEST(Parser, Fn) {
-  Lexer lexer("(fn [a b c] (+ a b c))");
-  auto tokens = lexer.scan();
-  Parser parser(tokens);
-  auto exprs = parser.Parse();
-  EXPECT_EQ(1, exprs.size());
-}
+TEST(Parser, Fn) { EXPECT_EQ(1, Parse("(fn [a b c] (+ a b c))").size()); }
 
 }  // namespace simpl
 // Local Variables:

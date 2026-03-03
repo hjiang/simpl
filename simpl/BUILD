@@ -24,7 +24,6 @@ cc_test(name = 'simpl_test',
             '@gtest//:gtest_main',
             'ast',
             'config',
-            'interpreter',
             'simplib',
         ],
         size = 'small')
