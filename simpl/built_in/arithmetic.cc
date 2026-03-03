@@ -56,6 +56,9 @@ constexpr struct {
 
   template <typename T1, typename T2>
   requires Numeric<T1> && Numeric<T2> Expr operator()(T1 lhs, T2 rhs) const {
+    if constexpr (std::integral<T2>) {
+      if (rhs == 0) throw std::runtime_error("Division by zero");
+    }
     return Expr{lhs / rhs};
   }
 } divide;
