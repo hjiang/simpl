@@ -56,7 +56,7 @@ class Quoted {
   Quoted& operator=(Quoted&& other) noexcept;
   std::size_t hash() const {
     static Hash hash;
-    return hash(*expr_) ^ std::hash<uint32_t>{}(0xdeadbeef);
+    return hash(*expr_) ^ std::hash<uint32_t>{}(0xf00dcafe);
   }
   bool operator==(const Quoted& other) const;
 

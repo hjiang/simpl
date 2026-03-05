@@ -1,5 +1,7 @@
 // Copyright 2023 Hong Jiang <lazyseq@gmail.com> and the contributors
 
+#include "simpl/ast.hh"
+
 #include <gtest/gtest.h>
 
 #include <sstream>
@@ -33,5 +35,18 @@ TEST(AST, VectorOutput) {
 TEST(AST, EmptyVectorOutput) { EXPECT_EQ(FormatExpr("[]"), "[]"); }
 
 TEST(AST, QuoteOutput) { EXPECT_EQ(FormatExpr("'(+ 1 2)"), "'(+ 1 2)"); }
+
+TEST(AST, ListHashIsOrderDependent) {
+  Hash hash;
+  Expr l123{List{Expr{int_type{1}}, Expr{int_type{2}}, Expr{int_type{3}}}};
+  Expr l321{List{Expr{int_type{3}}, Expr{int_type{2}}, Expr{int_type{1}}}};
+  EXPECT_NE(hash(l123), hash(l321));
+}
+
+TEST(AST, QuotedSymbolHashDiffersFromRawStringHash) {
+  Quoted q{Expr{Symbol{"foo"}}};
+  Quoted k{Expr{Keyword{"foo"}}};
+  EXPECT_NE(q.hash(), k.hash());
+}
 
 }  // namespace simpl

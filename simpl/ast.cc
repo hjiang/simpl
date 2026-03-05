@@ -102,14 +102,14 @@ std::size_t Hash::operator()(const Expr& expr) const {
                [](const List& l) {
                  std::size_t seed = 0;
                  for (auto& e : l) {
-                   seed ^= hash(e);
+                   seed ^= hash(e) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
                  }
                  return seed;
                },
                [](const Vector& v) {
                  std::size_t seed = 0;
                  for (auto& e : v) {
-                   seed ^= hash(e);
+                   seed ^= hash(e) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
                  }
                  return seed;
                },
@@ -117,8 +117,7 @@ std::size_t Hash::operator()(const Expr& expr) const {
                [](const Map& m) {
                  std::size_t seed = 0;
                  for (auto& [k, v] : m) {
-                   seed ^= hash(k);
-                   seed ^= hash(v);
+                   seed ^= hash(k) + hash(v) * 0x9e3779b9;
                  }
                  return seed;
                }},
