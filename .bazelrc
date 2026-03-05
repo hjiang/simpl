@@ -8,3 +8,4 @@ build --cxxopt='-Wextra'
 build --cxxopt='-Werror'
 build --features=external_include_paths
 test --test_output=errors
+coverage --action_env=GCOV
