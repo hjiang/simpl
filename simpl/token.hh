@@ -61,7 +61,7 @@ class Token {
   Token(Type type, const std::string &lexeme, literal_t literal, size_t line)
       : type(type), lexeme(lexeme), literal(literal), line(line) {}
 
-  operator std::string() { return lexeme; }
+  explicit operator std::string() const { return lexeme; }
 };
 
 }  // namespace simpl

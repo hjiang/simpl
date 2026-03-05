@@ -16,7 +16,9 @@ template <typename F>
 class Finalizer {
  public:
   template <typename T>
-  explicit Finalizer(T&& f) : f_(f) {}
+  explicit Finalizer(T&& f) : f_(std::forward<T>(f)) {}
+  Finalizer(const Finalizer&) = delete;
+  Finalizer(Finalizer&&) = delete;
   ~Finalizer() { f_(); }
 
  private:

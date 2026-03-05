@@ -54,7 +54,7 @@ class Interpreter {
   };
 
   Interpreter();
-  virtual ~Interpreter() {}
+  virtual ~Interpreter() = default;
   Expr Evaluate(Expr&& expr);
   Expr Evaluate(ExprList&& expr, std::shared_ptr<Environment> env = nullptr);
   std::shared_ptr<Environment> env() const { return env_; }

@@ -95,7 +95,7 @@ Expr Sum::FnCall(Interpreter*, args_type&& args) {
       [](const Expr& lhs, const Expr& rhs) { return lhs + rhs; });
 }
 
-Expr Substract::FnCall(Interpreter*, args_type&& args) {
+Expr Subtract::FnCall(Interpreter*, args_type&& args) {
   auto i = args.begin();
   const Expr& init = *i++;
   auto result = std::accumulate(

@@ -15,7 +15,7 @@ class Sum : public Function {
   Expr FnCall(Interpreter* interpreter, args_type&& args) override;
 };
 
-class Substract : public Function {
+class Subtract : public Function {
  private:
   Expr FnCall(Interpreter* interpreter, args_type&& args) override;
 };

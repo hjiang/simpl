@@ -10,7 +10,7 @@ namespace simpl {
 using int_type = int_fast64_t;
 using float_type = double;
 
-const char* const kVersion = "0.0.1";
+constexpr const char* kVersion = "0.0.1";
 
 }  // namespace simpl
 

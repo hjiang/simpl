@@ -44,19 +44,14 @@ Expr Parser::ParseSimpleExpr() {
   switch (token.type) {
     case Token::Type::kInteger:
       return Expr{std::get<int_type>(token.literal)};
-      break;
     case Token::Type::kString:
       return Expr{std::get<std::string>(token.literal)};
-      break;
     case Token::Type::kFloat:
       return Expr{std::get<float_type>(token.literal)};
-      break;
     case Token::Type::kFalse:
       return Expr{false};
-      break;
     case Token::Type::kTrue:
       return Expr{true};
-      break;
     case Token::Type::kQuote:
       return Expr{Quoted(ParseExpr())};
     case Token::Type::kMinus:
@@ -73,13 +68,10 @@ Expr Parser::ParseSimpleExpr() {
     case Token::Type::kLessEqual:
     case Token::Type::kSymbol:
       return Expr{Symbol{token.lexeme}};
-      break;
     case Token::Type::kKeyword:
       return Expr{Keyword{std::get<std::string>(token.literal)}};
-      break;
     case Token::Type::kNil:
       return Expr{nullptr};
-      break;
     default:
       throw Error(token, "Unexpected token");
   }

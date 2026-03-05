@@ -32,8 +32,6 @@ int OrderingToInt(std::partial_ordering ordering) {
   throw std::runtime_error("Invalid ordering");
 }
 
-namespace {
-
 constexpr struct {
   int operator()(auto&&, auto&&) const {
     throw std::runtime_error("Incomparable types.");
@@ -49,8 +47,6 @@ constexpr struct {
     return lhs.compare(std::move(rhs));
   }
 } compare;
-
-}  // anonymous namespace
 
 int Compare(std::list<Expr>&& args) {
   if (args.size() != 2) {

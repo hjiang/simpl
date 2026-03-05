@@ -59,14 +59,14 @@ struct Interpreter::EvalVisitor {
   }
 };
 
-Interpreter::Interpreter() : env_(new Environment()) {
+Interpreter::Interpreter() : env_(std::make_shared<Environment>()) {
   env_->Define("=", std::make_unique<built_in::Equals>());
   env_->Define(">", std::make_unique<built_in::GreaterThan>());
   env_->Define(">=", std::make_unique<built_in::GreaterThanOrEqualTo>());
   env_->Define("<", std::make_unique<built_in::LessThan>());
   env_->Define("<=", std::make_unique<built_in::LessThanOrEqualTo>());
   env_->Define("+", std::make_unique<built_in::Sum>());
-  env_->Define("-", std::make_unique<built_in::Substract>());
+  env_->Define("-", std::make_unique<built_in::Subtract>());
   env_->Define("*", std::make_unique<built_in::Multiply>());
   env_->Define("/", std::make_unique<built_in::Divide>());
   env_->Define("%", std::make_unique<built_in::Modulo>());
