@@ -9,6 +9,10 @@ jobs:
       - uses: cachix/install-nix-action@v31
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: nix-community/cache-nix-action@v6
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.nix', 'flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
       - run: nix develop --command bazel coverage -c fastbuild --combined_report=lcov //...
         shell: bash
       - uses: codecov/codecov-action@v5
