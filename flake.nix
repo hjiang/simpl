@@ -14,6 +14,8 @@
             pkgs.bazel
             pkgs.cpplint
             pkgs.expect
+            pkgs.jdk
+            pkgs.lcov
             pkgs.llvmPackages.clang
             pkgs.llvmPackages.clang-tools
           ];
