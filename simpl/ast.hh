@@ -73,9 +73,15 @@ using Vector = std::vector<Expr>;
 
 using Map = std::unordered_map<Expr, Expr, Hash>;
 
+struct TailCall {
+  callable_ptr_t callable;
+  ExprList args;  // Already evaluated
+  bool operator==(const TailCall&) const = default;
+};
+
 using ExprBase = std::variant<int_type, float_type, bool, std::string, Symbol,
                               std::nullptr_t, callable_ptr_t, List, Vector,
-                              Quoted, Map, Keyword>;
+                              Quoted, Map, Keyword, TailCall>;
 
 class Expr : public ExprBase {
  public:
@@ -87,6 +93,7 @@ std::ostream& operator<<(std::ostream& os, const List& l);
 std::ostream& operator<<(std::ostream& os, const Symbol& s);
 std::ostream& operator<<(std::ostream& os, const Vector& vec);
 std::ostream& operator<<(std::ostream& os, const Quoted& qt);
+std::ostream& operator<<(std::ostream& os, const TailCall& tc);
 
 }  // namespace simpl
 

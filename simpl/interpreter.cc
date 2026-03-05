@@ -31,6 +31,7 @@ namespace simpl {
 struct Interpreter::EvalVisitor {
   Interpreter* interpreter;
   Expr operator()(auto&& expr) { return std::forward<Expr>(expr); }
+  Expr operator()(TailCall&& tc) { return std::move(tc); }
   Expr operator()(Quoted&& expr) { return expr.expr(); }
   Expr operator()(Symbol&& expr) {
     return interpreter->env_->Get(std::move(expr.name));
@@ -39,6 +40,9 @@ struct Interpreter::EvalVisitor {
     if (list.empty()) {
       return Expr{nullptr};
     }
+
+    bool in_tail = std::exchange(interpreter->tail_position_, false);
+
     auto result = interpreter->Evaluate(std::move(list.front()));
     if (holds<Keyword>(result)) {
       if (list.size() != 2) {
@@ -52,7 +56,41 @@ struct Interpreter::EvalVisitor {
       ++it;
       ExprList args;
       std::move(it, list.end(), std::back_inserter(args));
-      return callable->Call(interpreter, std::move(args));
+
+      // Tail-position non-lazy UserFn: evaluate args now, return TailCall
+      // sentinel for the trampoline to iterate without growing the C++ stack.
+      auto fn = std::dynamic_pointer_cast<UserFn>(callable);
+      if (in_tail && fn && !fn->is_lazy()) {
+        ExprList evaluated;
+        for (auto& arg : args) {
+          evaluated.push_back(interpreter->Evaluate(std::move(arg)));
+        }
+        return TailCall{callable, std::move(evaluated)};
+      }
+
+      // Only If reads tail_position_ to decide whether to restore it for its
+      // branches. Let uses EvaluateBody internally. All other callables
+      // (And, Or, *, +, eval, etc.) must NOT see tail_position_=true because
+      // they evaluate sub-expressions that are not in tail position.
+      if (in_tail && std::dynamic_pointer_cast<built_in::If>(callable)) {
+        interpreter->set_tail_position(true);
+      }
+
+      auto call_result = callable->Call(interpreter, std::move(args));
+
+      // Non-tail context: run trampoline loop until a real value is returned.
+      if (!in_tail) {
+        while (auto* tc = std::get_if<TailCall>(&call_result)) {
+          auto tc_fn = std::dynamic_pointer_cast<Function>(tc->callable);
+          if (tc_fn) {
+            call_result =
+                tc_fn->CallEvaluated(interpreter, std::move(tc->args));
+          } else {
+            call_result = tc->callable->Call(interpreter, std::move(tc->args));
+          }
+        }
+      }
+      return call_result;
     } else {
       throw std::runtime_error("Cannot apply a non-callable");
     }
@@ -115,6 +153,25 @@ Expr Interpreter::Evaluate(ExprList&& exprs, std::shared_ptr<Environment> env) {
       make_move_iterator(exprs.begin()), make_move_iterator(exprs.end()),
       Expr(nullptr),
       [this](Expr&&, Expr&& rhs) { return Evaluate(std::move(rhs)); });
+}
+
+Expr Interpreter::EvaluateBody(const ExprList& exprs,
+                               std::shared_ptr<Environment> env) {
+  auto old_env = env_;
+  if (env) env_ = env;
+  auto restore = defer([this, env, old_env]() {
+    if (env) this->env_ = old_env;
+  });
+
+  Expr result{nullptr};
+  for (auto it = exprs.begin(); it != exprs.end();) {
+    auto next = std::next(it);
+    if (next == exprs.end()) tail_position_ = true;  // mark last expr
+    result = Evaluate(Expr{*it});
+    tail_position_ = false;  // always reset after each eval
+    it = next;
+  }
+  return result;
 }
 
 }  // namespace simpl

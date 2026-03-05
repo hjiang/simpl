@@ -19,11 +19,14 @@ Expr If::Call(Interpreter* interpreter, args_type&& exprs) {
     throw std::runtime_error("'if' expects three arguments");
   }
 
+  bool was_tail = interpreter->tail_position();
+  interpreter->set_tail_position(false);
   auto i = make_move_iterator(exprs.begin());
-  auto cond = interpreter->Evaluate(*i++);
+  auto cond = interpreter->Evaluate(*i++);   // NOT in tail position
   auto then = i++;
   auto otherwise = i++;
 
+  interpreter->set_tail_position(was_tail);  // restore for chosen branch
   if (IsTruthy(cond)) {
     return interpreter->Evaluate(*then);
   } else {
@@ -45,7 +48,7 @@ Expr Let::Call(Interpreter* interpreter, args_type&& exprs) {
     auto value = interpreter->Evaluate(*j++);
     env->Bind(name, value);
   }
-  return interpreter->Evaluate(ExprList(i, exprs.end()), env);
+  return interpreter->EvaluateBody(ExprList(i, exprs.end()), env);
 }
 
 Expr Do::FnCall(Interpreter*, args_type&& args) {

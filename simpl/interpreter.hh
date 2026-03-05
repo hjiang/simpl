@@ -57,12 +57,18 @@ class Interpreter {
   virtual ~Interpreter() = default;
   Expr Evaluate(Expr&& expr);
   Expr Evaluate(ExprList&& expr, std::shared_ptr<Environment> env = nullptr);
-  Expr Evaluate(const ExprList& expr, std::shared_ptr<Environment> env = nullptr);
+  Expr Evaluate(const ExprList& expr,
+                std::shared_ptr<Environment> env = nullptr);
+  Expr EvaluateBody(const ExprList& exprs,
+                    std::shared_ptr<Environment> env = nullptr);
   std::shared_ptr<Environment> env() const { return env_; }
+  bool tail_position() const { return tail_position_; }
+  void set_tail_position(bool v) { tail_position_ = v; }
 
  private:
   struct EvalVisitor;
   std::shared_ptr<Environment> env_;
+  bool tail_position_ = false;
 };
 
 }  // namespace simpl

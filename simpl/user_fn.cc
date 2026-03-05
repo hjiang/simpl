@@ -18,7 +18,7 @@ Expr UserFn::FnCall(Interpreter* interpreter, Function::args_type&& args) {
   if (!definition_.param_rest().empty()) {
     env->Bind(definition_.param_rest(), List(arg, args.end()));
   }
-  return interpreter->Evaluate(definition_.body(), env);
+  return interpreter->EvaluateBody(definition_.body(), env);
 }
 
 }  // namespace simpl

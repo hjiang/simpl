@@ -63,6 +63,10 @@ std::ostream& operator<<(std::ostream& os, const Quoted& qt) {
   return os << '\'' << qt.expr();
 }
 
+std::ostream& operator<<(std::ostream& os, const TailCall&) {
+  return os << "<tail-call>";
+}
+
 // Defined in callable.cc
 std::ostream& operator<<(std::ostream& os, const Callable&);
 
@@ -72,6 +76,7 @@ struct ExprPrinter {
   void operator()(std::nullptr_t) { os << "nil"; }
   void operator()(const std::string& s) { os << "\"" << s << "\""; }
   void operator()(bool b) { os << (b ? "true" : "false"); }
+  void operator()(const TailCall& tc) { os << tc; }
   template <typename T>
   void operator()(std::shared_ptr<T> ep) {
     os << *ep;
@@ -120,6 +125,9 @@ std::size_t Hash::operator()(const Expr& expr) const {
                    seed ^= hash(k) + hash(v) * 0x9e3779b9;
                  }
                  return seed;
+               },
+               [](const TailCall&) -> std::size_t {
+                 throw std::logic_error("TailCall cannot be hashed");
                }},
       expr);
 }

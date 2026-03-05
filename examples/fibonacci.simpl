@@ -1,6 +1,9 @@
-(defn fib [n]
-  (if (or (= n 0) (= n 1))
-    1
-    (+ (fib (- n 1)) (fib (- n 2)))))
+; Tail-recursive fibonacci using accumulator pattern
+(defn fib-iter [n a b]
+  (if (= n 0)
+    a
+    (fib-iter (- n 1) b (+ a b))))
 
-(println (fib 25))
+(defn fib [n] (fib-iter n 0 1))
+
+(println (fib 40))

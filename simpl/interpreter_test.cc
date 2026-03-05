@@ -252,4 +252,13 @@ TEST_F(InterpreterTest, StringEqual) {
   EXPECT_TRUE(std::get<bool>(Eval("(= \"foo\" \"foo\")")));
 }
 
+TEST_F(InterpreterTest, TailCallOptimizationSelfRecursion) {
+  // Would stack-overflow without TCO at n=1,000,000
+  EXPECT_EQ(
+      std::get<int_type>(Eval("(defn countdown [n] "
+                              "  (if (= n 0) 0 (countdown (- n 1)))) "
+                              "(countdown 1000000)")),
+      int_type{0});
+}
+
 }  // namespace simpl
