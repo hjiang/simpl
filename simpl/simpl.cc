@@ -31,7 +31,7 @@ std::unique_ptr<Interpreter> InitSimpl() {
                      simpl_lib_arrows_simpl + sizeof(simpl_lib_arrows_simpl));
   Lexer lexer(source);
   auto tokens = lexer.scan();
-  Parser parser(tokens);
+  Parser parser(std::move(tokens));
   auto interpreter = std::make_unique<Interpreter>();
   interpreter->Evaluate(parser.Parse());
   return interpreter;
@@ -40,7 +40,7 @@ std::unique_ptr<Interpreter> InitSimpl() {
 Expr RunInterpreter(Interpreter *interpreter, std::string &&source) {
   Lexer lexer(std::move(source));
   auto tokens = lexer.scan();
-  Parser parser(tokens);
+  Parser parser(std::move(tokens));
   return interpreter->Evaluate(parser.Parse());
 }
 
@@ -55,7 +55,7 @@ Expr run(const std::string &source, Timing *timing) {
     throw std::runtime_error("An error occurred while scanning tokens.");
   }
   try {
-    Parser parser(tokens);
+    Parser parser(std::move(tokens));
     auto ast = parser.Parse();
     auto t3 = std::chrono::steady_clock::now();
     auto interpreter = InitSimpl();

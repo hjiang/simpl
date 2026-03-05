@@ -187,7 +187,7 @@ void Lexer::Number() {
                std::stod(source_.substr(start_, current_ - start_)));
     } else {
       AddToken(Token::kInteger,
-               std::stoi(source_.substr(start_, current_ - start_)));
+               std::stoll(source_.substr(start_, current_ - start_)));
     }
   } catch (const std::invalid_argument &e) {
     Error(line_, "Invalid number.");

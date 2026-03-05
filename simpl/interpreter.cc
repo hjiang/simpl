@@ -96,6 +96,11 @@ Expr Interpreter::Evaluate(Expr&& expr) {
   return std::visit(visitor, std::move(expr));
 }
 
+Expr Interpreter::Evaluate(const ExprList& exprs,
+                           std::shared_ptr<Environment> env) {
+  return Evaluate(ExprList{exprs}, std::move(env));
+}
+
 Expr Interpreter::Evaluate(ExprList&& exprs, std::shared_ptr<Environment> env) {
   auto old_env = env_;
   if (env) {

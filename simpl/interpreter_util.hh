@@ -12,7 +12,7 @@
 namespace simpl {
 
 template <typename T>
-bool holds(Expr value) {
+bool holds(const Expr& value) {
   return std::holds_alternative<T>(value);
 }
 

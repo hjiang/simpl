@@ -20,8 +20,8 @@ using token_list_t = std::list<Token>;
 
 class Parser {
  public:
-  explicit Parser(const token_list_t& tokens)
-      : tokens_(tokens), current_(tokens_.begin()) {}
+  explicit Parser(token_list_t tokens)
+      : tokens_(std::move(tokens)), current_(tokens_.begin()) {}
   ExprList Parse();
 
   class ParseError : public std::runtime_error {
