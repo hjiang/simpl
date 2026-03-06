@@ -27,6 +27,8 @@ bazel build -c opt //simpl:simpl
 The executable will be at `bazel-bin/simpl/simpl`. It's both a REPL and a source
 file interpreter.
 
+The author uses a recent version of Clang and has not tested other compilers.
+
 ## What's working
 
 ### Primitive data types
