@@ -48,20 +48,25 @@ struct Keyword {
 
 class Quoted {
  public:
+  enum class Kind { kQuote, kSyntaxQuote, kUnquote, kSplice };
+
   Quoted(const Quoted& other);
   Quoted(Quoted&& other) noexcept;
-  explicit Quoted(const Expr& expr);
+  explicit Quoted(const Expr& expr, Kind kind = Kind::kQuote);
+  Kind kind() const { return kind_; }
   const Expr& expr() const { return *expr_; }
   Quoted& operator=(const Quoted& other);
   Quoted& operator=(Quoted&& other) noexcept;
   std::size_t hash() const {
     static Hash hash;
-    return hash(*expr_) ^ std::hash<uint32_t>{}(0xf00dcafe);
+    return hash(*expr_) ^ std::hash<uint32_t>{}(0xf00dcafe) ^
+           std::hash<int>{}(static_cast<int>(kind_));
   }
   bool operator==(const Quoted& other) const;
 
  private:
   std::unique_ptr<Expr> expr_;
+  Kind kind_;
 };
 
 // List and ExprList should not be automatically convertible

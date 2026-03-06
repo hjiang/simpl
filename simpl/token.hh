@@ -35,6 +35,9 @@ class Token {
     kLess,
     kLessEqual,
     kQuote,
+    kBacktick,
+    kTilde,
+    kTildeSplice,
 
     // Literals.
     kSymbol,

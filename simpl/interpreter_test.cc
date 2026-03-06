@@ -261,4 +261,70 @@ TEST_F(InterpreterTest, TailCallOptimizationSelfRecursion) {
       int_type{0});
 }
 
+// Macro system tests
+
+TEST_F(InterpreterTest, SyntaxQuoteReturnsList) {
+  EXPECT_TRUE(holds<List>(Eval("`(a b c)")));
+  auto list = std::get<List>(Eval("`(a b c)"));
+  EXPECT_EQ(list.size(), 3);
+  EXPECT_EQ(std::get<Symbol>(list.front()).name, "a");
+}
+
+TEST_F(InterpreterTest, SyntaxQuoteWithUnquote) {
+  EXPECT_EQ(std::get<int_type>(
+                Eval("(def x 42) (let [result `(a ~x c)] (head (tail result)))")),
+            42);
+}
+
+TEST_F(InterpreterTest, SyntaxQuoteWithSplice) {
+  auto result = Eval("(def args '(1 2 3)) `(+ ~@args)");
+  auto list = std::get<List>(result);
+  EXPECT_EQ(list.size(), 4);
+  EXPECT_EQ(std::get<Symbol>(list.front()).name, "+");
+}
+
+TEST_F(InterpreterTest, SpliceOutsideSyntaxQuote) {
+  EXPECT_THROW(Eval("~@x"), std::runtime_error);
+}
+
+TEST_F(InterpreterTest, DefmacroAndUsage) {
+  EXPECT_EQ(
+      std::get<int_type>(
+          Eval("(defmacro when [cond & body] `(if ~cond (do ~@body) nil))"
+               "(when true (+ 1 2))")),
+      3);
+}
+
+TEST_F(InterpreterTest, DefmacroFalseCondition) {
+  EXPECT_TRUE(holds<std::nullptr_t>(
+      Eval("(defmacro when [cond & body] `(if ~cond (do ~@body) nil))"
+           "(when false (+ 1 2))")));
+}
+
+TEST_F(InterpreterTest, DefmacroMultipleBody) {
+  EXPECT_EQ(
+      std::get<int_type>(
+          Eval("(defmacro when [cond & body] `(if ~cond (do ~@body) nil))"
+               "(when true 1 2 3)")),
+      3);
+}
+
+TEST_F(InterpreterTest, MacroexpandReturnsExpandedForm) {
+  auto result =
+      Eval("(defmacro when [cond & body] `(if ~cond (do ~@body) nil))"
+           "(macroexpand '(when true 1 2))");
+  EXPECT_TRUE(holds<List>(result));
+  auto list = std::get<List>(result);
+  EXPECT_EQ(list.size(), 4);
+  EXPECT_EQ(std::get<Symbol>(list.front()).name, "if");
+}
+
+TEST_F(InterpreterTest, MacroAccessesCallerScope) {
+  EXPECT_EQ(
+      std::get<int_type>(
+          Eval("(defmacro when [cond & body] `(if ~cond (do ~@body) nil))"
+               "(def x 10) (when true x)")),
+      10);
+}
+
 }  // namespace simpl

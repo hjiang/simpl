@@ -116,6 +116,35 @@ TEST(Parser, Nil) {
 
 TEST(Parser, Fn) { EXPECT_EQ(1, Parse("(fn [a b c] (+ a b c))").size()); }
 
+TEST(Parser, SyntaxQuote) {
+  auto exprs = Parse("`(a b)");
+  auto qt = std::get<Quoted>(exprs.front());
+  EXPECT_EQ(qt.kind(), Quoted::Kind::kSyntaxQuote);
+  EXPECT_TRUE(std::holds_alternative<List>(qt.expr()));
+}
+
+TEST(Parser, Unquote) {
+  auto exprs = Parse("~x");
+  auto qt = std::get<Quoted>(exprs.front());
+  EXPECT_EQ(qt.kind(), Quoted::Kind::kUnquote);
+  EXPECT_EQ(std::get<Symbol>(qt.expr()).name, "x");
+}
+
+TEST(Parser, SpliceUnquote) {
+  auto exprs = Parse("~@body");
+  auto qt = std::get<Quoted>(exprs.front());
+  EXPECT_EQ(qt.kind(), Quoted::Kind::kSplice);
+  EXPECT_EQ(std::get<Symbol>(qt.expr()).name, "body");
+}
+
+TEST(Parser, SyntaxQuoteWithUnquote) {
+  auto exprs = Parse("`(if ~cond (do ~@body) nil)");
+  auto qt = std::get<Quoted>(exprs.front());
+  EXPECT_EQ(qt.kind(), Quoted::Kind::kSyntaxQuote);
+  auto list = std::get<List>(qt.expr());
+  EXPECT_EQ(list.size(), 4);
+}
+
 }  // namespace simpl
 // Local Variables:
 // compile-command : "bazel test //simpl:parser_test"
