@@ -1,2 +1,8 @@
+; Basic threading with literals — this already passes
 (let [a (-> 1 (+ 2 3))]
   (assert (= a 6)))
+
+; Threading with a variable from the calling scope — the old lazy-fn + eval
+; implementation evaluates inside a fresh scope, so `n` is not found.
+(let [n 3]
+  (assert (= (-> 1 (+ n)) 4) "-> should thread with outer scope variable"))

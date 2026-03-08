@@ -123,6 +123,17 @@ struct Interpreter::EvalVisitor {
         ExprList args;
         std::move(it, list.end(), std::back_inserter(args));
         auto expanded = macro->Call(interpreter, std::move(args));
+        // The macro body may have emitted a TailCall (if its last expression
+        // was a tail-position user-fn call). Trampoline it to get the actual
+        // expanded form before re-evaluating it as code.
+        while (auto* tc = std::get_if<TailCall>(&expanded)) {
+          auto tc_fn = std::dynamic_pointer_cast<Function>(tc->callable);
+          if (tc_fn) {
+            expanded = tc_fn->CallEvaluated(interpreter, std::move(tc->args));
+          } else {
+            expanded = tc->callable->Call(interpreter, std::move(tc->args));
+          }
+        }
         return interpreter->Evaluate(std::move(expanded));
       }
 
