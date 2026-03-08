@@ -21,7 +21,7 @@ cc_library(name = 'simplib',
 cc_test(name = 'simpl_test',
         srcs = ['simpl_test.cc'],
         deps = [
-            '@gtest//:gtest_main',
+            '@googletest//:gtest_main',
             'ast',
             'config',
             'simplib',
@@ -46,7 +46,7 @@ cc_test(
     srcs = ['lexer_test.cc'],
     deps = [
         'lexer',
-        '@gtest//:gtest_main'
+        '@googletest//:gtest_main'
     ],
     size = 'small')
 
@@ -58,7 +58,7 @@ cc_library(name ='ast',
 cc_test(name='ast_test',
         srcs=['ast_test.cc'],
         deps=[
-            '@gtest//:gtest_main',
+            '@googletest//:gtest_main',
             'ast',
             'lexer',
             'parser',
@@ -78,7 +78,7 @@ cc_test(
         'lexer',
         'parser',
         'token',
-        '@gtest//:gtest_main'
+        '@googletest//:gtest_main'
     ],
     size = 'small')
 
@@ -127,7 +127,7 @@ cc_library(name = 'interpreter',
 
 cc_test(name = 'interpreter_test',
         srcs = ['interpreter_test.cc'],
-        deps = ['interpreter', 'parser', 'token', 'lexer', '@gtest//:gtest_main'],
+        deps = ['interpreter', 'parser', 'token', 'lexer', '@googletest//:gtest_main'],
         size='small')
 
 cc_library(name = 'error',
