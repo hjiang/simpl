@@ -14,8 +14,9 @@ namespace simpl {
 // Its result is re-evaluated by the interpreter at the call site.
 class UserMacro : public UserFn {
  public:
-  explicit UserMacro(FnDef&& definition,
-                     std::shared_ptr<Interpreter::Environment> closure = nullptr)
+  explicit UserMacro(
+      FnDef&& definition,
+      std::shared_ptr<Interpreter::Environment> closure = nullptr)
       : UserFn(std::move(definition), closure, /*lazy=*/true) {}
 };
 

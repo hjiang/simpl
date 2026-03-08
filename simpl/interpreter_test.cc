@@ -272,7 +272,8 @@ TEST_F(InterpreterTest, SyntaxQuoteReturnsList) {
 
 TEST_F(InterpreterTest, SyntaxQuoteWithUnquote) {
   EXPECT_EQ(std::get<int_type>(
-                Eval("(def x 42) (let [result `(a ~x c)] (head (tail result)))")),
+                Eval("(def x 42) "
+                     "(let [result `(a ~x c)] (head (tail result)))")),
             42);
 }
 
