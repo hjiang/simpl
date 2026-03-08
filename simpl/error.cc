@@ -2,34 +2,19 @@
 
 #include "simpl/error.hh"
 
-#include <iostream>
 #include <string>
 
 namespace simpl {
 
-static bool gHadError = false;
-static bool gHadRuntimeError = false;
-
-void Error(size_t line, const std::string &message) {
-  Report(line, "", message);
+std::string Report(size_t line, const std::string& where,
+                   const std::string& message) {
+  return "[line " + std::to_string(line) + "] Error " + where + ": " +
+         message;
 }
 
-void HandleRuntimeError(const std::runtime_error &error) {
-  std::cout << error.what() << std::endl;
-  gHadRuntimeError = true;
+[[noreturn]] void Error(size_t line, const std::string& message) {
+  throw LexError(Report(line, "", message));
 }
-
-void Report(size_t line, const std::string &where, const std::string &message) {
-  std::cout << "[line " << line << "] Error " << where << ": " << message
-            << std::endl;
-  gHadError = true;
-}
-
-bool HadError() { return gHadError; }
-bool HadRuntimeError() { return gHadRuntimeError; }
-
-void ClearError() { gHadError = false; }
-void ClearRuntimeError() { gHadRuntimeError = false; }
 
 }  // namespace simpl
 

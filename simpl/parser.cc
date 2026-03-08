@@ -12,18 +12,12 @@
 
 namespace simpl {
 
-static void Error(const Token& token, const std::string& message) {
-  if (token.type == Token::Type::kEof) {
-    Report(token.line, " at end", message);
-  } else {
-    Report(token.line, " at '" + token.lexeme + "'", message);
-  }
-}
-
 Parser::ParseError Parser::Error(const Token& token,
                                  const std::string& message) {
-  simpl::Error(token, message);
-  return ParseError(message);
+  std::string where = (token.type == Token::Type::kEof)
+                          ? " at end"
+                          : (" at '" + token.lexeme + "'");
+  return ParseError(Report(token.line, where, message));
 }
 
 const Token& Parser::Consume(Token::Type type, const std::string& message) {

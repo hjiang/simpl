@@ -8,17 +8,17 @@
 
 namespace simpl {
 
-void Error(size_t line, const std::string &message);
+class LexError : public std::runtime_error {
+ public:
+  explicit LexError(const std::string& msg) : std::runtime_error(msg) {}
+};
 
-void Report(size_t line, const std::string &where, const std::string &message);
+// Returns formatted "[line N] Error<where>: <message>" string (no side effects)
+std::string Report(size_t line, const std::string& where,
+                   const std::string& message);
 
-void HandleRuntimeError(const std::runtime_error &error);
-
-bool HadError();
-bool HadRuntimeError();
-
-void ClearError();
-void ClearRuntimeError();
+// Calls Report() and throws LexError — never returns
+[[noreturn]] void Error(size_t line, const std::string& message);
 
 }  // namespace simpl
 

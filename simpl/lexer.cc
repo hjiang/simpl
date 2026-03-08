@@ -166,7 +166,6 @@ void Lexer::String() {
 
   if (AtEnd()) {
     Error(line_, "Unterminated string.");
-    return;
   }
 
   Advance();  // move past the closing '"'
@@ -185,7 +184,6 @@ void Lexer::Number() {
 
   if (!CanEndNumber(Peek()) && !AtEnd()) {
     Error(line_, "Invalid number.");
-    return;
   }
 
   try {
@@ -213,7 +211,6 @@ void Lexer::Keyword() {
   while (CanBeInSymbol(Peek())) Advance();
   if (start_ + 2 > current_) {
     Error(line_, "Invalid keyword.");
-    return;
   }
   const auto text = source_.substr(start_ + 1, current_ - start_ - 1);
   AddToken(Token::kKeyword, text);

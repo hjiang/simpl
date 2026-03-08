@@ -16,7 +16,6 @@
 #include <utility>
 
 #include "simpl/ast.hh"
-#include "simpl/error.hh"
 #include "simpl/interpreter.hh"
 #include "simpl/lexer.hh"
 #include "simpl/parser.hh"
@@ -49,33 +48,23 @@ Expr RunInterpreter(Interpreter *interpreter, std::string &&source) {
 Expr run(const std::string &source, Timing *timing) {
   auto t1 = std::chrono::steady_clock::now();
   Lexer lexer(source);
-  std::list<Token> tokens = lexer.scan();
+  auto tokens = lexer.scan();  // throws LexError on failure
   auto t2 = std::chrono::steady_clock::now();
-  if (HadError()) {
-    throw std::runtime_error("An error occurred while scanning tokens.");
+  Parser parser(std::move(tokens));
+  auto ast = parser.Parse();  // throws ParseError on failure
+  auto t3 = std::chrono::steady_clock::now();
+  auto interpreter = InitSimpl();
+  const auto &result = interpreter->Evaluate(std::move(ast));
+  auto t4 = std::chrono::steady_clock::now();
+  if (timing) {
+    timing->lexer_ms =
+        std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
+    timing->parser_ms =
+        std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2);
+    timing->interpreter_ms =
+        std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3);
   }
-  try {
-    Parser parser(std::move(tokens));
-    auto ast = parser.Parse();
-    auto t3 = std::chrono::steady_clock::now();
-    auto interpreter = InitSimpl();
-    const auto &result = interpreter->Evaluate(std::move(ast));
-    auto t4 = std::chrono::steady_clock::now();
-    if (timing) {
-      timing->lexer_ms =
-          std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
-      timing->parser_ms =
-          std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2);
-      timing->interpreter_ms =
-          std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3);
-    }
-    return result;
-  } catch (const Parser::ParseError &e) {
-    throw std::runtime_error("An error occurred while parsing the input.");
-  } catch (const std::runtime_error &e) {
-    HandleRuntimeError(e);
-    throw std::runtime_error("An error occurred while evaluating the program.");
-  }
+  return result;
 }
 
 void RunFile(const std::string &path) {
@@ -85,19 +74,18 @@ void RunFile(const std::string &path) {
     ss << file.rdbuf();
     file.close();
     Timing t;
-    run(ss.str(), &t);
-    if (HadError()) {
+    try {
+      run(ss.str(), &t);
+    } catch (const std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
       exit(65);
-    }
-    if (HadRuntimeError()) {
-      exit(70);
     }
     std::cout << "lexer: " << t.lexer_ms.count() << "ms, "
               << "parser: " << t.parser_ms.count() << "ms, "
               << "interpreter: " << t.interpreter_ms.count() << "ms"
               << std::endl;
   } else {
-    std::cout << "Could not open file: " << path << std::endl;
+    std::cerr << "Could not open file: " << path << std::endl;
   }
 }
 
@@ -105,7 +93,6 @@ void RunREPL() {
   std::cout << "Simpl " << kVersion << std::endl;
   auto interpreter = InitSimpl();
   while (true) {
-    ClearError();
     std::cout << "> ";
     std::string line;
     getline(std::cin, line);
@@ -120,8 +107,6 @@ void RunREPL() {
                 << std::endl;
     } catch (const std::runtime_error &e) {
       std::cerr << e.what() << std::endl;
-      ClearError();
-      ClearRuntimeError();
     }
   }
 }
