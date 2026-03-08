@@ -9,3 +9,4 @@ bazel-simpl
 bazel-testlogs
 build/*
 genhtml
+.direnv

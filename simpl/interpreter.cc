@@ -20,19 +20,81 @@
 #include "simpl/built_in/fn.hh"
 #include "simpl/built_in/io.hh"
 #include "simpl/built_in/logic.hh"
+#include "simpl/built_in/macro.hh"
 #include "simpl/built_in/sequence.hh"
 #include "simpl/config.hh"
 #include "simpl/interpreter_util.hh"
+#include "simpl/overload.hh"
 #include "simpl/user_fn.hh"
+#include "simpl/user_macro.hh"
 #include "simpl/util.hh"
 
 namespace simpl {
+
+namespace {
+
+// Recursively process a syntax-quoted template, evaluating ~x and splicing ~@x.
+Expr ProcessSyntaxQuote(Interpreter* interpreter, Expr&& expr) {
+  return std::visit(
+      Overload{
+          [&](List&& list) -> Expr {
+            List result;
+            for (auto& elem : list) {
+              if (auto* qt = std::get_if<Quoted>(&elem)) {
+                if (qt->kind() == Quoted::Kind::kUnquote) {
+                  result.push_back(
+                      interpreter->Evaluate(Expr{qt->expr()}));
+                  continue;
+                }
+                if (qt->kind() == Quoted::Kind::kSplice) {
+                  auto spliced =
+                      interpreter->Evaluate(Expr{qt->expr()});
+                  auto& splice_list = std::get<List>(spliced);
+                  for (auto& e : splice_list) {
+                    result.push_back(std::move(e));
+                  }
+                  continue;
+                }
+              }
+              result.push_back(
+                  ProcessSyntaxQuote(interpreter, std::move(elem)));
+            }
+            return Expr{std::move(result)};
+          },
+          [&](Quoted&& qt) -> Expr {
+            if (qt.kind() == Quoted::Kind::kUnquote) {
+              return interpreter->Evaluate(Expr{qt.expr()});
+            }
+            if (qt.kind() == Quoted::Kind::kSplice) {
+              throw std::runtime_error("~@ used outside of a list");
+            }
+            return Expr{std::move(qt)};
+          },
+          [](auto&& other) -> Expr {
+            return Expr{std::forward<decltype(other)>(other)};
+          }},
+      std::move(expr));
+}
+
+}  // namespace
 
 struct Interpreter::EvalVisitor {
   Interpreter* interpreter;
   Expr operator()(auto&& expr) { return std::forward<Expr>(expr); }
   Expr operator()(TailCall&& tc) { return std::move(tc); }
-  Expr operator()(Quoted&& expr) { return expr.expr(); }
+  Expr operator()(Quoted&& expr) {
+    switch (expr.kind()) {
+      case Quoted::Kind::kQuote:
+        return expr.expr();
+      case Quoted::Kind::kSyntaxQuote:
+        return ProcessSyntaxQuote(interpreter, Expr{expr.expr()});
+      case Quoted::Kind::kUnquote:
+        return interpreter->Evaluate(Expr{expr.expr()});
+      case Quoted::Kind::kSplice:
+        throw std::runtime_error("~@ used outside of syntax-quote");
+    }
+    return Expr{nullptr};
+  }
   Expr operator()(Symbol&& expr) {
     return interpreter->env_->Get(std::move(expr.name));
   }
@@ -52,6 +114,29 @@ struct Interpreter::EvalVisitor {
       return std::get<Map>(m).at(result);
     } else if (holds<callable_ptr_t>(result)) {
       auto callable = std::get<callable_ptr_t>(result);
+
+      // Macro expansion: call with unevaluated args, then evaluate result.
+      auto macro = std::dynamic_pointer_cast<UserMacro>(callable);
+      if (macro) {
+        auto it = list.begin();
+        ++it;
+        ExprList args;
+        std::move(it, list.end(), std::back_inserter(args));
+        auto expanded = macro->Call(interpreter, std::move(args));
+        // The macro body may have emitted a TailCall (if its last expression
+        // was a tail-position user-fn call). Trampoline it to get the actual
+        // expanded form before re-evaluating it as code.
+        while (auto* tc = std::get_if<TailCall>(&expanded)) {
+          auto tc_fn = std::dynamic_pointer_cast<Function>(tc->callable);
+          if (tc_fn) {
+            expanded = tc_fn->CallEvaluated(interpreter, std::move(tc->args));
+          } else {
+            expanded = tc->callable->Call(interpreter, std::move(tc->args));
+          }
+        }
+        return interpreter->Evaluate(std::move(expanded));
+      }
+
       auto it = list.begin();
       ++it;
       ExprList args;
@@ -127,6 +212,8 @@ Interpreter::Interpreter() : env_(std::make_shared<Environment>()) {
   env_->Define("tail", std::make_unique<built_in::Tail>());
   env_->Define("get", std::make_unique<built_in::Get>());
   env_->Define("empty?", std::make_unique<built_in::Empty>());
+  env_->Define("defmacro", std::make_unique<built_in::Defmacro>());
+  env_->Define("macroexpand", std::make_unique<built_in::Macroexpand>());
 }
 
 Expr Interpreter::Evaluate(Expr&& expr) {

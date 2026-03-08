@@ -53,7 +53,13 @@ Expr Parser::ParseSimpleExpr() {
     case Token::Type::kTrue:
       return Expr{true};
     case Token::Type::kQuote:
-      return Expr{Quoted(ParseExpr())};
+      return Expr{Quoted(ParseExpr(), Quoted::Kind::kQuote)};
+    case Token::Type::kBacktick:
+      return Expr{Quoted(ParseExpr(), Quoted::Kind::kSyntaxQuote)};
+    case Token::Type::kTilde:
+      return Expr{Quoted(ParseExpr(), Quoted::Kind::kUnquote)};
+    case Token::Type::kTildeSplice:
+      return Expr{Quoted(ParseExpr(), Quoted::Kind::kSplice)};
     case Token::Type::kMinus:
     case Token::Type::kPlus:
     case Token::Type::kSlash:

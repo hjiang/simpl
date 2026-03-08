@@ -1,0 +1,31 @@
+; Basic when macro
+(defmacro when [cond & body]
+  `(if ~cond (do ~@body) nil))
+
+; when with true condition
+(assert (= (when true (+ 1 2)) 3) "when true should return body result")
+
+; when with false condition returns nil
+(assert (= (when false (+ 1 2)) nil) "when false should return nil")
+
+; when with multiple body expressions
+(assert (= (when true 1 2 3) 3) "when with multiple body returns last")
+
+; unless macro (macro calling another macro)
+(defmacro unless [cond & body]
+  `(when (not ~cond) ~@body))
+
+(assert (= (unless false 42) 42) "unless false should return body result")
+(assert (= (unless true 42) nil) "unless true should return nil")
+
+; Macros accessing calling-scope variables
+(def x 10)
+(assert (= (when true x) 10) "macro should access calling scope variables")
+
+; Nested macro calls
+(assert (= (when true (when true 99)) 99) "nested macro calls should work")
+
+; macroexpand returns expanded form: (if true (do 1 2) nil)
+(def expanded (macroexpand '(when true 1 2)))
+(assert (= (head expanded) 'if) "macroexpand should return if form")
+(assert (= (head (tail expanded)) true) "macroexpand condition should be true")

@@ -14,20 +14,24 @@ namespace simpl {
 
 namespace rv = std::views;
 
-Quoted::Quoted(const Expr& expr) : expr_(std::make_unique<Expr>(expr)) {}
+Quoted::Quoted(const Expr& expr, Kind kind)
+    : expr_(std::make_unique<Expr>(expr)), kind_(kind) {}
 
 Quoted::Quoted(const Quoted& other)
-    : expr_(std::make_unique<Expr>(*other.expr_)) {}
+    : expr_(std::make_unique<Expr>(*other.expr_)), kind_(other.kind_) {}
 
-Quoted::Quoted(Quoted&& other) noexcept : expr_(std::move(other.expr_)) {}
+Quoted::Quoted(Quoted&& other) noexcept
+    : expr_(std::move(other.expr_)), kind_(other.kind_) {}
 
 Quoted& Quoted::operator=(const Quoted& other) {
   *expr_ = *(other.expr_);
+  kind_ = other.kind_;
   return *this;
 }
 
 Quoted& Quoted::operator=(Quoted&& other) noexcept {
   expr_ = std::move(other.expr_);
+  kind_ = other.kind_;
   return *this;
 }
 
@@ -60,7 +64,17 @@ std::ostream& operator<<(std::ostream& os, const Vector& vec) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Quoted& qt) {
-  return os << '\'' << qt.expr();
+  switch (qt.kind()) {
+    case Quoted::Kind::kQuote:
+      return os << '\'' << qt.expr();
+    case Quoted::Kind::kSyntaxQuote:
+      return os << '`' << qt.expr();
+    case Quoted::Kind::kUnquote:
+      return os << '~' << qt.expr();
+    case Quoted::Kind::kSplice:
+      return os << "~@" << qt.expr();
+  }
+  return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const TailCall&) {
@@ -133,7 +147,7 @@ std::size_t Hash::operator()(const Expr& expr) const {
 }
 
 bool Quoted::operator==(const Quoted& other) const {
-  return *expr_ == *other.expr_;
+  return kind_ == other.kind_ && *expr_ == *other.expr_;
 }
 
 }  // namespace simpl

@@ -39,6 +39,16 @@ sh_test(
 )
 
 sh_test(
+    name = "macros_test",
+    size = "small",
+    srcs = ["run_simpl_tests"],
+    data = [
+        "//simpl:simpl",
+        "simpl_progs/macros.simpl",
+    ]
+)
+
+sh_test(
     name = "repl_test",
     size = "small",
     flaky = True,

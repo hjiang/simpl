@@ -232,4 +232,47 @@ TEST(Lexer, VariadicFn) {
   EXPECT_FALSE(simpl::HadError());
 }
 
+TEST(Lexer, Backtick) {
+  Lexer lexer("`(a b)");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kBacktick);
+}
+
+TEST(Lexer, Tilde) {
+  Lexer lexer("~x");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kTilde);
+}
+
+TEST(Lexer, TildeSplice) {
+  Lexer lexer("~@body");
+  auto tokens = lexer.scan();
+  EXPECT_EQ(tokens.front().type, Token::kTildeSplice);
+  auto it = tokens.begin();
+  ++it;
+  EXPECT_EQ(it->type, Token::kSymbol);
+  EXPECT_EQ(it->lexeme, "body");
+}
+
+TEST(Lexer, SyntaxQuoteExpression) {
+  simpl::ClearError();
+  Lexer lexer("`(if ~cond (do ~@body) nil)");
+  auto tokens = lexer.scan();
+  EXPECT_FALSE(simpl::HadError());
+  auto it = tokens.begin();
+  EXPECT_EQ((it++)->type, Token::kBacktick);
+  EXPECT_EQ((it++)->type, Token::kLeftParen);
+  EXPECT_EQ((it++)->type, Token::kSymbol);   // if
+  EXPECT_EQ((it++)->type, Token::kTilde);     // ~
+  EXPECT_EQ((it++)->type, Token::kSymbol);    // cond
+  EXPECT_EQ((it++)->type, Token::kLeftParen);
+  EXPECT_EQ((it++)->type, Token::kSymbol);    // do
+  EXPECT_EQ((it++)->type, Token::kTildeSplice);  // ~@
+  EXPECT_EQ((it++)->type, Token::kSymbol);    // body
+  EXPECT_EQ((it++)->type, Token::kRightParen);
+  EXPECT_EQ((it++)->type, Token::kNil);
+  EXPECT_EQ((it++)->type, Token::kRightParen);
+  EXPECT_EQ((it++)->type, Token::kEof);
+}
+
 }  // namespace simpl

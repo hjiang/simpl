@@ -55,10 +55,33 @@ int Compare(std::list<Expr>&& args) {
   return std::visit(compare, std::move(args.front()), std::move(args.back()));
 }
 
+// Equality check for two Expr values. Returns false for incompatible types.
+bool ExprEqual(Expr&& lhs, Expr&& rhs) {
+  // Cross-numeric: use variant index to detect mixed numeric types.
+  if (lhs == rhs) {
+    // std::variant::operator== handles same-type equality correctly for all
+    // alternative types that define operator==.
+    return true;
+  }
+  // Cross-numeric comparison: one int, one float.
+  if (holds<int_type>(lhs) && holds<float_type>(rhs)) {
+    return static_cast<float_type>(std::get<int_type>(lhs)) ==
+           std::get<float_type>(rhs);
+  }
+  if (holds<float_type>(lhs) && holds<int_type>(rhs)) {
+    return std::get<float_type>(lhs) ==
+           static_cast<float_type>(std::get<int_type>(rhs));
+  }
+  return false;
+}
+
 }  // namespace
 
 Expr Equals::FnCall(Interpreter*, args_type&& args) {
-  return Compare(std::move(args)) == 0;
+  if (args.size() != 2) {
+    throw std::runtime_error("comparison requires 2 arguments");
+  }
+  return ExprEqual(std::move(args.front()), std::move(args.back()));
 }
 
 Expr GreaterThan::FnCall(Interpreter*, args_type&& args) {

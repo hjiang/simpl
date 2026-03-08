@@ -30,7 +30,8 @@ bool CanBeInSymbol(char c) {
 }
 
 bool CanEndNumber(char c) {
-  return isspace(c) || c == ')' || c == ']' || c == '}' || c == ',';
+  return isspace(c) || c == ')' || c == ']' || c == '}' || c == ',' ||
+         c == '`' || c == '~';
 }
 
 }  // namespace
@@ -95,6 +96,12 @@ void Lexer::ScanToken() {
       break;
     case '\'':
       AddToken(Token::kQuote);
+      break;
+    case '`':
+      AddToken(Token::kBacktick);
+      break;
+    case '~':
+      AddToken(Match('@') ? Token::kTildeSplice : Token::kTilde);
       break;
     case '"':
       String();
