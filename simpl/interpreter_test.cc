@@ -328,4 +328,48 @@ TEST_F(InterpreterTest, MacroAccessesCallerScope) {
       10);
 }
 
+// Cross-numeric equality (ExprEqual int-vs-float branches)
+TEST_F(InterpreterTest, CrossNumericEquality) {
+  EXPECT_TRUE(std::get<bool>(Eval("(= 1 1.0)")));
+  EXPECT_TRUE(std::get<bool>(Eval("(= 1.0 1)")));
+  EXPECT_FALSE(std::get<bool>(Eval("(= 1 2.0)")));
+}
+
+// ~x at the top level of a syntax-quote (ProcessSyntaxQuote Quoted handler,
+// kUnquote branch)
+TEST_F(InterpreterTest, SyntaxQuoteTopLevelUnquote) {
+  EXPECT_EQ(std::get<int_type>(Eval("(def x 42) `~x")), 42);
+}
+
+// ~@x at the top level of a syntax-quote (ProcessSyntaxQuote Quoted handler,
+// kSplice error branch)
+TEST_F(InterpreterTest, SyntaxQuoteTopLevelSpliceError) {
+  EXPECT_THROW(Eval("(def xs '(1 2)) `~@xs"), std::runtime_error);
+}
+
+// ~x outside any syntax-quote (EvalVisitor Quoted kUnquote branch)
+TEST_F(InterpreterTest, UnquoteOutsideSyntaxQuote) {
+  EXPECT_EQ(std::get<int_type>(Eval("(def x 7) ~x")), 7);
+}
+
+// defmacro with fewer than 3 args (Defmacro::Call arity check)
+TEST_F(InterpreterTest, DefmacroTooFewArgs) {
+  EXPECT_THROW(Eval("(defmacro name [])"), std::runtime_error);
+}
+
+// macroexpand called on a non-macro (Macroexpand::FnCall error branch)
+TEST_F(InterpreterTest, MacroexpandNonMacro) {
+  EXPECT_THROW(Eval("(macroexpand '(+ 1 2))"), std::runtime_error);
+}
+
+// Macro body ends with a user-fn call (tail position → TailCall sentinel).
+// The macro expansion site must trampoline to get the actual expanded form.
+TEST_F(InterpreterTest, MacroBodyTailCallTrampoline) {
+  EXPECT_EQ(std::get<int_type>(
+                Eval("(defn make-add [a b] `(+ ~a ~b))"
+                     "(defmacro add-macro [a b] (make-add a b))"
+                     "(add-macro 3 4)")),
+            7);
+}
+
 }  // namespace simpl
